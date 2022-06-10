@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Confirmation email",
+        "template": "confirmation_email"
+    },
+    {
+        "name": "Forget password email",
+        "template": "lostpw_email"
+    }
+]

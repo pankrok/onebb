@@ -1,0 +1,46 @@
+{% extends 'main.html.twig' %}
+
+{% block title %}
+    Set environment variables
+{% endblock %}
+
+{% block body %}
+{% if message != 1 %}
+<form method="post">
+  <div class="mb-3">
+    <label for="db" class="form-label">Database name</label>
+    <input type="text" name="db" class="form-control" id="db" aria-describedby="db" value="{{ v.db }}">
+  </div>
+  <div class="mb-3">
+    <label for="user" class="form-label">Database user</label>
+    <input type="text" name="user" class="form-control" id="user" aria-describedby="user" value="{{ v.user }}">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Database password</label>
+    <input type="password" name="password" class="form-control" id="password" aria-describedby="password" value="{{ v.password }}">
+  </div>
+  <div class="mb-3">
+    <label for="server" class="form-label">Database server</label>
+    <input type="text" name="server" class="form-control" id="server" aria-describedby="server" value="{{ v.server }}">
+  </div>
+  <hr />
+  <div class="mb-3">
+    <label for="acp" class="form-label">Admin control panel address</label>
+    <input type="text" name="acp" class="form-control" id="acp" aria-describedby="acp" value="acp">
+  </div>
+  <div class="mb-3">
+    <label for="base" class="form-label">Admin control panel address</label>
+    <input type="text" name="base" class="form-control" id="base" aria-describedby="base" value="/">
+  </div>
+{% endif %}  
+
+{% endblock %}
+{% block footer %}
+{% if message != 1 %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+{% else %}
+    <a href="{{ path('createdb') }}" class="btn btn-primary">Next</a>
+{% endif %}
+{% endblock %}

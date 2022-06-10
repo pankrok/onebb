@@ -1,0 +1,56 @@
+###> symfony/framework-bundle ###
+/onebb-backend/.env.local
+/onebb-backend/.env.local.php
+/onebb-backend/.env.*.local
+/onebb-backend/config/secrets/prod/prod.decrypt.private.php
+/onebb-backend/public/bundles/
+/onebb-backend/var/
+/onebb-backend/var/migrations/*
+/onebb-backend/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+/onebb-backend/.phpunit.result.cache
+/onebb-backend/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/onebb-backend/phpunit.xml
+/onebb-backend/.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> local files and fixer ###
+index.html
+/onebb-backend/.php-cs-fixer.cache
+/onebb-backend/php-cs-fixer
+###< local files ###
+
+###> lexik/jwt-authentication-bundle ###
+/onebb-backend/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+/onebb-front/.DS_Store
+/onebb-front/node_modules
+/onebb-front/dist
+/onebb-front/obb1
+
+
+
+# local env files
+/onebb-front/.env.local
+/onebb-front/.env.*.local
+
+# Log files
+/onebb-front/npm-debug.log*
+/onebb-front/yarn-debug.log*
+/onebb-front/yarn-error.log*
+/onebb-front/pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

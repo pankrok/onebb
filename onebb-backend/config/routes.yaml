@@ -1,0 +1,10 @@
+api_login_check:
+    path: /api/login
+    methods: ['POST']
+app_refresh:
+    path: /api/refresh
+    methods: [POST]
+    controller: app.refreshservice::refresh
+swagger_ui:
+    path: /api/docs
+    controller: api_platform.swagger.action.ui

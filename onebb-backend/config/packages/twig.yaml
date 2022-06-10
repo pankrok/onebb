@@ -1,0 +1,10 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        base_url: '%base_url%'
+        acp_url: '%acp_url%'
+        lang: en
+
+when@test:
+    twig:
+        strict_variables: true

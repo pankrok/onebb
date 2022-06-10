@@ -1,0 +1,36 @@
+{% extends 'main.html.twig' %}
+
+{% block title %}
+    Create administrator
+{% endblock %}
+
+{% block body %}
+{% if message != 1 %}
+<form method="post">
+  <div class="mb-3">
+    <label for="username" class="form-label">Admin username</label>
+    <input type="text" name="username" class="form-control" id="username" aria-describedby="username">
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">email</label>
+    <input type="email" name="email" class="form-control" id="email" aria-describedby="email">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">password</label>
+    <input type="password" name="password" class="form-control" id="password" aria-describedby="password">
+  </div> 
+  <div class="mb-3">
+    <label for="vpassword" class="form-label">repeat password</label>
+    <input type="password" name="vpassword" class="form-control" id="vpassword" aria-describedby="vpassword">
+  </div>    
+{% endif %}
+{% endblock %}
+{% block footer %}
+{% if message != 1 %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+{% else %}
+    <a href="{{ path('finish') }}" class="btn btn-primary">Next</a>
+{% endif %}
+{% endblock %}

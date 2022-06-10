@@ -1,0 +1,31 @@
+{% extends 'main.html.twig' %}
+
+{% block title %}
+    Finish
+{% endblock %}
+
+{% block body %}
+<div class="alert alert-warning" role="alert">
+  <strong>Remove install directory!</strong>
+</div>
+  <p>clear cache...<br />
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    <div class="alert alert-primary" role="alert">
+ {% if log %}{{ log|raw }}{% endif %}
+</div>
+  </div>
+</div>
+  
+
+{% endblock %}
+{% block footer %}
+<button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    logs
+  </button>
+<a href="/{{ acp }}" class="btn btn-primary">Next</a>
+</form>
+
+
+{% endblock %}

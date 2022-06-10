@@ -1,0 +1,66 @@
+api_platform:
+    # The title of the API.
+    title: 'OneBB API REST'
+    # Boards docs version
+    version: '1.0.0'
+    # Enabling the NelmioApiDocBundle integration has been deprecated in 2.2 and will be removed in 3.0.
+    # NelmioApiDocBundle 3 has native support for API Platform.
+    enable_nelmio_api_doc: false
+
+    # Enable the Swagger documentation and export.
+    enable_swagger: true
+
+    # Enable Swagger UI.
+    enable_swagger_ui: true
+
+    # Enable ReDoc.
+    enable_re_doc: true
+
+    # Enable the entrypoint.
+    enable_entrypoint: true
+
+    # Enable the docs.
+    enable_docs: true
+    
+    # Enable the data collector and the WebProfilerBundle integration.
+    enable_profiler: false
+    # The description of the API.
+    description: 'Boards headless application'
+    allow_plain_identifiers: true
+    # The version of the API.
+
+    show_webby: false
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger: 
+        versions: [3]
+        api_keys:
+            apiKey:
+               name: Authorization
+               type: header
+    formats:
+        jsonld:
+            mime_types: ['application/ld+json']
+
+        json:
+            mime_types: ['application/json']
+
+        html:
+            mime_types: ['text/html']
+            
+    defaults:
+        pagination_enabled: true
+        pagination_partial: true
+        pagination_client_items_per_page: true
+        pagination_items_per_page: 20
+        pagination_maximum_items_per_page: 60
+        pagination_fetch_join_collection: true
+        
+    collection:
+        pagination:
+            enabled: true
+            partial: true   
+            items_per_page: 20
+            items_per_page_parameter_name: limit     
