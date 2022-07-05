@@ -44,8 +44,7 @@ export default {
             resource: this.$route.params.resource 
         }).then(response => {
             this.resources = response;
-            this.userFields();
-
+            this.pageFields();
             this.$store.dispatch('loaded');
         });   
     },
@@ -55,7 +54,7 @@ export default {
         this.crud.form = [
                     {
                             fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-10 column my-1',
                             name: 'name',
                             val: this.resources.name,
                             type: 'text',
@@ -64,12 +63,21 @@ export default {
                     }, 
                     {
                             fieldType: 'checkboxType',
-                            fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
-                            checked: this.resource.active,
+                            fieldClass: 'col-2 row d-flex j-c-center a-i-center py-1',
+                            checked: this.resources.active,
                             name: 'active',
                             class: 'form-control m-1',
                             label: 'Active',
       
+                    },
+                    {
+                            fieldType: 'joditType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'content',
+                            val: this.resources.content,
+                            type: 'jodit',
+                            class: 'form-control m-1',
+                            label: 'Content',
                     },
                     {
                             fieldType: 'buttonType',
@@ -77,7 +85,7 @@ export default {
                             name: 'submit',
                             type: 'button',
                             class: 'btn btn-secondary',
-                            text: 'Create page',
+                            text: 'Update page',
      
                     }
                 ]

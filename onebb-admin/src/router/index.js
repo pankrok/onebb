@@ -80,6 +80,12 @@ const routes = [
     name: 'SkinEdit',
     component: () => import('../views/SkinEdit.vue')
   }
+  ,
+  {
+    path: '/plugins/list/',
+    name: 'Plugins',
+    component: () => import('../views/Plugins.vue')
+  }
 ]
 
 const router = createRouter({

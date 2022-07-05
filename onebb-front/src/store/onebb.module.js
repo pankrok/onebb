@@ -95,7 +95,6 @@ export const onebb = {
       refresh({ commit }) {
         return new Promise((resolve) => {
           OneBB.refresh().then(response => {
-              console.log({ref_reso: response});
             if(response.success == true) {
                 commit('loginSuccess', response.response);
             } else {

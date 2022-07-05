@@ -23,7 +23,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
-
+    
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Api\JwtDecorator:
@@ -65,11 +65,21 @@ services:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Group'}
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Group'}
+            
+    App\EntityListener\PageEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Page'}
+            - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Page'}
     
     App\EntityListener\BoxEntityListener:
         tags:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Box'}
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Box'}
+    
+    
+    App\EntityListener\PluginEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'postUpdate', entity: 'App\Entity\Plugin'}
     
     acme_api.event.authentication_success_listener:
         class: App\EventSubscriber\AuthenticationSuccessListenerSubscriber

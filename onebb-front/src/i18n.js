@@ -21,7 +21,7 @@ function loadLocaleMessages() {
       const locale = matched[1]
       messages[locale] = locales(key)
     }
-  }); console.log({locales: locales, m: messages});
+  });
   return messages
 }
 initLocale();

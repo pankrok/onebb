@@ -91,7 +91,20 @@ export default {
             this.$store.dispatch('loaded');
         });   
     },  
-    formEvents: function(formData) { console.log({formData: formData});         
+    formEvents: function(formData) {
+    
+        if (formData.action === 'pageFields') {
+            this.$store.dispatch('loading');
+             this.$store.dispatch('onebb/post', {
+                resource: 'page',
+                data: formData.fields
+            }).then(() => {
+                this.$store.dispatch('loaded');
+                this.reloadCrud();
+            });
+        }
+
+    
         if (formData.action === 'itemDelete') {
             this.$store.dispatch('loading');
              this.$store.dispatch('onebb/delete', {

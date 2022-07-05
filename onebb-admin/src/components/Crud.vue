@@ -175,10 +175,7 @@ export default {
             fields: data
         }; 
         this.modalComponent = handler[0]
-        this.modal = true;
-        
-        console.log(this.modalComponent, this.modalData);
-        
+        this.modal = true;        
     },
     checkbox(val, type, checked) {
         this.$emit('update:crudCheckbox', {

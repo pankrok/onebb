@@ -10,7 +10,8 @@ class OneBB {
         this.params = {};
         this.headers = {
             'Content-Type': 'application/ld+json',
-            'Accept': 'application/ld+json'
+            'Accept': 'application/ld+json',
+            'X-ONEBB-ADMIN': 'true'
         };
         
         this.config = {
@@ -211,6 +212,11 @@ class OneBB {
   configuration() {
     this.resource = 'configuration';     
     return this;    
+  }
+  
+  plugins() {
+    this.resource = 'plugins';
+    return this;
   }
   
   async login(data){

@@ -11,7 +11,7 @@
         @change="sendInput"
         v-model="selected"
      >
-      <option v-for="v in cfg.options" :value="v.val" :key="v.val" :selected="v.selected">{{ v.name }}</option>
+      <option v-for="v in cfg.options" :value="v.val" :key="v.val" :selected="v.selected" v-html="v.name"></option>
 
     </select> 
    

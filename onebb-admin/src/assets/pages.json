@@ -1,0 +1,47 @@
+[
+  {
+    "val": "Home",
+    "name": "Home",
+    "selected": true
+  },
+  {
+    "val": "Category",
+    "name": "Category",
+    "selected": false
+  },
+  {
+    "val": "Board",
+    "name": "Board",
+    "selected": false
+  },
+  {
+    "val": "Plot",
+    "name": "Plot",
+    "selected": false
+  },
+  {
+    "val": "NewPlot",
+    "name": "New Plot",
+    "selected": false
+  },
+  {
+    "val": "SignUp",
+    "name": "SignUp",
+    "selected": false
+  },
+  {
+    "val": "Profile",
+    "name": "Profile",
+    "selected": false
+  },
+  {
+    "val": "Userlist",
+    "name": "User list",
+    "selected": false
+  },
+  {
+    "val": "Validation",
+    "name": "Validation",
+    "selected": false
+  }
+]

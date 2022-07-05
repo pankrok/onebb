@@ -9,10 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
- 
  * @ApiResource(
         subresourceOperations={
             "api_plots_posts_get_subresource"={
@@ -42,7 +43,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
              "delete"={"security"="is_granted('ROLE_PLOT_DELETE')"}
  *           }
  *  )
+ *  @ApiFilter(
+        OrderFilter::class, properties={"created_at"}, arguments={"orderParameterName": "order"}
+        
+     )
  */
+
 
 class Post
 {

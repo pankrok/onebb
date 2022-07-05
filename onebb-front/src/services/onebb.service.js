@@ -53,9 +53,60 @@ class OneBB {
             response =  req.json();
         }
         
+        if (response.code === 401 && this.token !== null) {
+            let lastReq = {
+                resource: this.resource,
+                params: this.params,
+                config: this.config, 
+            };
+            
+            this.refresh().then(ref => {
+                if (ref.success === true) {
+                    this.resource = lastReq.resource;
+                    this.params = lastReq.params;
+                    this.config = lastReq.config;
+                    
+                    return this.request();
+                }                
+            });
+            
+        }
+        
         this.setDefaults();
         return {status: req.status, response: response};
     }
+    
+    this.refresh = function (){
+        return new Promise((resolve) => {
+            this.resource = 'refresh';
+            this.config.method = 'POST';  
+            this.config.body = JSON.stringify({});
+            this.request().then(refresh => {
+                if (refresh.status == 200) {
+                    refresh.response.then(data => {
+                        this.token = data.token;
+                        localStorage.setItem('user', 'true');
+                        resolve({
+                            success: true,
+                            response: data,
+                        });
+                    });  
+                }
+                
+                if (refresh.status != 200) { // FIXME?
+                    refresh.response.then(data => { 
+                        this.token = null;
+                        localStorage.removeItem('user');
+                        resolve({
+                            success: false,
+                            response: data,
+                        });
+                    });
+                }
+            });
+            
+        });
+      }
   }
     
   get(id = null, subresource = null) {    
@@ -155,6 +206,16 @@ class OneBB {
       return this;
   }
   
+  forgetPassword(){
+    this.resource = 'forget-password';     
+    return this;  
+  }
+  
+  resetPassword(){
+    this.resource = 'reset-password';     
+    return this;  
+  }
+  
   skin(){
     this.resource = 'skins';     
     return this;  
@@ -213,37 +274,7 @@ class OneBB {
     });
   }
   
- refresh(){
-    return new Promise((resolve) => {
-        this.resource = 'refresh';
-        this.config.method = 'POST';  
-        this.config.body = JSON.stringify({});
-        this.request().then(refresh => {
-            if (refresh.status == 200) {
-                refresh.response.then(data => {
-                    this.token = data.token;
-                    localStorage.setItem('user', 'true');
-                    resolve({
-                        success: true,
-                        response: data,
-                    });
-                });  
-            }
-            
-            if (refresh.status != 200) { // FIXME?
-                refresh.response.then(data => { 
-                    this.token = null;
-                    localStorage.removeItem('user');
-                    resolve({
-                        success: false,
-                        response: data,
-                    });
-                });
-            }
-        });
-        
-    });
-  }
+ 
   
 }
 

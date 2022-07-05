@@ -23,9 +23,10 @@
             </div>
         </div>
         <div class="col-9">
-         <div class="box">
-         <span class="box-loading"></span>
-                TAB for posts / edit
+            <div class="box" v-for="post in posts" :key="post.id">
+                <div class="box-content">
+                    <span v-html="post.content"></span>
+                </div>
             </div>
         </div>
         <Cropper v-model:show="showCropper" />
@@ -51,6 +52,7 @@ export default {
         user: null,
         loading: true,
         showCropper: false,
+        posts: null,
     }
   },
   computed: {
@@ -72,6 +74,9 @@ export default {
         this.loading = false;
         this.$store.dispatch('plugins/reloadPlugins');
     });    
+    this.$store.dispatch('onebb/get', { resource: 'user', subresource: 'posts?page=1&limit=20&order[created_at]=desc',  id: this.$route.params.id}).then(response => {
+        this.posts = response['hydra:member'];
+    }); 
   },
   components: {
     Skeleton,

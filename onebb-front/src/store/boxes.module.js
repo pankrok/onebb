@@ -25,6 +25,12 @@ export const boxes = {
         left: null,
         right: null,   
     },
+    Page: {
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,   
+    },
     NewPlot: {
         top: null,
         bottom: null,
@@ -55,6 +61,25 @@ export const boxes = {
         left: null,
         right: null,   
     },
+    UserConfig: {
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,   
+    },
+    ResetPassword: {
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,   
+    },
+    ResetPasswordValidation: {
+        top: null,
+        bottom: null,
+        left: null,
+        right: null,   
+    },
+    
     
   }),
   actions: {

@@ -72,7 +72,12 @@
             <span><button v-if="this.next" class="btn btn-secondary j-s-end" type="button" @click="nextPage">{{ $t('Next') }}</button></span>
         </div>
         <div v-if="$store.state.onebb.status.loggedIn"  class="box">
-        <Transition name="slide-fade" mode="out-in"> 
+        <Transition name="slide-fade" mode="out-in">
+            <div class="alert info j-c-center a-i-center" v-if="alert" :key="alert" style="position: absolute; z-index: 1000; left: 40%; bottom: 5%;">
+                    <strong>{{ alert }}</strong>
+            </div>
+        </Transition>
+        <Transition name="slide-fade" mode="out-in">
             <div v-if="!editor && $store.state.onebb.status.loggedIn"  class="box-content d-flex j-c-end" :key="jodit-btn">
                 <button  @click="editor = true" class="btn btn-secondary">Odpowiedz</button>
             </div>
@@ -103,6 +108,7 @@ export default {
         limit: null,
         posts: {},
         content: '',
+        alert: null,
         loading: true,
         editor: false, 
         jodit_cfg: {},
@@ -128,6 +134,15 @@ export default {
   methods: {
     sendPost: function() {
 
+        if (this.content === '') {
+        
+            this.alert = 'content cannot be empty!';
+            setTimeout(() => {
+                this.alert = null;
+            }, 5000);
+            return null;
+        }
+        
         this.$store.dispatch('onebb/post', {
             resource: 'replay',
             data: {

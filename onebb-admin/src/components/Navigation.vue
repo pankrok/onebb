@@ -34,6 +34,9 @@
         <li class="list-item">
             <router-link :to="{ name: 'Configuration' }"><i class="fa-solid fa-gears"></i> {{ $t('configuration') }}</router-link>
         </li>
+        <li class="list-item">
+            <router-link :to="{ name: 'Plugins' }"><i class="fa-solid fa-plug"></i> {{ $t('plugins') }}</router-link>
+        </li>
         <hr />
         <li class="list-item" v-if="$store.state.onebb.status.loggedIn">
             <a href="#" class="px-1" @click="logout"><i class="fa fa-sign-out fa-lg"></i> {{ $t('logout') }}</a>

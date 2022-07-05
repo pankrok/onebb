@@ -22,7 +22,7 @@
     </div>
 
     <div class="f-grow list-complete-item p-relative" :key="main">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component }" :key="$route.fullPath">
 
             <component :is="Component" />
     
@@ -59,6 +59,7 @@ import FooterModule from './components/modules/FooterModule';
 
 // box modules import
 import CustomBox from './components/modules/boxes/CustomBox';
+import PluginBox from './components/modules/boxes/PluginBox';
 import UserStats from './components/modules/boxes/UserStats';
 // import ChatBox from './components/modules/ChatBox'; // NOT IMPLEMENTED YET!
 
@@ -69,6 +70,7 @@ export default {
     BreadcrumbsModule,
     FooterModule,
     CustomBox,
+    PluginBox,
     UserStats,
   },
   data(){
@@ -81,6 +83,10 @@ export default {
   },
   computed: {
     boxes() {
+        if(typeof(window.$obbPlugins) == "object") {
+            window.$obbPlugins.context(this.$route.name);
+        }
+        
         if(this.boxReady) {
             return this.$store.state.boxes[this.$route.name];
         }

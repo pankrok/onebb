@@ -1,7 +1,8 @@
  module.exports = {
    configureWebpack: {
     devServer: {
-      historyApiFallback: true
+      historyApiFallback: true,
+      allowedHosts: 'all',
     }
   },
   publicPath:  process.env.NODE_ENV === 'production'

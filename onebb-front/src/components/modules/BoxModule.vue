@@ -1,11 +1,10 @@
 <template>
-  <div class="list-complete-item box">
+  <div class="box">
           <div class="box-header">
             <h4>{{ name }}</h4>
           </div>
       <div class="box-content"> {{ content }}
-        <button class="btn btn-secondary" @click="changeLang">{{ $t('language') }}</button><br /><br />
-      </div> 
+    </div> 
     </div>
 </template>
 

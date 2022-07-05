@@ -49,6 +49,8 @@ class ConfigurationController extends AbstractController
         unset($data['version']);
         $array = [
             'parameters' => [
+                'maintaince' => $data['maintaince'],
+                'default_group' =>  $data['default_group'],
                 'base_url' => $data['base_url'] ?? $cfg['base_url'],
                 'acp_url' => $data['acp_url'] ?? $cfg['acp_url'],
                 'version' => $cfg['version'],
@@ -72,6 +74,15 @@ class ConfigurationController extends AbstractController
 
     protected function decodeMailerDns(string $dns): array
     {
+        if ($dns === 'sendmail://default') {
+            return [
+            'username' => null,
+            'password' => null,
+            'server' => null,
+            'port' => null,
+        ];
+        }
+        
         $str = substr($dns, 7);
         list($user, $server) = explode('@', $str);
         list($username, $password) = explode(':', $user);
@@ -88,6 +99,10 @@ class ConfigurationController extends AbstractController
 
     protected function encodeMailerDns(string $username, string $password, string $server, string $port): string
     {
+        if ($username === null || $password === null || $server === null || $port === null) {
+            return 'sendmail://default';
+        }
+        
         $username = str_replace('@', '%40', $username);
         $dns = 'smtp://%s:%s@%s:%s';
 

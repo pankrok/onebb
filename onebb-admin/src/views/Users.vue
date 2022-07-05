@@ -17,6 +17,7 @@ export default {
   data() {
     return {
         resources: null,
+        group: null,
         crud: {
             name: 'User',
             editRoute: 'UserEdit',
@@ -38,51 +39,7 @@ export default {
                 checkbox: 'banned'
             },
             forms: {
-                userFields: [
-                    {
-                            fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
-                            name: 'username',
-                            type: 'text',
-                            class: 'form-control m-1',
-                            label: 'Username',
-                    },
-                    {
-                            fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
-                            name: 'password',
-                            type: 'password',
-                            class: 'form-control m-1',
-                            label: 'Password',
-                    },
-                    {
-                            fieldType: 'checkboxType',
-                            fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
-                            checked: true,
-                            name: 'verified',
-                            class: 'form-control m-1',
-                            label: 'Verified',
-      
-                    },
-                    {
-                            fieldType: 'checkboxType',
-                            fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
-                            checked: false,
-                            name: 'banned',
-                            class: 'form-control m-1',
-                            label: 'Banned',
-      
-                    },
-                    {
-                            fieldType: 'buttonType',
-                            fieldClass: 'col-12 row j-c-end my-1',
-                            name: 'submit',
-                            type: 'button',
-                            class: 'btn btn-secondary',
-                            text: 'Create user',
-     
-                    }
-                ],
+                userFields: []
             },
             list: true,
             add: true,
@@ -100,29 +57,18 @@ export default {
             this.$store.dispatch('loaded');
         });   
     },  
-    formEvents: function(formData) { console.log({formData: formData});
-        if (formData.action === 'categoryFields') {
+    formEvents: function(formData) { 
+        if (formData.action === 'userFields') {
             this.$store.dispatch('loading');
              this.$store.dispatch('onebb/post', {
-                resource: 'category',
+                resource: 'user',
                 data: formData.fields
             }).then(() => {
                 this.$store.dispatch('loaded');
                 this.reloadCrud();
             });
         }
-        
-        if (formData.action === 'boardFields') {
-            this.$store.dispatch('loading');
-             this.$store.dispatch('onebb/post', {
-                resource: 'board',
-                data: formData.fields
-            }).then(() => {
-                this.$store.dispatch('loaded');
-                this.reloadCrud();
-            });
-        }
-        
+                
         if (formData.action === 'itemDelete') {
             this.$store.dispatch('loading');
              this.$store.dispatch('onebb/delete', {
@@ -140,8 +86,7 @@ export default {
             id: formData.id,  
             resource: formData.resource,
             data: {banned: formData.fields.active}
-        }).then(response => {
-            console.log(response);
+        }).then(() => {
             this.$store.dispatch('loaded');
         });
     }
@@ -150,7 +95,88 @@ export default {
     Crud
   },
   mounted() {
-    this.reloadCrud()     
+    this.$store.dispatch('onebb/get', { resource: 'group' }).then(response => {
+        let options = [];
+        response['hydra:member'].forEach(function(el) {
+            options.push({
+                val:  el.id,
+                name: el.group_name
+            });
+        });
+        this.group = options;
+        this.crud.forms.userFields = [
+                    {
+                            fieldType: 'inputType',
+                            fieldClass: 'col-6 column my-1',
+                            name: 'username',
+                            type: 'text',
+                            class: 'form-control m-1',
+                            label: 'Username',
+                    },
+                    {
+                            fieldType: 'inputType',
+                            fieldClass: 'col-6 column my-1',
+                            name: 'email',
+                            type: 'text',
+                            class: 'form-control m-1',
+                            label: 'Email',
+                    },
+                    {
+                            fieldType: 'inputType',
+                            fieldClass: 'col-6 column my-1',
+                            name: 'password',
+                            type: 'password',
+                            class: 'form-control m-1',
+                            label: 'Password',
+                    },
+                    {
+                        fieldType: 'selectType',
+                        fieldClass: 'col-6 column my-1',
+                        name: 'default_gruop',
+                        class: 'form-control my-1',
+                        label: 'Select user group',
+                        options: this.group
+                    },
+                    {
+                        fieldType: 'checkboxType',
+                        fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
+                        checked: true,
+                        name: 'verified',
+                        class: 'form-control m-1',
+                        label: 'Verified',
+      
+                    },
+                    {
+                            fieldType: 'checkboxType',
+                            fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
+                            checked: false,
+                            name: 'banned',
+                            class: 'form-control m-1',
+                            label: 'Banned',
+      
+                    },
+                    {
+                    fieldType: 'checkboxType',
+                    fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
+                    checked: false,
+                    name: 'apc_enabled',
+                    val: false,
+                    class: 'form-control m-1',
+                    label: 'ACP',
+  
+                },
+                {
+                        fieldType: 'buttonType',
+                        fieldClass: 'col-12 row j-c-end my-1',
+                        name: 'submit',
+                        type: 'button',
+                        class: 'btn btn-secondary',
+                        text: 'Create user',
+ 
+                }
+            ],
+        this.reloadCrud();  
+    });    
   },
   beforeUnmount() {
     this.$store.dispatch('loading');

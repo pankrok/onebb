@@ -47,6 +47,7 @@ export default {
             this.$emit('update:formEvent', 
                 {
                     action: this.data.action,
+                    button: v,
                     fields: this.formData
                 });
             return;

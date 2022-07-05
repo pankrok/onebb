@@ -193,6 +193,7 @@
 import draggable from "vuedraggable";
 import SelectType from "../components/crud/formControl/Select";
 import Create from "../components/crud/Create";
+import pageOptions from "../assets/pages.json";
 
 export default {
   name: "SkinEdit",
@@ -204,24 +205,14 @@ export default {
   data() {
     return {
         def: null,
-        currentPage: 'Home', 
+        currentPage: 'Home',
         selectCfg: {
           name: 'PageSelect',
           val: 'Home',
           class: 'form-control btn btn-secondary my-1',
           label: 'Currently edited layout:',
           labelClass: 'mx-2',
-          options: [
-            {val: 'Home', name: 'Home', selected: true},
-            {val: 'Category', name: 'Category', selected: false},
-            {val: 'Board', name: 'Board', selected: false},
-            {val: 'Plot', name: 'Plot', selected: false},
-            {val: 'NewPlot', name: 'New Plot', selected: false},
-            {val: 'SignUp', name: 'SignUp', selected: false},
-            {val: 'Profile', name: 'Profile', selected: false},
-            {val: 'Userlist', name: 'User list', selected: false},
-            {val: 'Validation', name: 'Validation', selected: false}
-          ],
+          options: pageOptions,
       },
       modules: {
           unused: [],    
@@ -263,6 +254,7 @@ export default {
     },
     
     newModule() {
+                this.modalComponent = 'Create';
                 this.fields = [
                 {
                     fieldType: 'inputType',
@@ -293,16 +285,18 @@ export default {
                     fieldClass: 'col-12 row j-c-end my-1',
                     name: 'submit',
                     type: 'button',
+                    custom: 'onebb/post',
                     class: 'btn btn-secondary',
                     text: 'Save',
  
                 }
             ];
-        this.modalData.action = 'onebb/post';
+        this.modalData.action = 'Create new module';
         this.modal = true;
     },
     
-    edit(module) {
+    edit(module) { console.log(module);
+        this.modalComponent = 'Update';
         this.fields = [
                 {
                     fieldType: 'inputType',
@@ -330,26 +324,41 @@ export default {
                 },
                 {
                     fieldType: 'buttonType',
-                    fieldClass: 'col-12 row j-c-end my-1',
+                    fieldClass: 'col-6 row j-c-start my-1',
+                    name: 'button',
+                    type: 'button',
+                    custom: 'onebb/delete',
+                    class: 'btn btn-danger',
+                    text: 'Delete',
+ 
+                },
+                {
+                    fieldType: 'buttonType',
+                    fieldClass: 'col-6 row j-c-end my-1',
                     name: 'submit',
+                    custom: 'onebb/put',
                     type: 'button',
                     class: 'btn btn-secondary',
                     text: 'Save',
  
                 }
             ];
-        this.modalData.action = 'onebb/put';
+        this.modalData.action = 'Edit module ' + module.name;
         this.modal = true;
     },
     
     formData(val) {
-        this.$store.dispatch(val.action, {
+        this.$store.dispatch(val.button.custom, {
             id: val.fields.id ?? null,
             resource: 'box',
             data: val.fields
         }).then(response => {
-            if (val.action === 'onebb/post') {
+            if (val.button.custom === 'onebb/post') {
                 this.modules.unused.push(response);
+            }
+            
+            if (val.button.custom === 'onebb/delete') {
+                this.init();
             }
         });        
         this.modal = false;

@@ -40,20 +40,17 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
             }
         },
  *     itemOperations={
- *         "put"={"security_post_denormalize"="is_granted('ROLE_ADMIN') or object.user == user"},
+            "put"={
+                "security"="is_granted('ROLE_ADMIN') or (object == user)"      
+            },
            "put_img"={
                 "method"="PUT",
                 "groups": {"avatar"},
                 "path"="/users/{id}/img",
                 "controller"="App\Controller\UserAvatarController",
-                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object.user == user"
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object == user"
             },
-            "put_admin"={
-               "security"="is_granted('ROLE_USER_EDIT')",
-               "path"="/users/admin/{id}",
-               "method"="PUT",
-           },
-           "delete"={"security"="is_granted('ROLE_MODERATOR')"}, 
+           "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
            "get"={
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
                 "normalization_context"={"groups": {"user"}}
@@ -63,7 +60,13 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
                "path"="/users/admin/{id}",
                "method"="GET",
                "normalization_context"={"groups": {"user", "user_admin", "user_admin_acp"}}
-           }
+           },
+            "put_admin"={
+               "security"="is_granted('ROLE_USER_EDIT')",
+               "path"="/users/admin/{id}",
+               "method"="PUT",
+               "security_post_denormalize"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
+           },
  *     }
  * )
  */
@@ -335,7 +338,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getAvatar(): ?string
     {        
-        return $this->avatar ?  'upload/img/' . $this->avatar : '/img/avatar.png' ;
+        return $this->avatar ?  'upload/img/' . $this->avatar : 'assets/avatar.png' ;
     }
 
     public function setAvatar(?string $avatar): self

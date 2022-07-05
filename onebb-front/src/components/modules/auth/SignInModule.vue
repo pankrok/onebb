@@ -27,7 +27,15 @@
         <div class="col column my-1">
           <button :disabled="logging" :class="{ 'btn-disabled': logging }" @click="login" type="submit" class="btn btn-secondary">{{ $t('sign in') }}</button>
         </div>
- 
+        <hr />
+        <div class="col column my-1 text-center">
+        
+          <router-link  @click="$emit('update:show', false)"
+            :to="{ name: 'ResetPassword' }"
+           >
+                <small>{{ $t('reset password') }}</small>
+           </router-link>
+        </div>
     </div>
     
   </div>

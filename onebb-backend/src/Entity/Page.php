@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      itemOperations={
  *           "get"={"groups": {"page"}}, 
  *           "delete"={"security"="is_granted('ROLE_PAGE_DELETE')"},
- *           "put"={"security"="is_granted('ROLE_PAGE_UPDATE')"}
+ *           "put"={"security"="is_granted('ROLE_PAGE_EDIT')"}
  *       }
  *  )   
  *)
@@ -78,7 +79,12 @@ class Page
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
      */
     private $active;
-
+    
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -118,6 +124,13 @@ class Page
         $this->slug = $slug;
 
         return $this;
+    }
+    
+    public function computeSlug(SluggerInterface $slugger)
+    {
+        if (!$this->slug || '-' === $this->slug) {
+            $this->slug = (string) $slugger->slug((string) $this)->lower();
+        }
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

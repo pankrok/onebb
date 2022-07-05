@@ -1,6 +1,6 @@
 export const plugins = {
   namespaced: true,
-  state: () => ({ plugins: {}}),
+  state: () => ({ plugins: {}, firstRun: true}),
   actions: {
     addPlugin({commit}, plugin)  {
         commit('init', plugin);
@@ -11,9 +11,12 @@ export const plugins = {
   },
   mutations: {
     init(state, plugin) {
-        if (typeof(plugin.name) === 'string') {
-            state.plugins[plugin.name] = plugin.app;
-            state.plugins[plugin.name].init();
+        console.log('%c PLUGIN MODULE || initialize plugin', 'color: #bada55');
+        console.log({initPlugin: plugin.name()});
+        if (typeof(plugin.name()) === 'string') {
+            state.plugins[plugin.name()] = plugin;
+            state.plugins[plugin.name()].init();
+            console.log({pluginStore: 'initing plugin : ' + plugin.name});
         }
     },
     
@@ -22,6 +25,11 @@ export const plugins = {
     },
     
     reload(state) {
+        if (state.firstRun === true) {
+            state.firstRun = false;
+            return;
+        }
+        
         if (Object.keys(state.plugins).length === 0) 
             return;
        

@@ -163,7 +163,7 @@ export default {
             this.$store.dispatch('loaded');
         });   
     },  
-    formEvents: function(formData) { console.log({formData: formData});
+    formEvents: function(formData) {
         if (formData.action === 'categoryFields') {
             this.$store.dispatch('loading');
              this.$store.dispatch('onebb/post', {
@@ -186,7 +186,7 @@ export default {
             });
         }
         
-        if (formData.action === 'itemDelete') {
+        if (formData.action === 'itemDelete' || formData.action === 'itemNestedDelete' ) {
             this.$store.dispatch('loading');
              this.$store.dispatch('onebb/delete', {
                 resource: formData.fields.resource,

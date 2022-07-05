@@ -34,7 +34,13 @@
                     ><i class="fa-solid fa-user"></i> <span>{{ $t('profile') }}</span>
                 </router-link>
             </li>
-            <li class="dropdown-item" v-if="loggedIn"><a href="#" class="px-1" @click.stop.prevent="logout"><i class="fa-solid fa-gear"></i> <span>{{ $t('configuration') }}</span></a></li>
+            <li class="dropdown-item" v-if="loggedIn">
+                <router-link  
+                    class="px-1"
+                    :to="{ name: 'UserConfig', params: {id: $store.state.onebb.status.uid} }"
+                    ><i class="fa-solid fa-cog"></i> <span>{{ $t('configuration') }}</span>
+                </router-link>
+            </li>
             <li class="dropwodn-item header"></li>
             <li class="dropdown-item" v-if="loggedIn"><a href="#" class="px-1" @click.stop.prevent="logout"><i class="fa fa-sign-out fa-lg"></i> <span>{{ $t('logout') }}</span></a></li>
          </ul>
@@ -55,8 +61,8 @@
     <ul class="menu">
       <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
       <li v-for="(menuItem, index) in menuItems" :key="index">
-        <router-link to="/about">
-            About
+        <router-link :to="{ name: 'Page', params: {slug: menuItem.slug, id: menuItem.id} }">
+            <span v-html="menuItem.name"></span>
         </router-link>  
       </li>
     </ul>
@@ -97,6 +103,12 @@ export default {
         this.$store.dispatch('onebb/logout');
     },
   },
+   mounted() {
+    this.$store.dispatch('onebb/get', { resource: 'page' }).then(response => {
+        this.menuItems = response['hydra:member'];
+    });
+    },
+    
   emits: ['darkMode']
   
 }

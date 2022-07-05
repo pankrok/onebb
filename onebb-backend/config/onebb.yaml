@@ -1,9 +1,10 @@
 parameters:
     maintaince: false
+    default_group: 1
     base_url: '%env(BASE_URL)%'
     acp_url: '%env(ACP_URL)%'
-    version: 0.0.1
+    version: 0.0.2
     mailer.dns: 'sendmail://default'
     mail.validation: false
-    mail.address: example@mail.com
+    mail.address: admin@mail.com
     mail.username: Admin
