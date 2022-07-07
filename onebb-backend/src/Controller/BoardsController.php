@@ -42,7 +42,7 @@ class BoardsController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         
         $payload = $request->toArray();
-        $return = $pluginService->dispatch($payload['plugin'], $payload['event']);
+        $return = $pluginService->dispatch($payload);
         
         $response->setContent(json_encode($return));
         

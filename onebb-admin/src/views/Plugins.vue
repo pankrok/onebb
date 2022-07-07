@@ -7,6 +7,10 @@
         </div>
         <div class="box-content">
         <p>{{ plugin.meta}}</p>
+        <hr v-if="plugin.install && plugin.acp" />
+        <div v-if="plugin.install && plugin.acp" class="row j-c-center a-i-center">
+            <router-link :to="{ name: 'PluginControl',  params: {plugin: plugin.name}}" class="btn btn-secondary"><i class="fa-solid fa-cog"></i> {{ $t('configuration') }}</router-link>
+        </div>
         <hr />
         <div class="row j-c-space-between a-i-center">
             <button @click="dispatch(plugin.id, 'install')" v-if="!plugin.install"  class="btn btn-info">Install</button> 

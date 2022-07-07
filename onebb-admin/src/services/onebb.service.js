@@ -219,6 +219,11 @@ class OneBB {
     return this;
   }
   
+  pluginControl() {
+    this.resource = 'plugin/control';
+    return this;  
+  }
+  
   async login(data){
     return new Promise((resolve) => {
         this.resource = 'login';

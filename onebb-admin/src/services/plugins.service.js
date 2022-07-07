@@ -4,11 +4,8 @@ const API_URL = cfg.url + cfg.obb + 'api/';
 class Plugin {
    
     #store = null;
+    #router = null
     #request = null;
-    #events = {
-        Home: [],
-        SignUp: []
-    };
     
     constructor() {
         this.config = {
@@ -20,7 +17,8 @@ class Plugin {
             referrerPolicy: 'no-referrer',
             headers: {
                 'Content-Type': 'application/ld+json',
-                'Accept': 'application/ld+json'
+                'Accept': 'application/ld+json',
+                'X-ONEBB-ADMIN': 'true'
             },
             body: null,
         };
@@ -34,24 +32,16 @@ class Plugin {
             return {status: req.status, response: response};
         };
         
-        this.context = function(name) {
-            if (typeof(this.#events[name]) === 'undefined') {
-                return null;
-            }
-            
-            if (this.#events[name].length === 0) {
-                return null;
-            }
-            
-            this.#events[name].forEach((el) => {
-                el();   
-            })
-        };
+       
     }
     
-    
-    subscribe(context, func) {
-        this.#events[context].push(func);
+    setRouter(router) {
+        if (this.#router === null) {
+            this.#router = router;
+            return this;
+        }
+        
+        throw 'Router is already set!';
     }
     
     setStore(store) {
@@ -63,18 +53,10 @@ class Plugin {
         throw 'Store is already set!';
     }
     
-    add(plugin) {
-        this.#store.dispatch('plugins/addPlugin', plugin)
+    routerPluginPush(plugin, temp = null, script = null) {
+      this.#router.push({ name: 'PluginControl', params: { plugin: plugin, temp: temp, script: script}});
     }
-    
-    reload() {
-        this.#store.dispatch('plugins/reloadPlugins');
-    }
-    
-    hello() {
-         console.log('%cPlugin Service say: %cHello!!', 'color: #9B3939;', 'color: green;');
-    }
-    
+       
     serializeForm(form) {
         let obj = {};
         let formData = new FormData(form);
@@ -83,7 +65,7 @@ class Plugin {
         }
         return obj;
     }
-    
+       
     dispatch(plugin, event, data = null) {
         this.config.body = JSON.stringify({
             plugin: plugin,

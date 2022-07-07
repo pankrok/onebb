@@ -23,9 +23,10 @@ class MetafieldValue
     private $metafield;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $value;
+    private $value = [];
+
 
     public function getId(): ?int
     {
@@ -44,12 +45,12 @@ class MetafieldValue
         return $this;
     }
 
-    public function getValue()
+    public function getValue(): ?array
     {
         return $this->value;
     }
 
-    public function setValue($value): self
+    public function setValue(?array $value): self
     {
         $this->value = $value;
 

@@ -1,18 +1,13 @@
 <script>
-document.onreadystatechange = function () {
-    if (document.readyState == 'interactive') {
-            
-        let el = document.querySelector('#examplePluginContent');
-        if (el !== null) {
+    document.addEventListener('readystatechange', function() {
+        if (document.readyState === 'complete') {
+            window.$obbPlugins.subscribe('Home', function(){
             window.$obbPlugins
-            .dispatch('ExamplePlugin', 'myEvent')
-            .then(response => {
-                
-                console.log(response.response);
-                //document.querySelector('#examplePluginContent').append(response.response)
-            });
+                .dispatch('ExamplePlugin', 'myEvent')
+                .then(response => {
+                    document.querySelector('#examplePluginContent').innerHTML = (response.data)
+                });
+            })   
         }
-            
-    }
-}
+    }); 
 </script>

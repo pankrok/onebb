@@ -1,0 +1,1 @@
+<div class="alert danger text-center"><strong>HELLO!</strong></div>

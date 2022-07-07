@@ -35,6 +35,11 @@ class Metafield
      */
     private $metafieldValues;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Plugin::class, inversedBy="metafields")
+     */
+    private $plugin;
+
     public function __construct()
     {
         $this->metafieldValues = new ArrayCollection();
@@ -95,6 +100,18 @@ class Metafield
                 $metafieldValue->setMetafield(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlugin(): ?Plugin
+    {
+        return $this->plugin;
+    }
+
+    public function setPlugin(?Plugin $plugin): self
+    {
+        $this->plugin = $plugin;
 
         return $this;
     }

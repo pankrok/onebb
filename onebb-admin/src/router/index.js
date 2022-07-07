@@ -31,7 +31,7 @@ const routes = [
     component: () => import('../views/UserEdit.vue')
   },
   {
-    path: '/manage/groups/list/',
+    path: '/manage/groups/list',
     name: 'GroupList',
     component: () => import('../views/GroupList.vue')
   },
@@ -71,7 +71,7 @@ const routes = [
     component: () => import('../views/EmailEditor.vue')
   },
   {
-    path: '/skin/list/',
+    path: '/skin/list',
     name: 'SkinList',
     component: () => import('../views/SkinList.vue')
   },
@@ -82,9 +82,14 @@ const routes = [
   }
   ,
   {
-    path: '/plugins/list/',
+    path: '/plugins/list',
     name: 'Plugins',
     component: () => import('../views/Plugins.vue')
+  },
+  {
+    path: '/plugins/:plugin/:temp?/:script?',
+    name: 'PluginControl',
+    component: () => import('../views/PluginControl.vue')
   }
 ]
 

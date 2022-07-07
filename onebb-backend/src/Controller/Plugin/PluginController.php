@@ -8,17 +8,20 @@ use App\Entity\Metafield;
 use App\Entity\MetafieldValue;
 use App\Entity\Box;
 use App\Entity\Skin;
-use App\Entity\SkinBoxes;    
+use App\Entity\SkinBoxes;
+use App\Entity\Plugin; 
 
 class PluginController
 {
     private $doctrine;
     protected $translator;
+    protected $plugin;
 
     public function __construct(ManagerRegistry $doctrine, TranslatorInterface $trans)
     {
-        $this->doctrine = $doctrine;       
+        $this->doctrine = $doctrine;
         $this->translator = $trans;
+        $this->plugin = $this->doctrine->getRepository(Plugin::class)->findOneBy(['name' => $this->info()['name']]);
     }
     
     protected function createMetafield(string $namespace, string $key): Metafield
@@ -31,6 +34,7 @@ class PluginController
             $metafield
                 ->setNamespace($namespace)
                 ->setMetafieldKey($key)
+                ->setPlugin($this->plugin)
             ;
             
             $em->persist($metafield);
@@ -40,9 +44,9 @@ class PluginController
         return $metafield;
     }
     
-    protected function createMetafieldValue(Metafield $metafield, string $value): ?Metafield
+    protected function createMetafieldValue(Metafield $metafield, array $value): ?MetafieldValue
     {
-        $metafieldValue = $this->doctrine->getRepository(Metafield::class)->findOneBy(['metafield' => $metafield, 'value' => $value]);
+        $metafieldValue = $this->doctrine->getRepository(MetafieldValue::class)->findOneBy(['metafield' => $metafield, 'value' => $value]);
         
         if ($metafieldValue !== null ) {   
             return false;
@@ -58,7 +62,7 @@ class PluginController
         $em->persist($metafieldValue);
         $em->flush();
         
-        return $metafield;
+        return $metafieldValue;
     }
     
     protected function getMetafield(string $namespace, string $key): ?Metafield
@@ -76,7 +80,7 @@ class PluginController
         return null;
     }
     
-    protected function updateMetafieldValue(int $id, string $value): bool
+    protected function updateMetafieldValue(int $id, array $value): bool
     {
         $metafieldValue = $this->doctrine->getRepository(Metafield::class)->find($id);
         $metafieldValue->setValue($value);
@@ -101,9 +105,9 @@ class PluginController
         return false;
     }
     
-    protected function deleteMetafieldValue(Metafield $metafield, string $value): bool
+    protected function deleteMetafieldValue(int $id): bool
     {
-        $metafieldValue = $this->doctrine->getRepository(Metafield::class)->findOneBy(['metafield' => $metafield, 'value' => $value]);
+        $metafieldValue = $this->doctrine->getRepository(MetafieldValue::class)->find($id);
         if ($metafieldValue !== null ) {  
             $em = $this->doctrine->getManager();
             $em->remove($metafieldValue);

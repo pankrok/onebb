@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\PluginRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,11 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *      collectionOperations={
             "get"={
+                "normalization_context"={"groups": {"plugin:get"}},
                 "security"="is_granted('ROLE_PLUGIN_GET')"
                 }, 
         },
  *      itemOperations={
  *           "get"={
+                "normalization_context"={"groups": {"plugin:get"}},
                 "security"="is_granted('ROLE_PLUGIN_GET')"
                 },
  *           "put"={
@@ -31,55 +35,79 @@ class Plugin
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"plugin:get"}) 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"plugin:get"}) 
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
+     * @Groups({"plugin:get"}) 
      */
     private $version;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"plugin:put"}) 
+     * @Groups({"plugin:put", "plugin:get"}) 
      */
     private $install;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"plugin:put"}) 
+     * @Groups({"plugin:put", "plugin:get"}) 
      */
     private $active;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"plugin:get"}) 
      */
     private $meta;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"plugin:get"}) 
      */
     private $updated_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"plugin:get"}) 
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"plugin:get"}) 
      */
     private $snippet;
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Groups({"plugin:get"}) 
      */
     private $events = [];
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"plugin:get"}) 
+     */
+    private $acp;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Metafield::class, mappedBy="plugin")
+     */
+    private $metafields;
+
+    public function __construct()
+    {
+        $this->metafields = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,6 +218,48 @@ class Plugin
     public function setEvents(?array $events): self
     {
         $this->events = $events;
+
+        return $this;
+    }
+
+    public function getAcp(): ?bool
+    {
+        return $this->acp;
+    }
+
+    public function setAcp(bool $acp): self
+    {
+        $this->acp = $acp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Metafield>
+     */
+    public function getMetafields(): Collection
+    {
+        return $this->metafields;
+    }
+
+    public function addMetafield(Metafield $metafield): self
+    {
+        if (!$this->metafields->contains($metafield)) {
+            $this->metafields[] = $metafield;
+            $metafield->setPlugin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMetafield(Metafield $metafield): self
+    {
+        if ($this->metafields->removeElement($metafield)) {
+            // set the owning side to null (unless already changed)
+            if ($metafield->getPlugin() === $this) {
+                $metafield->setPlugin(null);
+            }
+        }
 
         return $this;
     }

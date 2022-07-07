@@ -1,0 +1,15 @@
+<template>
+<div>
+    <input class="form-control" id="epFoo" type="text"></input><br />
+    <button class="btn btn-secondary" id="epBtn">GO!</button>
+</div>
+</template>
+<script>
+    document.getElementById('epBtn').addEventListener('click', () => { 
+        window.$obbPlugins.dispatch(
+            'ExamplePlugin',
+            'myAdminEvent',
+            { myFoo: document.getElementById('epFoo').value}
+        )
+    }, false);
+</script>

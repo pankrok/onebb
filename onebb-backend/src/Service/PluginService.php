@@ -27,28 +27,36 @@ class PluginService
     }
     
     // WARNING $all = true only for debug!
-    public function loadPlugins($all = false)
+    public function loadPlugins($admin = false)
     {   
         $this->plugins = [];
         $this->events = [];
         $this->snippets = [];
         
         $plugins = $this->doctrine->getRepository(Plugin::class);
-        if ($all) {
+        if ($admin) {
             $plugins = $plugins->findAll();
         } else {
             $plugins = $plugins->findBy(['active' => 1, 'install' => 1]);
         }
         
         foreach ($plugins as $plugin) {
-            $this->events[$plugin->getName()] = $plugin->getEvents();
+
             $this->snippets[] = $plugin->getSnippet();
             $class = sprintf('\\Plugin\\%s\\%s', $plugin->getName(), $plugin->getName());
             if (class_exists($class) === false) {
                 continue;
             }
             
-            $this->plugins[$plugin->getName()] = new $class($this->doctrine, $this->trans);
+            $pluginInstance = new $class($this->doctrine, $this->trans);
+            $this->plugins[$plugin->getName()] = $pluginInstance;
+            
+            if ($admin) {
+                $this->events[$plugin->getName()] = array_merge($pluginInstance->getEvents(), $pluginInstance->getAdminEvents());
+            } else {
+                $this->events[$plugin->getName()] = $pluginInstance->getEvents();
+            }
+            
             if (empty($this->plugins[$plugin->getName()]->info()['trans']) === false) {
                 $path = $this->dir . DIRECTORY_SEPARATOR . $plugin->getName() . DIRECTORY_SEPARATOR . 'translations/';
                 foreach ($this->plugins[$plugin->getName()]->info()['trans'] as $trans) {
@@ -87,6 +95,7 @@ class PluginService
                 ->setCreatedAt(new \DateTimeImmutable('NOW'))
                 ->setSnippet($pluginInstance->getSnippet())
                 ->setEvents($pluginInstance->getEvents())
+                ->setAcp($info['acp'])
             ;
             
             $em = $this->doctrine->getManager();
@@ -117,14 +126,14 @@ class PluginService
         return $this->snippets;
     }
     
-    public function dispatch($plugin, $payload)
+    public function dispatch($payload)
     {
-       $func = $this->events[$plugin][$payload];
+       $func = $this->events[$payload['plugin']][$payload['event']];
        
-       return $this->plugins[$plugin]->$func();
+       return $this->plugins[$payload['plugin']]->$func($payload);
     }
     
-    public function action($plugin, $action): bool
+    public function action($plugin, $action): string|bool
     {        
         return $this->plugins[$plugin]->$action();
     }

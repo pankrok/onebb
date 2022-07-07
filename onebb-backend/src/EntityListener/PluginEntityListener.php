@@ -22,8 +22,7 @@ class PluginEntityListener
     public function postUpdate(Plugin $plugin, LifecycleEventArgs $event)
     {
         $name = $plugin->getName();
-        $action = $this->request;
-        $action = $action->toArray();
+        $action = $this->request->toArray();
         
         if (isset($action['install'])) {
             if ($action['install'] === true) {

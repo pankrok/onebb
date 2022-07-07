@@ -14,6 +14,7 @@ class ExamplePlugin extends PluginController implements PluginInterface
             'name' => 'ExamplePlugin',
             'version' => '0.1.5',
             'meta' => 'This is an example plugin showing box and alert.',
+            'acp' => true,
             'trans' => [
                 [
                     'domain' => 'ep',
@@ -23,29 +24,69 @@ class ExamplePlugin extends PluginController implements PluginInterface
         ];
     }
     
-    public function getEvents(): array
+    public function getEvents(): ?array
     {
         return [
-            'myEvent' => 'myFunc'
+            'myEvent' => 'myFunc',
         ];
     }
     
-    public function getSnippet(): string
+    public function getAdminEvents(): ?array
     {
-        return 
-        "<script>
-            document.addEventListener('readystatechange', function() {
-                if (document.readyState === 'complete') {
-                    window.\$obbPlugins.subscribe('Home', function(){
-                    window.\$obbPlugins
-                        .dispatch('ExamplePlugin', 'myEvent')
-                        .then(response => {
-                            document.querySelector('#examplePluginContent').innerHTML = (response.data)
-                        });
-                    })   
-                }
-            }); 
-        </script>";
+        return [
+            'myAdminEvent' => 'myAdminFunc',
+            'getData' => 'myAdminGetData',
+        ];
+    }
+    
+    public function getSnippet(): ?string
+    {
+        return file_get_contents(__DIR__ . '/snippet.js');
+    }
+    
+    public function getAdminTemplate(): ?string
+    {
+        return  '<div>
+        
+                    <input class="form-control" id="epFoo" type="text"></input><br />
+                    <button class="btn btn-secondary" id="epBtn">GO!</button><br />
+                    <a id="epUrl" href="">link test</a>
+                </div>';
+    }
+    
+    public function getAdminScript(): ?string
+    {
+        return  "   document.getElementById('epUrl').addEventListener('click', (e) => { 
+                        e.preventDefault();
+                        window.\$obbPlugins.routerPluginPush('ExamplePlugin', 'getAdminTemplateTwo', 'getAdminScriptTwo');
+                    }, false);
+        
+                    let j = null;
+                    window.\$obbPlugins.dispatch(
+                        'ExamplePlugin',
+                        'getData',
+                    ).then(response => {
+                        document.getElementById('epFoo').value = response.data;
+                    }).then(() => {
+                        j = new window.\$jodit(document.getElementById('epFoo'), {});
+                    });
+                                
+                    document.getElementById('epBtn').addEventListener('click', () => { 
+                    window.\$obbPlugins.dispatch(
+                        'ExamplePlugin',
+                        'myAdminEvent',
+                        { text: document.getElementById('epFoo').value}
+                    ).then(response => {console.log(response);});
+                }, false);";
+    }
+    
+    public function getAdminTemplateTwo()
+    {
+        return 'xD';
+    }
+    
+    public function getAdminScriptTwo() {
+        return '';
     }
     
     public function install(): bool
@@ -89,10 +130,19 @@ class ExamplePlugin extends PluginController implements PluginInterface
         return true; 
     }
     
-    public function myFunc()
+    public function myFunc($payload)
     {   
-        $txt = '<div class="alert danger text-center"><strong>%s</strong></div>';
-       
-       return sprintf($txt, $this->translator->trans('hello'));
-    }    
+       return file_get_contents(__DIR__ .'/example.txt');
+    } 
+
+    public function myAdminFunc($payload)
+    {
+        file_put_contents(__DIR__ .'/example.txt', $payload['data']['text']);
+        return $payload;
+    }
+    
+    public function myAdminGetData($payload)
+    {
+        return file_get_contents(__DIR__ .'/example.txt');
+    }
 }
