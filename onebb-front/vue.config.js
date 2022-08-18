@@ -11,7 +11,7 @@
   ,
   
   pwa: {
-    name: 'OneBB'
+    name: '{{ board_name }}'
   },
 
   pluginOptions: {

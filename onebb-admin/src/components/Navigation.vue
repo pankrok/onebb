@@ -37,6 +37,27 @@
         <li class="list-item">
             <router-link :to="{ name: 'Plugins' }"><i class="fa-solid fa-plug"></i> {{ $t('plugins') }}</router-link>
         </li>
+        <li class="list-item" v-on:click.stop>
+            <span 
+                class="col-12 pointer active" 
+                :class="{ inactive: pluginsLoading }" 
+                @click="showPlugins = !showPlugins"
+            >
+                <i class="fa-solid fa-plug-circle-check"></i> Active plugins <i v-if="pluginsLoading" class="fas fa-circle-notch fa-spin"></i>
+                <i v-if="!pluginsLoading" class="ml-4 fa-solid fa-angle-right rotate-anim" :class="{'fa-rotate-90': showPlugins}"></i>
+            </span>
+            <Transition name="fade">
+                
+                <TransitionGroup v-if="showPlugins" name="list" tag="ul"  @click="hideMenu"  class="second-list">
+                    <template v-for="plugin in $store.state.obbPlugins" :key="plugin.id">   
+                      <li class="list-item" v-if="plugin.install" :key="plugin.name">
+                         <router-link  v-if="plugin.install && plugin.acp"  :to="{ name: 'PluginControl',  params: {plugin: plugin.name}}" ><i class="fa-solid" :class="plugin.ico ? plugin.ico : 'fa-cog'"></i> {{ plugin.name }}</router-link>
+                      </li> 
+                    </template> 
+                </TransitionGroup>
+                
+            </Transition>
+        </li>
         <hr />
         <li class="list-item" v-if="$store.state.onebb.status.loggedIn">
             <a href="#" class="px-1" @click="logout"><i class="fa fa-sign-out fa-lg"></i> {{ $t('logout') }}</a>
@@ -52,15 +73,34 @@
 
 export default {
   name: 'Navigation',
-  methods: {
-  hideMenu() {
-    this.$store.dispatch('hideMenu');
+  data() {
+    return {
+        pluginsLoading: true,
+        showPlugins: false,
+    }
   },
+  methods: {
+    hideMenu() {
+      this.$store.dispatch('hideMenu');
+    },
    logout() {
         this.$store.dispatch('onebb/logout');
         this.$router.push({ name: 'Login'} );
     },
-  }
+    loadPlugins() {
+        this.$store.dispatch('onebb/get', {resource:'plugins'}).then(response => {
+            response['hydra:member'].forEach((el) => {
+                this.$store.dispatch('obbPlugins/set', {plugin: el.name, data: el});
+            });        
+            this.pluginsLoading = false; 
+    });
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+        this.loadPlugins()
+    }, 2000);
+  },
 }
 </script>
 

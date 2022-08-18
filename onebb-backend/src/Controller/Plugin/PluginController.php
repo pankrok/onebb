@@ -80,6 +80,16 @@ class PluginController
         return null;
     }
     
+    protected function getMetafieldValue(int $id)
+    {        
+        $mv = $this->doctrine->getRepository(MetafieldValue::class)->find($id);
+        if ($mv === null) {
+            return null;
+        }
+        
+        return $mv->getValue();
+    }
+    
     protected function updateMetafieldValue(int $id, array $value): bool
     {
         $metafieldValue = $this->doctrine->getRepository(Metafield::class)->find($id);

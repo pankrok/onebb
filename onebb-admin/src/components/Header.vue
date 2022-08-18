@@ -9,6 +9,8 @@
             <span></span>
        </li>   
       <ul class="second_menu">
+        <!--
+            FIXME  not implemented yet
         <li class="list-complete-item">
             <button id="bells" class="btn btn-secondary xs rounded">
                 <i class="fa-solid fa-bell"></i>
@@ -16,7 +18,8 @@
                     <span class="badge danger">1</span>
                 </span>
             </button>
-        </li>
+        </li> 
+        -->
         <li class="list-complete-item"><button @click="darkMode" id="theme-toggle" class="btn btn-secondary xs rounded"><i class="fa-moon fas"></i></button></li>
         <li class="list-complete-item"><img :src="uri + $store.state.onebb.status.avatar" alt="Avatar" class="avatar xs mx-1"><!--<i class="fa-solid fa-caret-down"></i>--></li>
       </ul>

@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { onebb } from './onebb.module';
+import { obbPlugins } from './plugins.module';
 
 export default createStore({
   state: {
@@ -33,5 +34,6 @@ export default createStore({
   },
   modules: {
     onebb,
+    obbPlugins,
   }
 })

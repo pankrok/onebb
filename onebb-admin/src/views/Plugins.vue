@@ -1,6 +1,6 @@
 <template>
   <div class="row" :key="$route.name">
-   <div v-for="plugin in plugins" class="col-3 my-1" :key="plugin.id">
+   <div v-for="plugin in $store.state.obbPlugins" class="col-3 my-1" :key="plugin.id">
     <div class="box " :class="{ success: plugin.active}">
         <div class="box-header">
             <h2>{{ plugin.name }}</h2>
@@ -54,14 +54,17 @@ export default {
             body.active = false;
         }
         
-        this.$store.dispatch('onebb/put', {resource:'plugins', id: plugin, data: body}).then(() => {
-            this.load();
+        this.$store.dispatch('onebb/put', {resource:'plugins', id: plugin, data: body}).then((response) => {
+            this.$store.dispatch('obbPlugins/set', {plugin: response.name, data: response});
+            this.$store.dispatch('loaded');
         });
     },
     
     load: function() {
         this.$store.dispatch('onebb/get', {resource:'plugins'}).then(response => {
-            this.plugins = response['hydra:member'];
+            response['hydra:member'].forEach((el) => {
+                this.$store.dispatch('obbPlugins/set', {plugin: el.name, data: el});
+            }); 
             this.$store.dispatch('loaded');
         });
     }

@@ -51,7 +51,8 @@ class AuthenticationSuccessListenerSubscriber
             return;
         }
 
-        $data['acp_enabled'] = $user->getAcpEnabled();
+        $data['acp_enabled'] = $user->getAcpEnable();
+        $data['mcp_enabled'] = $user->getMcpEnable();
         $data['uid'] = $user->getId();
         $data['avatar'] = $user->getAvatar();
         $data['slug'] = $user->getSlug();

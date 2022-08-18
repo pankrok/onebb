@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ExistsFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
  * @ORM\Entity(repositoryClass=SkinRepository::class)
@@ -65,7 +66,7 @@ class Skin
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"skin_cfg"}) 
-     * @ApiFilter(ExistsFilter::class)
+     * @ApiFilter(BooleanFilter::class)
      */
     private $active;
 

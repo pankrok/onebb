@@ -224,6 +224,16 @@ class OneBB {
     return this;  
   }
   
+  cache() {
+    this.resource = 'admin/cache';
+    return this;    
+  }
+  
+  stats() {
+    this.resource = 'admin/stats';
+    return this;    
+  }
+  
   async login(data){
     return new Promise((resolve) => {
         this.resource = 'login';

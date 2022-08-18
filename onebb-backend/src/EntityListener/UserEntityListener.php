@@ -70,6 +70,7 @@ class UserEntityListener
             ->setUserGroup($this->groupRepository->find($group_id))
             ->setRoles(['ROLE_USER'])
             ->setVerified(!$validation)
+            ->setCreatedAt(new \DateTimeImmutable('NOW'));
         ;
         $user->setPassword($this->passwordHasher->hashPassword(
             $user,

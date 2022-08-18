@@ -17,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("slug")
 
  * @ApiResource(
-        order={"updated_at": "ASC"},
+       order={"priority": "DESC", "created_at": "DESC"},
        normalizationContext={"groups": {"board"}},
  *      collectionOperations={
  *          "get" = {"normalization_context"={"groups": {"category"}}, "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},

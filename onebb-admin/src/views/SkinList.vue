@@ -56,25 +56,40 @@
 <script>
 
 export default {  
+
   name: 'SkinList',
   data() {
     return {
         resources: null,
     }
   },
-methods: {
-    active: function(id){
-        alert(id);  
+  methods: {
+    loadSkins() {
+        this.$store.dispatch('onebb/get', { resource: 'adminSkin' }).then(response => {
+            this.resources = response;           
+            this.$store.dispatch('loaded');
+        });  
     },
+
+    active(id){ 
+        this.$store.dispatch(
+            'onebb/put', 
+            { 
+                resource: 'adminSkin', 
+                id: id 
+            }
+        ).then(() => {
+            this.$store.dispatch('loading');
+            this.loadSkins();
+        });  
+    },
+    
     skinImg(name) {
         return document.getElementById('app').dataset.url + '/skins/' + name + '/' + name +'.png';
     }
 },  
   mounted() {
-    this.$store.dispatch('onebb/get', { resource: 'adminSkin' }).then(response => {
-        this.resources = response;           
-        this.$store.dispatch('loaded');
-    });   
+    this.loadSkins();
   },
   beforeUnmount() {
     this.$store.dispatch('loading');

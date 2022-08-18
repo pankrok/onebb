@@ -32,7 +32,7 @@ class BoardsController extends AbstractController
         
         // FIXME here will be seo bot checker to delivery static content generate by TWIG!
         
-        return $this->render('boards/index.html.twig', ['snippets' => $pluginService->getSnippets()]);
+        return $this->render('boards/index.html.twig', ['snippets' => $pluginService->getSnippets(), 'board_name' => $this->getParameter('board_name')]);
     }
     
     #[Route('/api/plugin/dispatch', name: 'plugin', methods: 'POST')]

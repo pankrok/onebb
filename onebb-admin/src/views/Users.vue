@@ -11,6 +11,7 @@
 </template>
 <script>
 import Crud from '../components/Crud';  
+import roles from '../assets/roles.json'
 
 export default {  
   name: 'User',
@@ -97,11 +98,20 @@ export default {
   mounted() {
     this.$store.dispatch('onebb/get', { resource: 'group' }).then(response => {
         let options = [];
+        let userRoles = [];
         response['hydra:member'].forEach(function(el) {
             options.push({
                 val:  el.id,
                 name: el.group_name
             });
+        });
+        roles.forEach((role) => {
+            let r = {
+                name: role, // FIXME here should be used translations!
+                val: role
+            };
+             
+            userRoles.push(r);
         });
         this.group = options;
         this.crud.forms.userFields = [
@@ -131,15 +141,26 @@ export default {
                     },
                     {
                         fieldType: 'selectType',
-                        fieldClass: 'col-6 column my-1',
-                        name: 'default_gruop',
+                        fieldClass: 'col-6  column my-1',
+                        name: 'default_group',
                         class: 'form-control my-1',
                         label: 'Select user group',
                         options: this.group
                     },
                     {
+                        fieldType: 'selectType',
+                        fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
+                        name: 'roles',
+                        multiple: true,
+                        styles: "width: 100%; height: 250px;",
+                        options: userRoles,
+                        class: 'form-control m-1',
+                        label: 'Roles',
+        
+                    },
+                    {
                         fieldType: 'checkboxType',
-                        fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
+                        fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1 border-bottom',
                         checked: true,
                         name: 'verified',
                         class: 'form-control m-1',
@@ -148,7 +169,7 @@ export default {
                     },
                     {
                             fieldType: 'checkboxType',
-                            fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
+                            fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1 border-bottom',
                             checked: false,
                             name: 'banned',
                             class: 'form-control m-1',
@@ -156,24 +177,31 @@ export default {
       
                     },
                     {
-                    fieldType: 'checkboxType',
-                    fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
-                    checked: false,
-                    name: 'apc_enabled',
-                    val: false,
-                    class: 'form-control m-1',
-                    label: 'ACP',
-  
-                },
-                {
+                        fieldType: 'checkboxType',
+                        fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1 border-bottom',
+                        checked: false,
+                        name: 'acpEnable',
+                        val: false,
+                        class: 'form-control m-1',
+                        label: 'ACP',
+                    },
+                    {
+                        fieldType: 'checkboxType',
+                        fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1 border-bottom',
+                        checked: false,
+                        name: 'mcpEnable',
+                        val: false,
+                        class: 'form-control m-1',
+                        label: 'MCP',
+                    },
+                    {
                         fieldType: 'buttonType',
                         fieldClass: 'col-12 row j-c-end my-1',
                         name: 'submit',
                         type: 'button',
                         class: 'btn btn-secondary',
                         text: 'Create user',
- 
-                }
+                    }
             ],
         this.reloadCrud();  
     });    

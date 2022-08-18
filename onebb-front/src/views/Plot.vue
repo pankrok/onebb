@@ -3,8 +3,9 @@
         <div class="box">
             <div class="box-header">
             <Transition name="fade" mode="out-in">
-               <h1 v-if="plot.name" :key="plot.name">{{ plot.name }}</h1>
+               <span v-if="plot.name" :key="plot.name" class="d-flex j-c-space-between a-i-center"><h1>{{ plot.name }}</h1> <button v-if="$store.state.onebb.status.mcp" class="btn btn-warning" @click="plotMod = plot.id">EDIT PLOT</button></span>
                <h1 v-else :key="loading">{{ $t('loading') }}</h1>
+               
             </Transition>
             </div>
         </div>
@@ -57,11 +58,12 @@
                </div>
               
                </div>
-                <div class="f-grow">
-                <div class="box-content my-1 d-sm-none-xl-flex border-bottom-primary-1">{{ $t('created at') }} {{ dateFormat(post.created_at) }}</div>
-                <div class="box-content my-1" v-html="post.content" :id="'post' + post.id">
-                    
-                </div>
+                <div class="f-grow column j-c-space-between">
+                <span>
+                    <div class="box-content my-1 d-sm-none-xl-flex border-bottom-primary-1">{{ $t('created at') }} {{ dateFormat(post.created_at) }}</div>
+                    <div class="box-content my-1" v-html="post.content" :id="'post' + post.id"> </div>
+                </span>
+                <div v-if="$store.state.onebb.status.mcp" class="box-content my-1 a-s-end"><button class="btn btn-warning" @click="postMod = post.id"><i class="fas fa-edit "></i></button></div>
             </div>
             </div>
             </TransitionGroup>
@@ -88,6 +90,8 @@
         </Transition>
         </div>  
     </div>
+    <PlotMod v-model:pid="plotMod" />
+    <PostMod v-model:pid="postMod" />
 </template>
 
 
@@ -112,6 +116,8 @@ export default {
         loading: true,
         editor: false, 
         jodit_cfg: {},
+        plotMod: 0,
+        postMod: 0,
     }
   },
   mounted() {
@@ -211,6 +217,12 @@ export default {
   components: {
     Jodit: defineAsyncComponent(() =>
         import('../components/modules/JoditEditor')
+    ),
+    PlotMod: defineAsyncComponent(() =>
+        import('../components/modules/moderator/PlotMod')
+    ),
+    PostMod: defineAsyncComponent(() =>
+        import('../components/modules/moderator/PostMod')
     ),
     Skeleton
   }

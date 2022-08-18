@@ -27,7 +27,7 @@ class SkinController extends AbstractController
     /**
      * Require ROLE_CONFIG_GET only for this action.
      *
-     * @//IsGranted//("ROLE_SKING_GET")
+     * @IsGranted("ROLE_SKING_GET")
      */
     #[Route('/api/admin-skins', methods: 'GET')]
     public function getSkin(): Response
@@ -43,12 +43,12 @@ class SkinController extends AbstractController
     }
 
     /**
-     * Require ROLE_CONFIG_PUT only for this action.
+     * Require ROLE_SKIN_EDIT only for this action.
      *
-     * @IsGranted("ROLE_SKIN_PUT")
+     * @IsGranted("ROLE_SKIN_EDIT")
      */
     #[Route('/api/admin-skins/{id}', methods: 'PUT')]
-    public function putSkin(Request $request, int $id): Response
+    public function putSkin(int $id): Response
     {
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
@@ -60,7 +60,13 @@ class SkinController extends AbstractController
         $oldSkin->setActive(0);
         
         $this->entityManager->persist($newSkin);
-                $this->entityManager->persist($oldSkin);
+        $this->entityManager->persist($oldSkin);
+        
+        $return = $this->entityManager->flush();
+        
+        $this->changeSkinTpl($newSkin->getName());
+        
+        $response->setContent(json_encode($return));
 
         return $response;
     }
@@ -100,5 +106,22 @@ class SkinController extends AbstractController
             ];
         }
         return $return;
+    }
+    
+    private function changeSkinTpl(string $newSkin): void
+    {
+        $indexDir = $this->getParameter('kernel.project_dir') . SELF::SKIN_DIR . DIRECTORY_SEPARATOR . $newSkin . DIRECTORY_SEPARATOR . 'index.html';
+        $indexTpl = $this->getParameter('kernel.project_dir') . DIRECTORY_SEPARATOR . '/templates/boards/index.html.twig';
+        
+        try {
+            $content = file_get_contents($indexDir);
+            if ($content === false) {
+                throw new \Exception('Skin not found!');
+            }
+            file_put_contents($indexTpl, $content);
+        } catch (\Exception $e) {
+            die(json_encode($e));
+        }
+        
     }
 }

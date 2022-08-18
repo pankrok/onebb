@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("slug")
  * @ApiResource(
- *      order={"priority": "DESC", "updated_at": "DESC"},
+ *      order={"priority": "ASC", "created_at": "ASC"},
  *      normalizationContext={"groups": {"category"}},
  *      collectionOperations={
  *          "get" = {"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},

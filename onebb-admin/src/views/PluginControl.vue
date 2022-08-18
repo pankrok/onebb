@@ -1,6 +1,6 @@
 <template>
   <div class="row j-c-center" :key="$route.params.plugin + $route.params.temp + $route.params.script">
-    <div class="box">
+    <div class="box col-12">
         <div class="box-header">
             <h2>{{ $route.params.plugin }}</h2>
         </div>

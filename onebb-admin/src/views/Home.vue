@@ -5,72 +5,74 @@
             <div class="box-header">
                 <h2>OneBB</h2>
             </div>
-            <div class="box-content">
-            <p>Hello admin, lets start work!</p>
+            <div v-if="stats" class="box-content">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="list">
+                            <h3 class="mx-2 border-bottom">{{ $t('statistics') }}</h3>
+                            <div class="list-item">
+                                <span>{{ $t('all topics') }}:</span> <span>{{ stats.current_plots }}</span>
+                            </div>
+                            <div class="list-item">
+                                <span>{{ $t('all posts') }}:</span> <span>{{ stats.current_posts }}</span>
+                            </div>
+                            <div class="list-item">
+                                <span>{{ $t('all users') }}:</span> <span>{{ stats.current_users }}</span>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col-6">
+                        <div class="list">
+                            <h3 class="mx-2 border-bottom">{{ $t('system informations') }}</h3>
+                            <div class="list-item">
+                                <span>{{ $t('version') }}:</span> <span>{{ stats.version }}</span>
+                            </div>
+                            <div class="list-item">
+                                <span>{{ $t('php version') }}:</span> <span>{{ stats.php_version }}</span>
+                            </div>
+                            <div class="list-item">
+                                <span>{{ $t('mysql version') }}:</span> <span>{{ stats.mysql_version }}</span>
+                            </div>
+                        </div> 
+                    </div>
             </div>
         </div>
     </div>
-   <!-- <div class="col-3">
-        <div class="box danger">
-            <div class="box-header">
-                <h2>BOX</h2>
-            </div>
-            <div class="box-content">
-            <p>Lorem Ipsum</p>
-            </div>
-        </div>
-    </div>
-    
-     <div class="col-3">
-        <div class="box success">
-            <div class="box-header">
-                <h2>BOX</h2>
-            </div>
-            <div class="box-content">
-            <p>Lorem Ipsum</p>
-            </div>
-        </div>
-    </div>
-    
-     <div class="col-3">
-        <div class="box warning">
-            <div class="box-header">
-                <h2>BOX</h2>
-            </div>
-            <div class="box-content">
-            <p>Lorem Ipsum</p>
-            </div>
-        </div>
-    </div>
-    
-     <div class="col-3">
+   <div class="col-12">
         <div class="box info">
             <div class="box-header">
-                <h2>BOX</h2>
+                <h2><i class="fa-solid fa-users"></i> Stats</h2>
             </div>
             <div class="box-content">
-            <p>Lorem Ipsum</p>
+                <Chart :statistics="stats" />
             </div>
-        </div>
-    </div> -->
-    
-    
+        </div> 
+    </div>   
   </div>
+</div>
 </template>
-
 <script>
-
+import { defineAsyncComponent } from 'vue'
 export default {
   name: 'Home',
-  components: {
-
+  data() {
+    return {
+        stats: null,
+    }
   },
   mounted() {
-    this.$store.dispatch('loaded');
+    this.$store.dispatch('onebb/get', { resource: 'stats' }).then(response => {
+        this.stats = response;
+        this.$store.dispatch('loaded');
+    });
   },
   beforeUnmount() {
     this.$store.dispatch('loading');
+  },
+  components: {
+    Chart: defineAsyncComponent(() =>
+        import('./../components/Chart')
+    ),
   }
-
 }
 </script>

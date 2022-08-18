@@ -105,18 +105,18 @@ export default {
                 },
                                 {
                     fieldType: 'checkboxType',
-                    fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1',
-                    checked: true,
+                    fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1',
+                    checked: this.resources.verified,
                     name: 'verified',
-                    val: this.resources.verfied,
+                    val: this.resources.verified,
                     class: 'form-control m-1',
                     label: 'Verified',
   
                 },
                 {
                     fieldType: 'checkboxType',
-                    fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1',
-                    checked: false,
+                    fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1',
+                    checked: this.resources.banned,
                     name: 'banned',
                     val: this.resources.banned,
                     class: 'form-control m-1',
@@ -125,12 +125,22 @@ export default {
                 },
                 {
                     fieldType: 'checkboxType',
-                    fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1',
-                    checked: false,
-                    name: 'apc_enabled',
-                    val: this.resources.apc_enabled,
+                    fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1',
+                    checked: this.resources.acp_enable,
+                    name: 'acpEnable',
+                    val: this.resources.acp_enable,
                     class: 'form-control m-1',
                     label: 'ACP',
+  
+                },
+                {
+                    fieldType: 'checkboxType',
+                    fieldClass: 'col-3 row d-flex j-c-center a-i-center py-1',
+                    checked: this.resources.mcp_enable,
+                    name: 'mcpEnable',
+                    val: this.resources.mcp_enable,
+                    class: 'form-control m-1',
+                    label: 'MCP',
   
                 },
                 {
@@ -149,18 +159,17 @@ export default {
          if (formData.fields.password === null) {
             delete formData.fields.password
         }
-        
+         
         if (formData.fields.roles === null) {
             delete formData.fields.roles
         }
         
-        formData.fields['acpEnabled'] = formData.fields.apc_enabled;
-        delete formData.fields.apc_enabled;
-        delete formData.fields.undefined;
-                
+    //    formData.fields['acpEnabled'] = formData.fields.apc_enabled;
+    //    delete formData.fields.apc_enabled;
+    //      delete formData.fields.undefined; 
         this.$store.dispatch('onebb/put', { 
             id: this.$route.params.id,  
-            resource: 'userAdmin',
+            resource: 'userAdmin', 
             data: formData.fields
         })
     }

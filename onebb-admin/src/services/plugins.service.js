@@ -53,8 +53,24 @@ class Plugin {
         throw 'Store is already set!';
     }
     
-    routerPluginPush(plugin, temp = null, script = null) {
-      this.#router.push({ name: 'PluginControl', params: { plugin: plugin, temp: temp, script: script}});
+    routerPluginPush(plugin, temp = null, script = null, q = {},) {
+        this.#router.push({ 
+            name: 'PluginControl', 
+            params: { 
+                plugin: plugin, 
+                temp: temp, 
+                script: script
+            }, 
+            query: q
+        });
+    }
+    
+    getParam(p) {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+          get: (searchParams, prop) => searchParams.get(prop),
+        });
+        
+        return params[p] ?? null;
     }
        
     serializeForm(form) {

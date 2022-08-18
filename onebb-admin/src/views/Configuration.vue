@@ -12,6 +12,20 @@
             @update:form-event="formEvents"
           />
       </Transition>
+       <div class="box col-12 my-2">
+            <div class="box-content row j-c-center a-i-center">
+                <button class="btn btn-warning" @click="claerCache" >{{ $t('clear cache') }}</button>
+            </div>
+            <Transition name="fade">
+            <div v-if="cache" class="modal">
+                <div class="alert column info">
+                    <div class="alert-body">
+                        <span v-html="cache"></span>
+                     </div>
+                </div>
+            </div>
+            </Transition>
+      </div>
   </div>
 </template>
 <script>
@@ -23,6 +37,7 @@ export default {
     return {
         resources: null,
         options: [],
+        cache: false,
         crud: {
             name: 'Onebb Configuration',
             class: 'box-header',
@@ -54,6 +69,7 @@ export default {
         });
          
     },
+    
     cfgFields() {
         this.crud.form = null;
         this.$store.dispatch('loading');
@@ -67,6 +83,15 @@ export default {
                             type: 'text',
                             class: 'form-control m-1 form-control-disabled',
                             label: 'OneBB Version',
+                    },
+                    {
+                            fieldType: 'inputType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'board_name',
+                            val: this.resources.board_name,
+                            type: 'text',
+                            class: 'form-control m-1',
+                            label: 'Forum name',
                     },
                     {
                         fieldType: 'checkboxType',
@@ -180,7 +205,8 @@ export default {
                 ]
                 
         this.$store.dispatch('loaded');
-    },    
+    },   
+    
     formEvents: function(formData) {
         this.$store.dispatch('loading');
         this.$store.dispatch('onebb/post', {  
@@ -190,6 +216,19 @@ export default {
             this.$store.dispatch('loaded');
         });
         
+    },
+    
+    claerCache() {
+        this.$store.dispatch('loading');
+        this.$store.dispatch('onebb/put', {  
+            resource: 'cache',
+        }).then(response => {
+            this.cache = response;
+            setTimeout(()=> {
+                this.cache = false;
+            }, 5000);
+            this.$store.dispatch('loaded');
+        });
     }
   },
   components: {

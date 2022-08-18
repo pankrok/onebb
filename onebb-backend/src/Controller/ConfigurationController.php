@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationController extends AbstractController
@@ -51,6 +53,7 @@ class ConfigurationController extends AbstractController
             'parameters' => [
                 'maintaince' => $data['maintaince'],
                 'default_group' =>  $data['default_group'],
+                'board_name' =>  $data['board_name'],
                 'base_url' => $data['base_url'] ?? $cfg['base_url'],
                 'acp_url' => $data['acp_url'] ?? $cfg['acp_url'],
                 'version' => $cfg['version'],
@@ -69,6 +72,33 @@ class ConfigurationController extends AbstractController
         $response->setContent(json_encode(true));
         $response->headers->set('Content-Type', 'application/json');
 
+        return $response;
+    }
+    
+    /**
+     * Require ROLE_CONFIG_PUT only for this action.
+     *
+     * @IsGranted("ROLE_CONFIG_PUT")
+     */
+    #[Route('/api/admin/cache', methods: 'PUT')]
+    public function clearCache(): Response
+    {
+        
+        $phpBinaryFinder = new PhpExecutableFinder(); 
+               
+        $process = new Process([
+            'php', 'bin/console', 'cache:clear'
+         ]);
+        $process->setWorkingDirectory(__DIR__ . '/../..');
+        $process->start();
+        $process->wait();      
+        
+        $log = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>", $process->getOutput());
+        
+        $response = new Response();
+        $response->setContent(json_encode($log));
+        $response->headers->set('Content-Type', 'application/json');
+        
         return $response;
     }
 
@@ -108,4 +138,5 @@ class ConfigurationController extends AbstractController
 
         return sprintf($dns, $username, $password, $server, $port);
     }
+    
 }

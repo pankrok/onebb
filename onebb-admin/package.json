@@ -9,6 +9,7 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/undefined/**/*.json\""
   },
   "dependencies": {
+    "chart.js": "^3.9.1",
     "core-js": "^3.6.5",
     "jodit": "^3.17.1",
     "register-service-worker": "^1.7.1",

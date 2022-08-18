@@ -27,9 +27,8 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  * @UniqueEntity("email")
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(OrderFilter::class, properties={"id", "username", "email"})
- * @ApiResource(
- *      attributes={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
-        collectionOperations={
+ * @ApiResource( 
+    collectionOperations={
             "post"={
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
                 "normalization_context"={"groups": {"board"}}
@@ -39,19 +38,25 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
                 "normalization_context"={"groups": {"board"}}
             }
         },
- *     itemOperations={
+    itemOperations={
+            "put_admin"={
+               "security"="is_granted('ROLE_USER_EDIT')",
+               "path"="/users/admin/{id}",
+               "method"="PUT",
+            },
             "put"={
-                "security"="is_granted('ROLE_ADMIN') or (object == user)"      
+                "security"="is_granted('ROLE_USER_EDIT') or (object == user)",
+                "denormalization_context"={"groups": {"user"}}                
             },
            "put_img"={
                 "method"="PUT",
                 "groups": {"avatar"},
                 "path"="/users/{id}/img",
                 "controller"="App\Controller\UserAvatarController",
-                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object == user"
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object == user",
+                 "denormalization_context"={"groups": {"avatar"}}  
             },
-           "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
-           "get"={
+            "get"={
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
                 "normalization_context"={"groups": {"user"}}
            },
@@ -61,15 +66,12 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
                "method"="GET",
                "normalization_context"={"groups": {"user", "user_admin", "user_admin_acp"}}
            },
-            "put_admin"={
-               "security"="is_granted('ROLE_USER_EDIT')",
-               "path"="/users/admin/{id}",
-               "method"="PUT",
-               "security_post_denormalize"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
-           },
+           "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
+
  *     }
- * )
+ )
  */
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -84,7 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
-     * @Groups({"category", "plot", "plot_subresource", "board", "user"}) 
+     * @Groups({"category", "plot", "plot_subresource", "board", "user", "admin_user_put"}) 
      * @Assert\Length(
      *      min = 3,
      *      max = 32,
@@ -97,13 +99,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"user_admin"})
+     * @Groups({"user_admin", "admin_user_put"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups("admin_user_put")
      * @Assert\Length(
      *      min = 8,
      *      max = 64,
@@ -116,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
-     * @Groups({"user"})
+     * @Groups({"user", "admin_user_put"})
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
@@ -125,25 +128,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"category", "board", "plot", "plot_subresource", "user"}) 
+     * @Groups({"category", "board", "plot", "plot_subresource", "user", "admin_user_put"}) 
      */
     private $banned = false;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"user_admin"})    
+     * @Groups({"user_admin", "admin_user_put"})    
      */
     private $verified = false;
 
     /**
      * @ORM\Column(type="boolean")   
-     * @Groups({"user_admin_acp"})       
+     * @Groups({"user_admin", "user_admin_acp", "admin_user_put"})       
      */
     private $acp_enable = false;
 
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="user")
-     * @Groups({"category", "board", "plot", "plot_subresource", "user"})
+     * @Groups({"category", "board", "plot", "plot_subresource", "user", "admin_user_put"})
      */
     private $user_group;
 
@@ -167,13 +170,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"board", "plot", "plot_subresource", "user"})
+     * @Groups({"board", "plot", "plot_subresource", "user", "admin_user_put"})
      */
     private $posts_no;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"board", "plot", "plot_subresource", "user"})
+     * @Groups({"board", "plot", "plot_subresource", "user", "admin_user_put"})
      */
     private $plots_no;
 
@@ -181,6 +184,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToOne(targetEntity=UserValidation::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $userValidation;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"user_admin", "admin_user_put"})
+     */
+    private $mcp_enable;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"board", "plot", "plot_subresource", "user", "admin_user_put"})
+     */
+    private $warn_lvl;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $created_at;
     
     public function __construct()
     {
@@ -312,12 +332,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     
-    public function getAcpEnabled(): ?bool
+    public function getAcpEnable(): ?bool
     {
         return $this->acp_enable;
     }
-
-    public function setAcpEnabled(bool $acp_enable): self
+     
+    /* @Groups("admin_user_put")    */  
+    public function setAcpEnable(bool $acp_enable): self
     {
         $this->acp_enable = $acp_enable;
 
@@ -458,6 +479,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->userValidation = $userValidation;
+
+        return $this;
+    }
+
+    public function getMcpEnable(): ?bool
+    {
+        return $this->mcp_enable;
+    }
+
+    public function setMcpEnable(?bool $mcp_enable): self
+    {
+        $this->mcp_enable = $mcp_enable;
+
+        return $this;
+    }
+
+    public function getWarnLvl(): ?int
+    {
+        return $this->warn_lvl;
+    }
+
+    public function setWarnLvl(?int $warn_lvl): self
+    {
+        $this->warn_lvl = $warn_lvl;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

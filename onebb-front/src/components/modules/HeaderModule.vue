@@ -7,7 +7,7 @@
     <div class="header-wrapper">
     <div class="logo">
         <router-link :to="{ name: 'Home' }">
-            <img class="logo-img" src="../../assets/ONE_white_transparent.png">
+            <img class="logo-img" :src="$store.state.baseUrl + 'skins/standard/img/logo.png'">
         </router-link>
     </div> 
  

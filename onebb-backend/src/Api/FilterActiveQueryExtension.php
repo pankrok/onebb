@@ -19,7 +19,7 @@ class FilterActiveQueryExtension implements QueryCollectionExtensionInterface, Q
         $this->admin = false;
         $token = $ti->getToken();
         if (null !== $token) {
-            $this->admin = $token->getUser()->getAcpEnabled();
+            $this->admin = $token->getUser()->getAcpEnable();
         }
     }
 

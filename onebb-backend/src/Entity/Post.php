@@ -39,7 +39,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
                 "normalization_context"={"groups": {"plot_subresource"}},
                 "security"="is_granted('ROLE_POST_READ')"
                 },
- *           "put"={"security"="is_granted('POST_EDIT') or object.user == user"},
+ *           "put"={"security"="is_granted('ROLE_POST_EDIT') or object.user == user"},
              "delete"={"security"="is_granted('ROLE_PLOT_DELETE')"}
  *           }
  *  )

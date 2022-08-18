@@ -1,7 +1,7 @@
 <template>
 <Transition name="fade">
 <div v-if="show" @click.self="$emit('update:show', false)" class="modal">
-    <div class="alert column" :class="{ success: data.success, danger: data.error }">
+    <div class="alert column" :class="{ success: data.success, danger: data.error, info: data.info }">
         <div class="alert-body">
             <strong> {{ data.message }} </strong>
          </div>

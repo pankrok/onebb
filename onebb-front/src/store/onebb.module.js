@@ -4,7 +4,8 @@ const user = localStorage.getItem('user');
 const initialState = user
   ? { status: { 
         loggedIn: true,  
-        acp: false, 
+        acp: false,
+        mcp: false,
         errors: null, 
         uid: null,
         avatar: null,
@@ -12,7 +13,7 @@ const initialState = user
       }, 
       errors: null
     }
-  : { status: { loggedIn: false, acp: false, errors: null, uid: null }, errors: null};
+  : { status: { loggedIn: false, acp: false, mcp: false, errors: null, uid: null }, errors: null};
   
 export const onebb = {
   namespaced: true,
@@ -111,9 +112,11 @@ export const onebb = {
   },
   mutations: {
     loginSuccess(state, data) {
+        console.log({loginSuccessData: data});
       state.status.loggedIn = true;
       state.status.errors = false;
       state.status.acp = data.acp_enabled;
+      state.status.mcp = data.mcp_enabled;
       state.status.uid = data.uid;
       state.status.avatar = data.avatar;
       state.status.slug = data.slug;
@@ -126,6 +129,7 @@ export const onebb = {
         state.status.loggedIn = false;
           state.status.errors = false;
           state.status.acp = false;
+          state.status.mcp = false;
           state.status.uid = null;
           state.status.avatar = null;
           state.status.slug = null;
