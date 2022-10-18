@@ -1,6 +1,6 @@
 <template>
-    <div height="200px">
-        <canvas id="oneBbStats" ></canvas>
+    <div  style="max-height: 500px;" >
+        <canvas id="oneBbStats"></canvas>
     </div>
 </template>
 
@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     init(s) {
-        console.log(s);
         let DAYS = [];
         for(let $i = 30; $i > 0; $i--) {
             DAYS[(30-$i)] = $i;
@@ -40,6 +39,7 @@ export default {
             labels: DAYS,
             datasets: [{
               label: this.$t('all plots'),
+              lineTension: 0.6,
               backgroundColor: [
                 'rgba(255, 99, 132, 0.2)'
               ],
@@ -50,6 +50,7 @@ export default {
               fill: false,
             }, {
               label: this.$t('all posts'),
+              lineTension: 0.6,
               backgroundColor: [
                 'rgba(54, 162, 235, 0.2)'
               ],
@@ -60,6 +61,7 @@ export default {
               fill: false,
             }, {
               label: this.$t('all users'),
+              lineTension: 0.6,
               fill: false,
               backgroundColor: [
                 'rgba(75, 192, 192, 0.2)'
@@ -69,7 +71,8 @@ export default {
               ],
               data: JSON.parse(s.users),
             }, {
-              label: this.$t(' plots per day '),
+              label: this.$t('plots per day'),
+              lineTension: 0.6,
               backgroundColor: [
                 'rgba(255,140,0, 0.2)'
               ],
@@ -79,7 +82,8 @@ export default {
               data: JSON.parse(s.plots_per_day),
               fill: false,
             }, {
-              label: this.$t('posts per day '),
+              label: this.$t('posts per day'),
+              lineTension: 0.6,
               backgroundColor: [
                 'rgba(255,20,147, 0.2)'
               ],
@@ -90,6 +94,7 @@ export default {
               fill: false,
             }, {
               label: this.$t('users per day'),
+              lineTension: 0.6,
               backgroundColor: [
                 'rgba(255,255,0, 0.2)'
               ],
@@ -102,6 +107,12 @@ export default {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
+            elements: {
+                line: {
+                    tension: 0
+                }
+            },
             title: {
               display: false
             },

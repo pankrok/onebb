@@ -80,6 +80,15 @@ export default {
                             label: 'Content',
                     },
                     {
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'metaDesc',
+                            val: this.resources.meta_desc,
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Meta description',
+                    },
+                    {
                             fieldType: 'buttonType',
                             fieldClass: 'col-12 row j-c-end my-1',
                             name: 'submit',

@@ -4,8 +4,6 @@
 
 </template>
 
-
-
 <script>
 import CategoryComponent from '../components/CategoryComponent';
 export default {
@@ -19,6 +17,8 @@ export default {
   mounted() {
     this.$store.dispatch('onebb/get', { resource: 'category' }).then(response => {
         this.home = response['hydra:member'];
+        document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta);
+        document.title = this.$store.state.defaultTitle;
         this.loading = false;
         this.$store.dispatch('plugins/reloadPlugins');
     });    

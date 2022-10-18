@@ -10,27 +10,27 @@
              <div class="alert-body"> {{ $t(msg) }} </div>
             </div>
             <div class="col-12 column">
-                <label for="login" >login</label>
+                <label for="login" >{{ $t('Login') }}</label>
                 <input v-model="user.username" type="text" name="login" id="login" class="form-control mx-1">
             </div>
             <div class="col-6 column">
-                <label for="password">password</label>
+                <label for="password">{{ $t('Password') }}</label>
                 <input v-model="user.password" type="password" name="password" id="password" class="form-control mx-1">
             </div>
             <div class="col-6 column">
-                <label for="vpassword" >verifie password</label>
+                <label for="vpassword">{{ $t('Confirm Password') }}</label>
                 <input v-model="validate.password" type="password" name="vpassword" id="vpassword" class="form-control mx-1">
             </div>
             <div class="col-6 column">
-                <label for="email">email</label>
+                <label for="email">{{ $t('Email address') }}</label>
                 <input v-model="user.email" type="email" name="email" id="email" class="form-control mx-1">
             </div>
             <div class="col-6 column">
-                <label for="vemail" >verfie email</label>
+                <label for="vemail" >{{ $t('Confirm Email address') }}</label>
                 <input v-model="validate.email" type="email" name="vemail" id="vemail" class="form-control mx-1">
             </div>
             <div class="col-12 column my-1 mx-1">
-                <button @click="registerBtn" class="btn btn-secondary">{{ $t('register') }}</button>
+                <button @click="registerBtn" class="btn btn-secondary">{{ $t('sign in') }}</button>
             </div>
         </div>
       </div>
@@ -89,6 +89,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch('plugins/reloadPlugins');
+    document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + this.$t('sign up'));
+    document.title = this.$store.state.defaultTitle + '-' + this.$t('sign up');
   },
   components: {
   }

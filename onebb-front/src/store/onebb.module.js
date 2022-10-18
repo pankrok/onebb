@@ -10,10 +10,26 @@ const initialState = user
         uid: null,
         avatar: null,
         slug: '-',
-      }, 
+      },
+      messenger: {
+        show: false,
+        box: false,
+      },
       errors: null
     }
-  : { status: { loggedIn: false, acp: false, mcp: false, errors: null, uid: null }, errors: null};
+  : { status: { 
+          loggedIn: false, 
+          acp: false, 
+          mcp: false, 
+          errors: null, 
+          uid: null, 
+        },
+        messenger: {
+            show: false,
+            box: false,
+        }, 
+      errors: null
+    };
   
 export const onebb = {
   namespaced: true,
@@ -36,7 +52,7 @@ export const onebb = {
                   commit('errors', res);
                   resolve(res.response);
               } else {
-                resolve(res.response);  
+                  resolve(res.response);  
               }
           })
         })
@@ -107,12 +123,23 @@ export const onebb = {
       },
       newAvatar({ commit }, avatarUrl) {
           commit('setAvatar', avatarUrl);
+      },
+      
+      toggleMsg({ commit }) {
+          commit('toggleMsg');
+      },
+      
+      showMsgBox({ commit }) {
+          commit('msgBoxShow');
+      },
+      
+      toggleMsgBox({ commit }) {
+          commit('toggleMsgBox');
       }
       
   },
   mutations: {
     loginSuccess(state, data) {
-        console.log({loginSuccessData: data});
       state.status.loggedIn = true;
       state.status.errors = false;
       state.status.acp = data.acp_enabled;
@@ -120,10 +147,14 @@ export const onebb = {
       state.status.uid = data.uid;
       state.status.avatar = data.avatar;
       state.status.slug = data.slug;
+      state.messenger.show = false;
+      state.messenger.box = false;
     },
     loginError(state) {
       state.status.loggedIn = false;
       state.status.errors = true;
+      state.messenger.show = false;
+      state.messenger.box = false;
     },
     logout(state) {
         state.status.loggedIn = false;
@@ -133,13 +164,28 @@ export const onebb = {
           state.status.uid = null;
           state.status.avatar = null;
           state.status.slug = null;
+          state.messenger.show = false;
+          state.messenger.box = false;
     },
     errors(state, err) {
         state.errors = err;
     },
     setAvatar(state, avatar) {
         state.status.avatar = avatar;
+    },
+    
+    toggleMsg(state) {
+        state.messenger.show = !state.messenger.show;
+    },
+    
+    msgBoxShow(state) {
+        state.messenger.box = true;
+    },
+    
+    toggleMsgBox(state) {
+        state.messenger.box = !state.messenger.box;
     }
+    
   },
 
 };

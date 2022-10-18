@@ -71,6 +71,8 @@ export default {
   mounted() {
     this.$store.dispatch('onebb/get', { resource: 'user', id: this.$route.params.id}).then(response => {
         this.user = response;
+        document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + ' - ' + response.username);
+        document.title = this.$store.state.defaultTitle + ' - ' + response.username;
         this.loading = false;
         this.$store.dispatch('plugins/reloadPlugins');
     });    

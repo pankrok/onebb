@@ -3,8 +3,8 @@ const API_URL = cfg.url + cfg.obb + 'api/';
 
 class OneBB {
   constructor() {
-      
-    this.setDefaults = function() {
+        this.defaultMeta = document.querySelector('meta[name="description"]').getAttribute('content');
+        this.setDefaults = function() {
         this.resource = '';
         this.token = this.token ?? null;
         this.params = {};
@@ -70,8 +70,8 @@ class OneBB {
                 }                
             });
             
-        }
-        
+        }           
+  
         this.setDefaults();
         return {status: req.status, response: response};
     }
@@ -229,6 +229,16 @@ class OneBB {
   config() {
     this.resource = 'configuration';     
     return this;    
+  }
+  
+  messenger() {
+    this.resource = 'one_messengers';     
+    return this;   
+  }
+  
+  message() {
+    this.resource = 'messages';     
+    return this;   
   }
   
   async login(data){

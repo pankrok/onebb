@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 "normalizationContext"={"groups": {"plot"}},
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
             },
- *           "put"={"security"="is_granted('ROLE_MODERATOR') or object.user == user"},
+ *           "put"={"security"="is_granted('ROLE_MODERATOR') or object.user in user"},
              "delete"={"security"="is_granted('ROLE_MODERATOR')"}
  *      },
         subresourceOperations={
@@ -158,6 +158,12 @@ class Plot
      * @Groups({"board"})
      */
     private $last_active_user;
+
+    /**
+    * @Groups({"plot"}) 
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $meta_desc;
 
     public function __construct()
     {
@@ -419,6 +425,18 @@ class Plot
     public function setLastActiveUser(?User $last_active_user): self
     {
         $this->last_active_user = $last_active_user;
+
+        return $this;
+    }
+
+    public function getMetaDesc(): ?string
+    {
+        return $this->meta_desc;
+    }
+
+    public function setMetaDesc(?string $meta_desc): self
+    {
+        $this->meta_desc = $meta_desc;
 
         return $this;
     }

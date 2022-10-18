@@ -19,7 +19,7 @@ class BoardsController extends AbstractController
     }
     
     #[Route('/', name: 'home')]
-    #[Route('/{route}', name: 'vue', requirements: ['route' => '^(?!api)(?!%acp_url%).+'])]
+    #[Route('/{route}', name: 'vue', requirements: ['route' => '^(?!api)(?!%acp_url%)(?!wizard).+'])]
     public function index(PluginService $pluginService, Request $request): Response
     {     
         if (str_contains($request->getUri(), '.css') || str_contains($request->getUri(), '.js')) {
@@ -30,9 +30,13 @@ class BoardsController extends AbstractController
             return $this->render('maintaince.html.twig');    
         }
         
-        // FIXME here will be seo bot checker to delivery static content generate by TWIG!
+        $params = [
+            'snippets' => $pluginService->getSnippets(), 
+            'board_name' => $this->getParameter('board_name'), 
+            'meta_descripton' => $this->getParameter('meta.description'),
+        ];
         
-        return $this->render('boards/index.html.twig', ['snippets' => $pluginService->getSnippets(), 'board_name' => $this->getParameter('board_name')]);
+        return $this->render('boards/index.html.twig', $params);
     }
     
     #[Route('/api/plugin/dispatch', name: 'plugin', methods: 'POST')]

@@ -66,6 +66,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
                "method"="GET",
                "normalization_context"={"groups": {"user", "user_admin", "user_admin_acp"}}
            },
+           
            "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
 
  *     }
@@ -201,10 +202,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime_immutable")
      */
     private $created_at;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=OneMessenger::class, mappedBy="users")
+     */
+    private $oneMessengers; 
+
     
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->oneMessengers = new ArrayCollection();
     }
     
     public function __toString(): string
@@ -518,4 +526,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, OneMessenger>
+     */
+    public function getOneMessengers(): Collection
+    {
+        return $this->oneMessengers;
+    }
+
+    public function addOneMessenger(OneMessenger $oneMessenger): self
+    {
+        if (!$this->oneMessengers->contains($oneMessenger)) {
+            $this->oneMessengers[] = $oneMessenger;
+            $oneMessenger->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOneMessenger(OneMessenger $oneMessenger): self
+    {
+        if ($this->oneMessengers->removeElement($oneMessenger)) {
+            $oneMessenger->removeUser($this);
+        }
+
+        return $this;
+    }
+
 }

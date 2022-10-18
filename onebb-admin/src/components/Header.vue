@@ -20,6 +20,7 @@
             </button>
         </li> 
         -->
+        <li class="list-complete-item"><button @click="setLocale" id="theme-toggle" class="btn btn-secondary xs rounded"><i class="fas fa-flag"></i></button></li>
         <li class="list-complete-item"><button @click="darkMode" id="theme-toggle" class="btn btn-secondary xs rounded"><i class="fa-moon fas"></i></button></li>
         <li class="list-complete-item"><img :src="uri + $store.state.onebb.status.avatar" alt="Avatar" class="avatar xs mx-1"><!--<i class="fa-solid fa-caret-down"></i>--></li>
       </ul>
@@ -54,7 +55,16 @@ export default {
     },
     toggleMenu() {
         this.$store.dispatch('toggleMenu');
-    }
+    },
+    setLocale() {
+      if ( this.$root.$i18n.locale == 'pl') {
+        localStorage.setItem('locale', 'en');
+        this.$root.$i18n.locale = 'en';
+      } else {      
+        localStorage.setItem('locale', 'pl');
+        this.$root.$i18n.locale = 'pl';
+      }
+    },
   },
   
 }

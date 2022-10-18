@@ -49,10 +49,10 @@
                     >
                     </li>
                     <li class="list-item">
-                        {{ $t('posts') }} - {{ post.user.posts_no }}
+                        {{ $t('Posts') }} - {{ post.user.posts_no }}
                     </li>
                     <li class="list-item">
-                        {{ $t('plots') }} - {{ post.user.plots_no }}
+                        {{ $t('Plots') }} - {{ post.user.plots_no }}
                     </li>
                 </ul>
                </div>
@@ -130,6 +130,13 @@ export default {
         id: this.$route.params.id
     }).then(response => {
         this.plot = response;
+        
+        document.title = this.$store.state.defaultTitle + ' - '+  response.name;
+        if (response.meta_desc !== null) {
+            document.querySelector('meta[name="description"]').setAttribute("content", response.meta_desc);
+        } else {
+            document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta);
+        }
     });
     this.getPosts(
         this.page,

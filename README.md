@@ -1,5 +1,5 @@
 # ONEBB DEV
-> Single page discussion board.
+> Single page application for discussion board.
 
 ## Table of contents
 * [General info](#general-info)
@@ -10,7 +10,7 @@
 * [Inspiration](#inspiration)
 
 ## General info
-Boards are an open source discussion software that is simple to use and extended with a plugin system. The project uses the TWIG template system, Boards is a simple and free forum script, a modern responsive front in combination with TWIG templates allows you to easily edit skins. Boards is a forum script that is easy to modify, the plugin system allows you to create your own add-ons without interfering with the source code! Fully responsive design allows you to conveniently use the forum on both mobile and stationary devices.which creates a synergy of the ease of its modification.
+OneBB are an open source discussion software that is simple to use and extended with a plugin system. The project uses the VUE as front and Symfony as backend, a modern responsive front with simple module system. OneBB is a forum script that is easy to modify, the plugin system allows you to create your own add-ons without interfering with the source code! Fully responsive design allows you to conveniently use the forum on both mobile and stationary devices.which creates a synergy of the ease of its modification.
 
 ## Technologies
 * PHP 8.0
@@ -23,8 +23,12 @@ Boards are an open source discussion software that is simple to use and extended
 > soon
 
 ## Features
+* RWD designe,
+* plugins system,
+* easy to use module system,
+* OneBB Messenger,
+* RestAPI
 
-> soon
 
 ## Status
 Project is: _in progress_

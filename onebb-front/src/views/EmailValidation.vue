@@ -18,6 +18,8 @@ export default {
     }
   },
   mounted() {
+    document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + this.$t('email validation'));
+    document.title = this.$store.state.defaultTitle + ' - ' + this.$t('email validation');
     this.$store.dispatch('onebb/post', { 
         resource: 'validation', 
         data: {

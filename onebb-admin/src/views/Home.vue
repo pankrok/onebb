@@ -41,7 +41,7 @@
    <div class="col-12">
         <div class="box info">
             <div class="box-header">
-                <h2><i class="fa-solid fa-users"></i> Stats</h2>
+                <h2><i class="fa-solid fa-users"></i> {{ $t('statistics') }}</h2>
             </div>
             <div class="box-content">
                 <Chart :statistics="stats" />

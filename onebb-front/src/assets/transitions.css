@@ -1,7 +1,7 @@
 /* transition */
 
 .list-complete-item {
-  transition: all .6s;
+  transition: all .3s;
 }
 .list-complete-enter-from, .list-complete-leave-to
 /* .list-complete-leave-active below version 2.1.8 */ { 
@@ -15,11 +15,11 @@
 /* slide transition */
 
 .slide-fade-enter-active{
-  transition: all 0.3s ease-out !important;
+  transition: all 0.2s ease-out !important;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1) !important;
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1) !important;
 }
 
 .slide-fade-enter-from,
@@ -30,7 +30,7 @@
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,

@@ -96,8 +96,10 @@ export default {
   mounted() {
     this.$store.dispatch('onebb/get', { resource: 'user', id: this.$route.params.id}).then(response => {
         this.user = response;
+        document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + this.$t('user configuration'));
         this.loading = false;
         this.$store.dispatch('plugins/reloadPlugins');
+        document.title = this.$store.state.defaultTitle + '-' + this.$t('user configuration');
     });    
   },
   components: {

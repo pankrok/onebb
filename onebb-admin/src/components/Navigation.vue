@@ -43,7 +43,7 @@
                 :class="{ inactive: pluginsLoading }" 
                 @click="showPlugins = !showPlugins"
             >
-                <i class="fa-solid fa-plug-circle-check"></i> Active plugins <i v-if="pluginsLoading" class="fas fa-circle-notch fa-spin"></i>
+                <i class="fa-solid fa-plug-circle-check"></i> {{ $t('active plugins') }} <i v-if="pluginsLoading" class="fas fa-circle-notch fa-spin"></i>
                 <i v-if="!pluginsLoading" class="ml-4 fa-solid fa-angle-right rotate-anim" :class="{'fa-rotate-90': showPlugins}"></i>
             </span>
             <Transition name="fade">
@@ -79,6 +79,13 @@ export default {
         showPlugins: false,
     }
   },
+  watch: {
+      '$store.state.onebb.status.acp': function() {
+        if (this.$store.state.onebb.status.acp === true) {
+            this.loadPlugins();
+        }
+      }
+    },
   methods: {
     hideMenu() {
       this.$store.dispatch('hideMenu');
@@ -96,11 +103,7 @@ export default {
     });
     }
   },
-  mounted() {
-    setTimeout(() => {
-        this.loadPlugins()
-    }, 2000);
-  },
+  
 }
 </script>
 

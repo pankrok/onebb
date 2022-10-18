@@ -108,5 +108,4 @@ class Plugin {
 
 }
 
-window.$obbPlugins = new Plugin();
-export default window.$obbPlugins
+export default new Plugin();

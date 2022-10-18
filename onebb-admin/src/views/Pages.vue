@@ -41,11 +41,20 @@ export default {
                 pageFields: [
                     {
                             fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-10 column my-1',
                             name: 'name',
                             type: 'text',
                             class: 'form-control m-1',
                             label: 'Name',
+                    },
+                    {
+                            fieldType: 'checkboxType',
+                            fieldClass: 'col-2 row d-flex j-c-center a-i-center py-1 border-bottom',
+                            checked: true,
+                            name: 'active',
+                            class: 'form-control m-1',
+                            label: 'Active',
+      
                     },
                     {
                             fieldType: 'joditType',
@@ -56,13 +65,12 @@ export default {
                             label: 'Content',
                     },
                     {
-                            fieldType: 'checkboxType',
-                            fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
-                            checked: true,
-                            name: 'active',
-                            class: 'form-control m-1',
-                            label: 'Active',
-      
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'metaDesc',
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Meta description',
                     },
                     {
                             fieldType: 'buttonType',

@@ -23,7 +23,7 @@
                         <b>{{ crud.values.checkbox }}</b>
                     </div>
                     <div class="px-2">
-                        <b>Actions</b>
+                        <b>{{ $t('actions') }}</b>
                     </div>
                 </div>
             </div>
@@ -48,14 +48,14 @@
                             :to="{ name: crud.editRoute, params: {id: values[crud.values.id], resource: values[crud.type].toLowerCase() } }" 
                             class="btn btn-info mx-1"
                         >
-                            <i class="fa-solid fa-pen-to-square"></i> EDIT
+                            <i class="fa-solid fa-pen-to-square"></i> {{ $t('edit') }}
                         </router-link>
                         <button 
                             v-if="crud.delete"
                             @click="action('delete:itemDelete', {id: values[crud.values.id], resource: values[crud.type]})"
                             class="btn btn-danger mx-1"
                         >
-                            DELETE
+                            {{ $t('delete') }}
                         </button>
                     </span>
                 </div>
@@ -89,14 +89,14 @@
                             :to="{ name: crud.editRoute, params: {id: nested[crud.nested.id], resource: nested[crud.type].toLowerCase() } }" 
                             class="btn btn-info mx-1"
                             >
-                                <i class="fa-solid fa-pen-to-square"></i> EDIT
+                                <i class="fa-solid fa-pen-to-square"></i> {{ $t('edit') }}
                             </router-link>
                             <button 
                                 v-if="crud.nested.delete"
                                 @click="action('delete:itemNestedDelete', {id: nested[crud.nested.id], resource: nested[crud.type]})"
                                 class="btn btn-danger mx-1"
                             >
-                                DELETE
+                                {{ $t('delete') }}
                             </button>
                         </span>
                     </div>

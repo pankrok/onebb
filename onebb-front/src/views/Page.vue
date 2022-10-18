@@ -25,6 +25,12 @@ export default {
     init() {
         this.$store.dispatch('onebb/get', {resource:'page', id: this.$route.params.id}).then(response => {
             this.page = response;
+            document.title = this.$store.state.defaultTitle + ' - ' + response.name;
+            if (response.meta_desc !== null) {
+                document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + response.meta_desc);
+            } else {
+                document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + response.name);
+            }
         });
     }
   },

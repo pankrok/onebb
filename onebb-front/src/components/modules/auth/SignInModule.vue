@@ -16,12 +16,12 @@
     <div class="box-content">
         <span v-if="logging" class="box-loader"></span>
         <div class="col-12 column">
-          <label for="exampleInputEmail1">{{ $t('login') }}</label>
+          <label for="exampleInputEmail1">{{ $t('Login') }}</label>
           <input v-model="username" type="text" name="login" id="login" class="form-control" :class="{ 'form-control-disabled': logging }" :disabled="logging">
 
         </div>
         <div class="col-12 column">
-          <label for="exampleInputPassword1">{{ $t('password') }}</label>
+          <label for="exampleInputPassword1">{{ $t('Password') }}</label>
           <input v-model="password" type="password" name="password" id="password" class="form-control" :class="{ 'form-control-disabled': logging }" :disabled="logging">
         </div>
         <div class="col column my-1">
@@ -33,7 +33,7 @@
           <router-link  @click="$emit('update:show', false)"
             :to="{ name: 'ResetPassword' }"
            >
-                <small>{{ $t('reset password') }}</small>
+                <small>{{ $t('Forget password') }}</small>
            </router-link>
         </div>
     </div>

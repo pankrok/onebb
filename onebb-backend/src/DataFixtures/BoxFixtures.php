@@ -39,7 +39,8 @@ class BoxFixtures extends Fixture
             ->setBanned(0)
             ->setVerified(1)
             ->setUserGroup($adminGroup)
-            ->setAcpEnabled(1)
+            ->setAcpEnable(1)
+            ->setMcpEnable(1)
             ->setAvatar(null)
         ;
         

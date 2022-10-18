@@ -26,7 +26,7 @@
 *{
     transition: background-color .5s ease;
     transition: color .5s ease;
-    scrollbar-color: #08252b #186e81;
+    scrollbar-color: var(--secondary) #186e81;
     scrollbar-width: thin;
 }
 
@@ -130,6 +130,10 @@ li {
   padding: 0.25rem;
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -138,6 +142,11 @@ li {
 .py-1 {
     padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .px-xl-1 {
@@ -370,7 +379,6 @@ a:hover {
   color: var(--black);
   background: var(--white);
   margin: 0.25rem;
-
   border: 1px solid var(--primary);
   border-radius: 4px;
 }
@@ -385,6 +393,12 @@ a:hover {
 .box-content {
   padding: 0.5rem;
   position: relative;
+}
+
+.box-footer {
+    flex-grow: 1;
+    align-items: end;
+    display: flex;
 }
 
 .box-loader {
@@ -426,6 +440,9 @@ a:hover {
   padding: 0.25rem;
   border: 1px solid var(--primary);
   border-radius: 4px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
 
 .alert {
@@ -454,6 +471,8 @@ a:hover {
 .success{
     background-color: var(--green);
 }
+
+.pointer {cursor: pointer;}
 
 .autor {
   display: flex;
@@ -648,16 +667,16 @@ a:hover {
     border-bottom: 1px solid var(--dark);
 }
 
-li.list-item {
+.list-item {
     border-bottom: 1px solid var(--primary);
     padding-bottom: .25rem;
 }
 
-li.list-item-no-border {
+.list-item-no-border {
     padding-bottom: .25rem;
 }
 
-li.list-item:last-child {
+.list-item:last-child {
     border-bottom: none;
 }
 

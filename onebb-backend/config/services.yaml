@@ -76,6 +76,13 @@ services:
             - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Box'}
             - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Box'}
     
+    App\EntityListener\OneMessengerEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\OneMessenger'}
+            
+    App\EntityListener\MessageEntityListener:
+        tags:
+            - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Message'}
     
     App\EntityListener\PluginEntityListener:
         tags:

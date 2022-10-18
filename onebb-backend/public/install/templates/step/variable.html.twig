@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block body %}
+    <pre>
+    {{ log }}
+    </pre>
+    {% if message == 'err' %}
+        <div class="alert alert-warning" role="alert">
+          Can't connect to DB or cant create tabels, check install logs.
+        </div>
+    {% endif %}
 {% if message != 1 %}
 <form method="post">
   <div class="mb-3">

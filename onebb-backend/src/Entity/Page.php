@@ -79,6 +79,11 @@ class Page
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
      */
     private $active;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $meta_desc;
     
     public function __toString(): string
     {
@@ -177,6 +182,18 @@ class Page
     public function setActive(bool $active): self
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getMetaDesc(): ?string
+    {
+        return $this->meta_desc;
+    }
+
+    public function setMetaDesc(?string $meta_desc): self
+    {
+        $this->meta_desc = $meta_desc;
 
         return $this;
     }

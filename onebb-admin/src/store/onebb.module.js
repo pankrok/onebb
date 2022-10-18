@@ -93,6 +93,10 @@ export const onebb = {
         })
       },
       
+      getToken() {
+          return OneBB.getToken();
+      },
+      
       login({ commit }, user) {
         return new Promise((resolve) => {
           OneBB.login(user).then(response => {

@@ -12,6 +12,12 @@
     </div> 
  
     <TransitionGroup name="list-complete" tag="ul" class="second_menu" mode="out-in">
+      <li v-if="loggedIn" class="list-complete-item">
+        <button @click="msg()" id="theme-toggle" class="btn btn-secondary relative">
+            <span v-if="$store.state.messenger.unread > 0" class="badge danger">{{ $store.state.messenger.unread }}</span>
+            <i class="fa-regular fa-envelope"></i>
+        </button>
+      </li>
       <li class="list-complete-item">
         <button @click="$emit('darkMode', !darkmode)" id="theme-toggle" class="btn btn-secondary">
             <i :class="[darkmode ? true : 'fa-sun', 'fa-moon']" class="fas"></i>
@@ -102,6 +108,11 @@ export default {
     logout() {
         this.$store.dispatch('onebb/logout');
     },
+    msg() {
+        this.$store.dispatch('onebb/toggleMsg');
+        this.$store.dispatch('onebb/showMsgBox');
+    },
+
   },
    mounted() {
     this.$store.dispatch('onebb/get', { resource: 'page' }).then(response => {

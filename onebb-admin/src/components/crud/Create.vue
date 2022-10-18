@@ -24,6 +24,7 @@
 <script>
 
 import Input from './formControl/Input'; 
+import Textarea from './formControl/Textarea'; 
 import Button from './formControl/Button';  
 import Checkbox from './formControl/Checkbox';
 import Select from './formControl/Select';
@@ -60,7 +61,8 @@ export default {
     buttonType: Button,
     checkboxType: Checkbox,
     selectType: Select,
-    joditType: Jodit
+    joditType: Jodit,
+    textareaType: Textarea,
   },
   emits: ['update:show', 'update:formEvent']
 }

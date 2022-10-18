@@ -6,6 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpKernel\KernelInterface ;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
+use Symfony\Component\Security\Core\Security;
 use App\Entity\Plugin;
 
 
@@ -17,13 +18,15 @@ class PluginService
     protected $events = [];
     protected $snippets = [];
     protected $plugins = [];
+    private $security;
 
-    public function __construct(ManagerRegistry $doctrine, KernelInterface  $kernel)
+    public function __construct(ManagerRegistry $doctrine, KernelInterface  $kernel, Security $security)
     {
         $this->doctrine = $doctrine; 
         $this->dir = $kernel->getProjectDir() . '/plugin';
         $this->trans = new Translator('pl_PL');
         $this->trans->addLoader('json', new JsonFileLoader());
+        $this->security = $security;
     }
     
     // WARNING $all = true only for debug!
@@ -51,7 +54,7 @@ class PluginService
             $pluginInstance = new $class($this->doctrine, $this->trans);
             $this->plugins[$plugin->getName()] = $pluginInstance;
             
-            if ($admin) {
+            if ($admin && $this->security->isGranted('ROLE_ADMIN') ) {              
                 $this->events[$plugin->getName()] = array_merge($pluginInstance->getEvents(), $pluginInstance->getAdminEvents());
             } else {
                 $this->events[$plugin->getName()] = $pluginInstance->getEvents();

@@ -32,7 +32,8 @@ export default {
     }
   },
   mounted() {
-
+    document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + ' - ' + this.$t('new plot'));
+    document.title = this.$store.state.defaultTitle + ' - ' + this.$t('new plot');
   },
   methods: {
     sendPost: function() {

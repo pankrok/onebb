@@ -92,6 +92,15 @@ export default {
                             label: 'Category priority',
                     },
                     {
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            val: this.resources.meta_desc,
+                            name: 'metaDesc',
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Meta description',
+                    },
+                    {
                          fieldType: 'buttonType',
                         fieldClass: 'col-6 row pt-4 border-top',
                         name: 'submit',
@@ -124,7 +133,7 @@ export default {
         this.crud.form = [
             {
                 fieldType: 'selectType',
-                fieldClass: 'col-12 column my-1',
+                fieldClass: 'col-3 column my-1',
                 val: this.resources.category,
                 name: 'category',
                 class: 'form-control my-1',
@@ -133,7 +142,7 @@ export default {
             },
             {
                 fieldType: 'inputType',
-                fieldClass: 'col-12 column my-1',
+                fieldClass: 'col-3 column my-1',
                 name: 'name',
                 val: this.resources.name,
                 type: 'text',
@@ -142,12 +151,21 @@ export default {
             },
             {
                 fieldType: 'inputType',
-                fieldClass: 'col-12 column my-1',
+                fieldClass: 'col-3 column my-1',
                 val: this.resources.priority ?? 0,
                 name: 'priority',
                 type: 'number',
                 class: 'form-control m-1',
                 label: 'Board priority',
+            },
+            {
+                fieldType: 'checkboxType',
+                fieldClass: 'col-3 my-1 row j-c-center a-i-center',
+                checked: this.resources.active,
+                name: 'active',
+                class: 'form-control my-1',
+                label: 'Active',
+
             },
             {
                 fieldType: 'joditType',
@@ -158,14 +176,15 @@ export default {
                 class: 'form-control my-1',
                 label: 'Board description',
             },
-            {
-                fieldType: 'checkboxType',
-                fieldClass: 'col-12 my-1 row j-c-center a-i-center',
-                checked: this.resources.active,
-                name: 'active',
+            
+             {
+                fieldType: 'textareaType',
+                fieldClass: 'col-12 column my-1',
+                val: this.resources.meta_desc,
+                name: 'metaDesc',
+                type: 'text',
                 class: 'form-control my-1',
-                label: 'Active',
-
+                label: 'Meta description',
             },
             {
                  fieldType: 'buttonType',

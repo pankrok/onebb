@@ -193,6 +193,15 @@ export default {
                             class: 'form-control m-1',
                             label: 'Mail username',
                     }, 
+                     {
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'meta.description',
+                            val: this.resources['meta.description'],
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Homepage meta description',
+                    },
                     {
                             fieldType: 'buttonType',
                             fieldClass: 'col-12 row j-c-end my-1',

@@ -61,6 +61,7 @@ class ConfigurationController extends AbstractController
                 'mail.validation' => $data['mail.validation'] ?? $cfg['mail.validation'],
                 'mail.address' => $data['mail.address'] ?? $cfg['mail.address'],
                 'mail.username' => $data['mail.username'] ?? $cfg['mail.username'],
+                'meta.description' => $data['meta.description'] ?? $cfg['meta.description'],
             ],
         ];
 

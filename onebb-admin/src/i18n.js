@@ -2,7 +2,7 @@ import  { createI18n } from 'vue-i18n'
 
 function initLocale() {
     if(localStorage.getItem('locale') == null) {
-        localStorage.setItem('locale', 'en');
+        localStorage.setItem('locale', document.getElementById('app').dataset.locale);
     }
 }
 

@@ -612,6 +612,7 @@ li.list-item:last-child, .list-item:last-child {
     position: relative;
 }
 .badge {
+  display: ruby;
   border-radius: 50%;
   padding: 0.15rem;
   position: absolute;

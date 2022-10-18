@@ -111,6 +111,10 @@ class OneBB {
     this.token = token;
   }
   
+  getToken() {
+    return this.token;
+  }
+  
   setLimit(limit) {
     if (limit !== null)
         this.params.limit = limit;

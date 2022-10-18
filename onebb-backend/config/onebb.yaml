@@ -1,11 +1,12 @@
 parameters:
     board_name: 'OneBB Forum'
     maintaince: false
-    default_group: 2
+    default_group: 1
     base_url: '%env(BASE_URL)%'
     acp_url: '%env(ACP_URL)%'
-    version: 0.0.4
+    version: 0.0.5
     mailer.dns: 'sendmail://default'
     mail.validation: false
     mail.address: admin@email.com
     mail.username: Admin
+    meta.description: 'Onebb Forum'

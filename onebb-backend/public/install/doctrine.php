@@ -40,9 +40,4 @@ class Doctrine {
         return $this->entityManager;
     }
 
-    public function test() 
-    {
-      echo $this->entityManager->getRepository(User::class)->find(3);
-    }
-
 }

@@ -10,22 +10,22 @@
     </div>
   <div v-else  class="box" style="width: 300px;">
     <div class="box-header text-center">
-      <h4>sign in</h4>
+      <h4>{{ $t('sign in') }}</h4>
     </div>
    
     <div class="box-content">
            <span v-if="$store.state.loading" class="box-loader"></span>
         <div class="col-12 column">
-          <label for="exampleInputEmail1">login</label>
+          <label for="exampleInputEmail1">{{ $t('login') }}</label>
           <input v-model="username" type="text" name="login" id="login" class="form-control" :class="{ 'form-control-disabled': logging }" :disabled="logging">
 
         </div>
         <div class="col-12 column">
-          <label for="exampleInputPassword1">password</label>
+          <label for="exampleInputPassword1">{{ $t('password') }}</label>
           <input v-model="password" type="password" name="password" id="password" class="form-control" :class="{ 'form-control-disabled': logging }" :disabled="logging">
         </div>
         <div class="col column my-1">
-          <button :disabled="logging" :class="{ 'btn-disabled': logging }" @click="login" type="submit" class="btn btn-secondary">sign in</button>
+          <button :disabled="logging" :class="{ 'btn-disabled': logging }" @click="login" type="submit" class="btn btn-secondary">{{ $t('sign in') }}</button>
         </div>
  
     </div>

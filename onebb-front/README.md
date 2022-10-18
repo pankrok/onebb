@@ -1,4 +1,4 @@
-# kurs
+# onebb-front
 
 ## Project setup
 ```

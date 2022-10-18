@@ -127,6 +127,12 @@ class Board
      */
     private $last_active_user;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"board"})
+     */
+    private $meta_desc;
+
     public function __construct()
     {
         $this->parent = new ArrayCollection();
@@ -380,6 +386,18 @@ class Board
     public function setLastActiveUser(?User $user): self
     {
         $this->last_active_user = $user;
+
+        return $this;
+    }
+
+    public function getMetaDesc(): ?string
+    {
+        return $this->meta_desc;
+    }
+
+    public function setMetaDesc(?string $meta_desc): self
+    {
+        $this->meta_desc = $meta_desc;
 
         return $this;
     }

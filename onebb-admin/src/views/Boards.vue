@@ -56,7 +56,7 @@ export default {
                 categoryFields: [
                     {
                             fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-4 column my-1',
                             name: 'name',
                             type: 'text',
                             class: 'form-control m-1',
@@ -64,7 +64,7 @@ export default {
                     },
                     {
                             fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-4 column my-1',
                             name: 'priority',
                             type: 'number',
                             val: 0,
@@ -73,12 +73,20 @@ export default {
                     },
                     {
                             fieldType: 'checkboxType',
-                            fieldClass: 'col-12 row d-flex j-c-center a-i-center py-1 border-bottom',
+                            fieldClass: 'col-4 row d-flex j-c-center a-i-center py-1 border-bottom',
                             checked: true,
                             name: 'active',
                             class: 'form-control m-1',
                             label: 'Active',
       
+                    },
+                    {
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'metaDesc',
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Meta description',
                     },
                     {
                             fieldType: 'buttonType',
@@ -94,7 +102,7 @@ export default {
                 
                     {
                             fieldType: 'selectType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-4 column my-1',
                             name: 'category',
                             class: 'form-control my-1',
                             label: 'Select board category',
@@ -103,28 +111,36 @@ export default {
                     },
                     {
                             fieldType: 'inputType',
-                            fieldClass: 'col-12 column my-1',
+                            fieldClass: 'col-4 column my-1',
                             name: 'name',
                             type: 'text',
                             class: 'form-control my-1',
                             label: 'Board name',
                     },
-                    {
-                            fieldType: 'joditType',
-                            fieldClass: 'col-12 column my-1',
-                            name: 'Description',
-                            type: 'jodit',
-                            class: 'form-control my-1',
-                            label: 'Description',
-                    },
-                    {
+                     {
                             fieldType: 'checkboxType',
-                            fieldClass: 'col-12 my-1 row j-c-center a-i-center',
+                            fieldClass: 'col-4 my-1 row j-c-center a-i-center',
                             checked: true,
                             name: 'active',
                             class: 'form-control my-1',
                             label: 'Active',
       
+                    },
+                    {
+                            fieldType: 'joditType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'description',
+                            type: 'jodit',
+                            class: 'form-control my-1',
+                            label: 'Description',
+                    },
+                    {
+                            fieldType: 'textareaType',
+                            fieldClass: 'col-12 column my-1',
+                            name: 'metaDesc',
+                            type: 'text',
+                            class: 'form-control my-1',
+                            label: 'Meta description',
                     },
                     {
                             fieldType: 'buttonType',

@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="box">
                 <div class="box-header">
-                <h1> {{ $t('reset password') }}</h1>
+                <h1> {{ $t('Forgot Password') }}</h1>
                 </div>
                 <div v-if="success" class="box-content row">
                     <div class="col-12 column mx-4">
@@ -15,11 +15,11 @@
                 </div>
                 <div v-else class="box-content row">
                     <div class="col-12 column mx-4">
-                      <label for="email">{{ $t('email') }}</label>
+                      <label for="email">{{ $t('Email address') }}</label>
                       <input v-model="email" type="email" name="email" id="email" class="form-control">
                     </div>
-                    <div class="col column my-1">
-                      <button  @click="changePassword" type="submit" class="btn btn-secondary">{{ $t('reset password') }}</button>
+                    <div class="col-12 column mx-4 my-2 j-c-center a-i-center">
+                      <button  @click="changePassword" type="submit" class="btn btn-secondary">{{ $t('click here to reset your password') }}</button>
                     </div>
                 </div>
             </div>
@@ -65,6 +65,8 @@ export default {
   mounted() {
     this.loading = false;
     this.$store.dispatch('plugins/reloadPlugins');    
+    document.querySelector('meta[name="description"]').setAttribute("content", this.$store.state.defaultMeta + '-' + this.$t('reset password'));
+    document.title = this.$store.state.defaultTitle + ' - ' + this.$t('reset password');
   },
   components: {
     Skeleton

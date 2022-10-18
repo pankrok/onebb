@@ -24,7 +24,9 @@ class Plugin {
         };
         
         this.#request = async function() {
+            
             let response = null;
+            
             const req = await fetch(API_URL + 'plugin/dispatch', this.config);
             response =  req.json();
           
@@ -91,16 +93,20 @@ class Plugin {
         
         
         return new Promise((resolve) => {
-            this.#request().then(ret => {
-                if (ret.status == 200) {
-                    ret.response.then(data => { 
-                        resolve({
-                            success: true,
-                            data: data,
+
+            this.#store.dispatch('onebb/getToken').then(token => {
+                this.config.headers.Authorization = 'Bearer ' + token;
+                this.#request().then(ret => {
+                    if (ret.status == 200) {
+                        ret.response.then(data => { 
+                            resolve({
+                                success: true,
+                                data: data,
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            })
         })
     }
 

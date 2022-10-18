@@ -46,9 +46,12 @@
     </div>
     
   </TransitionGroup>
+  <Transition name="fade">
+    <Messenger v-if="logged" />
+  </Transition>
   </main>
   <FooterModule />
-
+  
 </template>
 
 <script>
@@ -56,12 +59,15 @@
 import HeaderModule from './components/modules/HeaderModule';
 import BreadcrumbsModule from './components/modules/BreadcrumbsModule';
 import FooterModule from './components/modules/FooterModule';
+import Messenger from './components/modules/messenger/Messenger';
 
 // box modules import
 import CustomBox from './components/modules/boxes/CustomBox';
 import PluginBox from './components/modules/boxes/PluginBox';
 import UserStats from './components/modules/boxes/UserStats';
 // import ChatBox from './components/modules/ChatBox'; // NOT IMPLEMENTED YET!
+
+import moment from 'moment';
 
 export default {
   name: 'App',
@@ -72,6 +78,7 @@ export default {
     CustomBox,
     PluginBox,
     UserStats,
+    Messenger,
   },
   data(){
     return {
@@ -82,6 +89,9 @@ export default {
     }
   },
   computed: {
+    logged() {
+        return (this.$store.state.onebb.status.loggedIn && this.$store.state.onebb.messenger.show); 
+    },
     boxes() {
         if(typeof(window.$obbPlugins) == "object") {
             window.$obbPlugins.context(this.$route.name);
@@ -110,13 +120,48 @@ export default {
             document.documentElement.setAttribute('data-theme', 'light');
             localStorage.setItem('theme', 'light');
         }
+    },
+    msgPooling() {
+        let subres = '?page1&limit20';
+        if (this.$store.state.messenger.lastCheck !== null) {
+            subres += '&updated_at%5Bstrictly_after%5D=' + moment(this.$store.state.messenger.lastCheck).format('YYYY-MM-DD HH:mm:ss')
+        }
+    
+        this.$store.dispatch('onebb/get', {
+            resource: 'messenger', 
+            subresource: subres
+        }).then(r => {
+            let last = this.$store.state.messenger.lastCheck;
+            if (r.code === 401) {
+                this.$store.dispatch('messenger/setShortPooling');
+                return null;
+            }
+            
+            if(r['hydra:member'].length > 0) {
+                last = r['hydra:member'][0].updated_at; 
+                this.$store.dispatch('messenger/setCache', r['hydra:member']);
+                
+                r['hydra:member'].forEach(el =>{
+                    if (typeof(this.$store.state.messenger.readMessages[el.id]) !== 'undefined') {
+                        if (this.$store.state.messenger.readMessages[el.id]  < el.updated_at) {
+                            this.$store.dispatch('messenger/incrementUnread');
+                        }
+                    } else {
+                        this.$store.dispatch('messenger/incrementUnread');
+                        this.$store.dispatch('messenger/setReadMessage', el);
+                    }
+                });
+            }
+            
+            this.$store.dispatch('messenger/setLastCheck', last);
+        });
     }
   },
   mounted() {
     
     if(localStorage.getItem('user') == 'true') {
         this.$store.dispatch('onebb/refresh', {
-        });
+    });
     }
     let storedTheme = localStorage.getItem('theme');
     if (storedTheme == 'dark') {
@@ -131,6 +176,15 @@ export default {
         this.$store.dispatch('boxes/init', response['hydra:member'][0].skinBoxes);
         this.boxReady = true;
     })
+    
+    let msgPooling = () => {
+        if (this.$store.state.onebb.status.loggedIn) {
+            this.msgPooling();
+        }
+        setTimeout(msgPooling, this.$store.state.messenger.pooling);
+    }
+    msgPooling();
+    
   }
 }
 </script>
