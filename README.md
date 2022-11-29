@@ -1,5 +1,6 @@
 # ONEBB DEV
-> Single page application for discussion board.
+> Single page discussion board.    
+official forum: [OneBB Forum](https://onebb.org)
 
 ## Table of contents
 * [General info](#general-info)
@@ -20,15 +21,26 @@ OneBB are an open source discussion software that is simple to use and extended 
 * VUE 3
 
 ## Setup
-> soon
+* [Getting started](INSTALL.md)
 
 ## Features
+
+Ready features:
 * RWD designe,
 * plugins system,
+* plugin store,
 * easy to use module system,
-* OneBB Messenger,
-* RestAPI
+* email templates with editor,
+* messenger,
+* updater,
 
+In progress:
+* chat,
+* skin store,
+* ban reasons,
+* translation,
+* simple search engine
+* two factor authentication,
 
 ## Status
 Project is: _in progress_

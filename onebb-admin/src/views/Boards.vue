@@ -20,8 +20,8 @@ export default {
         crud: {
             name: 'Boards',
             editRoute: 'ForumEdit',
-            listClass: 'box',
-            itemListClass: 'box-header',
+            listClass: 'box border-0',
+            itemListClass: 'box-header box-header-hover',
             type: '@type',
             buttons: [
                 {

@@ -28,5 +28,14 @@
     "cancel": "Anuluj",
     "edit": "Edytuj",
     "delete": "Usuń",
-    "actions": "Akcje"
+    "actions": "Akcje",
+    "appearance": "Wygląd",
+    "themes": "Szablony",
+    "add theme": "Dodaj szablon",
+    "add plugin": "Dodaj wtyczkę",
+    "installed plugins": "Zainstalowane wtyczki",
+    "settings": "Ustawienia",
+    "update": "Aktualizacje",
+    "available updates": "Dostępne aktualizacje",
+    "aveable new update": "Dostępne są nowe aktualizacje"
 }

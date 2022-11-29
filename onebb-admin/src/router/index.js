@@ -66,6 +66,11 @@ const routes = [
     component: () => import('../views/EmailList.vue')
   },
   {
+    path: '/update',
+    name: 'Update',
+    component: () => import('../views/Update.vue')
+  },
+  {
     path: '/email-template/edit/:template',
     name: 'EmailEditor',
     component: () => import('../views/EmailEditor.vue')
@@ -85,6 +90,11 @@ const routes = [
     path: '/plugins/list',
     name: 'Plugins',
     component: () => import('../views/Plugins.vue')
+  },
+  {
+    path: '/plugins/store',
+    name: 'PluginStore',
+    component: () => import('../views/PluginStore.vue')
   },
   {
     path: '/plugins/:plugin/:temp?/:script?',

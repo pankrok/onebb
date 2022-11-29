@@ -104,6 +104,12 @@ class Plugin
      */
     private $metafields;
 
+    /**
+     * @Groups({"plugin:get"}) 
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    private $ico;
+
     public function __construct()
     {
         $this->metafields = new ArrayCollection();
@@ -260,6 +266,18 @@ class Plugin
                 $metafield->setPlugin(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIco(): ?string
+    {
+        return $this->ico;
+    }
+
+    public function setIco(string $ico): self
+    {
+        $this->ico = $ico;
 
         return $this;
     }

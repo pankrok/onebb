@@ -9,6 +9,10 @@ if (file_exists(__DIR__ . '/../.install') === false) {
     die();
 }
 
+if (file_exists(__DIR__ . '/../lock')) {
+    die('application locked');
+}
+
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {

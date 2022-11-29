@@ -1,16 +1,17 @@
 <template>
 
 <main>
-<div class="container row">
-    <Navigation />
-    <div class="f-grow">
-        <div class="row">
-          <Header />
-          <Transition name="fade">
-          <div v-if="$store.state.loading" class="col-12 relative">
+<Transition name="fade">
+            <div v-if="$store.state.loading" class="col-12 relative">
                     <span class="box-loader"></span>
             </div>
             </Transition>
+<div class="container row">
+    <Navigation />
+    <div class="main">
+        <div class="row">
+          <Header />
+          
 
             <div class="view">
             <Transition name="fade" mode="out-in">

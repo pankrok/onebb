@@ -1,11 +1,12 @@
 let cfg = document.getElementById('app').dataset;
-const API_URL = cfg.url + cfg.obb + 'api/';
+const API_URL = cfg.url + cfg.obb;
 
 class OneBB {
   constructor() {
       
     this.setDefaults = function() {
         this.resource = '';
+        this.api = null;
         this.token = this.token ?? null;
         this.params = {};
         this.headers = {
@@ -47,11 +48,20 @@ class OneBB {
         if (this.token != null) {
             this.headers.Authorization = 'Bearer ' + this.token;
         }
-        const req = await fetch(API_URL + this.resource + this.parseParams(), this.config);
+        let uri = API_URL;
+        uri += this.api ?? 'api/'; 
+        uri += this.resource + this.parseParams();
+        
+        const req = await fetch(uri, this.config);
         if (this.config.method === 'DELETE') {
             response =  req;
         } else {
-            response =  req.json();
+            try {
+                response =  req.json();
+            } catch(e) {
+                console.log({OnebbError: e});
+                response = null;
+            }
         }
         
         this.setDefaults();
@@ -217,7 +227,19 @@ class OneBB {
     this.resource = 'configuration';     
     return this;    
   }
+   
+  updateCheck() {
+    this.api = 'update/';
+    this.resource = 'check';     
+    return this;
+  }
   
+  updateRun() {
+    this.api = 'update/';
+    this.resource = 'run';     
+    return this;
+  }
+   
   plugins() {
     this.resource = 'plugins';
     return this;
@@ -226,6 +248,11 @@ class OneBB {
   pluginControl() {
     this.resource = 'plugin/control';
     return this;  
+  }
+  
+  pluginDownload() {
+    this.resource = 'plugins/download';
+    return this;
   }
   
   cache() {

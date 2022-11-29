@@ -23,7 +23,7 @@ export default {
             name: 'User',
             editRoute: 'UserEdit',
             listClass: 'list',
-            itemListClass: 'list-item mx-2 px-2',
+            itemListClass: 'list-item px-4',
             type: '@type',
             buttons: [
                 {

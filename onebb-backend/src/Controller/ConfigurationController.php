@@ -7,9 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Yaml\Yaml;
+
 
 class ConfigurationController extends AbstractController
 {
@@ -82,22 +85,28 @@ class ConfigurationController extends AbstractController
      * @IsGranted("ROLE_CONFIG_PUT")
      */
     #[Route('/api/admin/cache', methods: 'PUT')]
-    public function clearCache(): Response
+    public function clearCache(KernelInterface $kernel): Response
     {
         
-        $phpBinaryFinder = new PhpExecutableFinder(); 
+        // $phpBinaryFinder = new PhpExecutableFinder(); 
                
-        $process = new Process([
-            'php', 'bin/console', 'cache:clear'
-         ]);
-        $process->setWorkingDirectory(__DIR__ . '/../..');
-        $process->start();
-        $process->wait();      
+        // $process = new Process([
+            // 'php', 'bin/console', 'cache:clear'
+         // ]);
+        // $process->setWorkingDirectory(__DIR__ . '/../..');
+        // $process->start();
+        // $process->wait();      
         
-        $log = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>", $process->getOutput());
+        // $log = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>", $process->getOutput());
+
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+        $output = new BufferedOutput();
         
-        $response = new Response();
-        $response->setContent(json_encode($log));
+        $options = array('command' => 'cache:clear');
+        $application->run(new ArrayInput($options), $output);
+        $console = str_replace(array("\r\n","\r","\n","\\r","\\n","\\r\\n"),"<br/>", $output->fetch());
+        $response = new Response(json_encode($console));
         $response->headers->set('Content-Type', 'application/json');
         
         return $response;

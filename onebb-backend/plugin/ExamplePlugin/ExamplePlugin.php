@@ -15,6 +15,7 @@ class ExamplePlugin extends PluginController implements PluginInterface
             'version' => '0.1.5',
             'meta' => 'This is an example plugin showing box and alert.',
             'acp' => true,
+            'ico' => 'fa-bolt',
             'trans' => [
                 [
                     'domain' => 'ep',

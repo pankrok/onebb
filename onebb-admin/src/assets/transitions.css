@@ -14,11 +14,17 @@
 
 /* slide transition */
 
-.slide-fade-enter-active, .slide-left-fade-enter-active, .slide-top-fade-enter-active {
+.slide-fade-enter-active, 
+.slide-left-fade-enter-active, 
+.slide-top-fade-enter-active,
+.slide-right-fade-enter-active  {
   transition: all 0.2s ease-out !important;
 }
 
-.slide-fade-leave-active, .slide-left-fade-leave-active, .slide-top-fade-leave-active {
+.slide-fade-leave-active, 
+.slide-left-fade-leave-active, 
+.slide-top-fade-leave-active,
+.slide-right-fade-leave-active {
   transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1) !important;
 }
 
@@ -41,6 +47,12 @@
     transform: translateY(-30px);
 }
 
+.slide-right-fade-enter-from,
+.slide-right-fade-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -49,4 +61,25 @@
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* **** */
+
+.group-fade-move,
+.group-fade-enter-active,
+.group-fade-leave-active {
+  transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. declare enter from and leave to state */
+.group-fade-enter-from,
+.group-fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.group-fade-leave-active {
+  position: absolute;
 }

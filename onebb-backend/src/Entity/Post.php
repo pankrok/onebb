@@ -10,8 +10,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
@@ -43,10 +45,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
              "delete"={"security"="is_granted('ROLE_PLOT_DELETE')"}
  *           }
  *  )
- *  @ApiFilter(
-        OrderFilter::class, properties={"created_at"}, arguments={"orderParameterName": "order"}
-        
-     )
+ *  @ApiFilter(OrderFilter::class, properties={"created_at"}, arguments={"orderParameterName": "order"})
+ *  @ApiFilter(SearchFilter::class, properties={"content": "partial"}) 
  */
 
 
@@ -63,6 +63,7 @@ class Post
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @Groups({"plot_subresource", "user"}) 
+     * @ApiFilter(SearchFilter::class, properties={"user.username": "partial"}) 
      */
     private $user;
 
@@ -70,6 +71,7 @@ class Post
      * @ORM\ManyToOne(targetEntity=Plot::class, inversedBy="posts")
      * @Groups({"plot:write"}) 
      * @ORM\JoinColumn(nullable=false)
+     * @ApiFilter(SearchFilter::class, properties={"plot.name": "partial"}) 
      */
     private $plot;
 

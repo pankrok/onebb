@@ -35,7 +35,7 @@
                 <span class="dz-message">Drop top modules here:</span>
               </template>
             <template #item="{ element }">
-              <div class="box item m-1 p-1 text-center">
+              <div class="box green-background green-shadow item m-1 p-1 text-center">
    
                     {{ element.name }}
               
@@ -62,7 +62,7 @@
                 <span class="dz-message">Drop left modules here:</span>
               </template>
         <template #item="{ element }">
-          <div class="box item m-1 p-1 text-center">
+          <div class="box green-background green-shadow item m-1 p-1 text-center">
             {{ element.name }}
             
           </div>
@@ -97,7 +97,7 @@
                 <span class="dz-message">Drop right modules here:</span>
               </template>
         <template #item="{ element }">
-          <div class="box item m-1 p-1 text-center">
+          <div class="box green-background green-shadow item m-1 p-1 text-center">
             {{ element.name }}
           </div>
         </template>
@@ -121,7 +121,7 @@
                 <span class="dz-message">Drop bottom modules here:</span>
               </template>
             <template #item="{ element }">
-              <div class="box item m-1 p-1 text-center">
+              <div class="box green-background green-shadow item m-1 p-1 text-center">
                 {{ element.name }}
               </div>
             </template>
@@ -160,7 +160,7 @@
              </template>
              
             <template #item="{ element }">
-              <div class="box item m-1 p-1 text-center row j-c-space-between a-i-center">
+              <div class="box green-background green-shadow item m-1 p-1 text-center row j-c-space-between a-i-center">
                 <div>
                 </div>
                 <div>{{ element.name }}</div>
@@ -441,7 +441,7 @@ export default {
 <style scoped>
 
 .dropzone {
-    background: var(--light);
+    background: transparent;
     border-radius: 5px;
     border: 2px dashed rgb(0, 135, 247);
       border-image-outset: 0;
@@ -457,10 +457,10 @@ export default {
 .bg-content {
     background: repeating-linear-gradient(
   45deg,
-  var(--light),
-  var(--light) 10px,
-  var(--dark) 10px,
-  var(--dark) 20px
+  var(--blue),
+  var(--blue) 10px,
+  var(--secondary) 10px,
+  var(--secondary) 20px
 );
 }
 

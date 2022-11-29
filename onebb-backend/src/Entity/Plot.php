@@ -12,6 +12,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PlotRepository::class)
@@ -47,6 +52,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             }            
         },
  *  )
+ *  @ApiFilter(OrderFilter::class, properties={"created_at", "updated_at"})
+ *  @ApiFilter(SearchFilter::class, properties={"name": "partial", "tags": "partial"}) 
  */
 class Plot
 {
@@ -61,6 +68,7 @@ class Plot
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"board", "plot"})
+     
      */
     private $name;
 
@@ -73,12 +81,14 @@ class Plot
     /**
      * @ORM\ManyToOne(targetEntity=Board::class, inversedBy="plots")
      * @ORM\JoinColumn(nullable=false)
+     * @ApiFilter(SearchFilter::class, properties={"board.name": "partial"}) 
      */
     private $board;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @Groups({"board", "plot"})
+     * @ApiFilter(SearchFilter::class, properties={"user.username": "partial"}) 
      */
     private $user;
 
@@ -127,11 +137,13 @@ class Plot
     /**
      * @ORM\Column(type="datetime_immutable")
      * @Groups({"board", "plot"})
+      * @ApiFilter(DateFilter::class)
      */
     private $updated_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+      * @ApiFilter(DateFilter::class)
      */
     private $created_at;
 

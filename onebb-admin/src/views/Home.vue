@@ -1,7 +1,7 @@
 <template>
   <div class="row" :key="$route.name">
    <div class="col-12 my-1">
-        <div class="box success">
+        <div class="box">
             <div class="box-header">
                 <h2>OneBB</h2>
             </div>
@@ -10,13 +10,13 @@
                     <div class="col-6">
                         <div class="list">
                             <h3 class="mx-2 border-bottom">{{ $t('statistics') }}</h3>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between border-0">
                                 <span>{{ $t('all topics') }}:</span> <span>{{ stats.current_plots }}</span>
                             </div>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between  border-0">
                                 <span>{{ $t('all posts') }}:</span> <span>{{ stats.current_posts }}</span>
                             </div>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between border-0">
                                 <span>{{ $t('all users') }}:</span> <span>{{ stats.current_users }}</span>
                             </div>
                         </div> 
@@ -24,13 +24,13 @@
                     <div class="col-6">
                         <div class="list">
                             <h3 class="mx-2 border-bottom">{{ $t('system informations') }}</h3>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between border-0">
                                 <span>{{ $t('version') }}:</span> <span>{{ stats.version }}</span>
                             </div>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between border-0">
                                 <span>{{ $t('php version') }}:</span> <span>{{ stats.php_version }}</span>
                             </div>
-                            <div class="list-item">
+                            <div class="list-item d-flex j-c-space-between border-0">
                                 <span>{{ $t('mysql version') }}:</span> <span>{{ stats.mysql_version }}</span>
                             </div>
                         </div> 
@@ -39,7 +39,7 @@
         </div>
     </div>
    <div class="col-12">
-        <div class="box info">
+        <div class="box">
             <div class="box-header">
                 <h2><i class="fa-solid fa-users"></i> {{ $t('statistics') }}</h2>
             </div>

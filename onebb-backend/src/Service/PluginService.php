@@ -99,6 +99,7 @@ class PluginService
                 ->setSnippet($pluginInstance->getSnippet())
                 ->setEvents($pluginInstance->getEvents())
                 ->setAcp($info['acp'])
+                ->setIco($info['ico'] ?? null)
             ;
             
             $em = $this->doctrine->getManager();

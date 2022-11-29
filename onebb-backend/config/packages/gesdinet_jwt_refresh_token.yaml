@@ -3,7 +3,7 @@ gesdinet_jwt_refresh_token:
     single_use: true
     cookie:
       enabled: true
-      same_site: none               # default value
+      same_site: none              # default value
       path: /                      # default value
       domain: null                 # default value
       http_only: true              # default value

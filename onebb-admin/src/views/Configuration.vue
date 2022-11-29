@@ -18,8 +18,9 @@
             </div>
             <Transition name="fade">
             <div v-if="cache" class="modal">
-                <div class="alert column info">
+                <div class="alert column console">
                     <div class="alert-body">
+                        <h3 class="text-center">Console log:</h3>
                         <span v-html="cache"></span>
                      </div>
                 </div>
@@ -234,7 +235,7 @@ export default {
         }).then(response => {
             this.cache = response;
             setTimeout(()=> {
-                this.cache = false;
+              this.cache = false;
             }, 5000);
             this.$store.dispatch('loaded');
         });
@@ -253,3 +254,15 @@ export default {
 }
 </script>
 
+<style scoped>
+
+.console {
+  margin: 2rem;
+  padding: 2rem;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  background: black;
+  color: #4AF626;
+}
+
+</style>

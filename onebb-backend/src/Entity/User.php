@@ -94,7 +94,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *      minMessage = "Your login must be at least {{ limit }} characters long",
      *      maxMessage = "Your login cannot be longer than {{ limit }} characters"
      * )
-     * @Assert\NotBlank
+     * @Assert\NotEqualTo(
+     *      {"alert", "img"}
+     * )
      */
     private $username;
 
@@ -123,6 +125,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user", "admin_user_put"})
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
+     * )
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 32,
+     *      minMessage = "Your login must be at least {{ limit }} characters long",
+     *      maxMessage = "Your login cannot be longer than {{ limit }} characters"
      * )
      */
     private $email;
@@ -238,6 +246,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    #[Assert\IsTrue(message: 'username contains forbidden words.')]
+    public function isUsernameValid()
+    {
+        $flag = true;
+        $forbidden = ['alert', 'img', 'src', 'script', 'href', 'onmouseover', 'onerror', 'onclick', 'onchange', 'onload'];
+        foreach ( $forbidden as $keyword ) 
+        {
+            if (strpos( strtolower($this->username), $keyword) !== FALSE ) {
+                $flag = false;
+                break;
+            }
+        }
+        
+        return $flag;
     }
 
     /**
