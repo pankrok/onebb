@@ -1,55 +1,26 @@
 {
-  "name": "OneBB",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-project",
+  "version": "0.0.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/undefined/**/*.json\""
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --port 5050",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "jodit": "^3.16.5",
-    "moment": "^2.29.1",
-    "register-service-worker": "^1.7.2",
-    "vue": "^3.0.0",
-    "vue-advanced-cropper": "^2.8.1",
-    "vue-i18n": "^9.1.9",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "jodit": "^3.23.3",
+    "jodit-vue3": "^1.0.5",
+    "moment": "^2.29.4",
+    "vue": "^3.2.22",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@intlify/vue-i18n-loader": "^3.0.0",
-    "@vue/cli-plugin-babel": "^5.0.4",
-    "@vue/cli-plugin-eslint": "^5.0.4",
-    "@vue/cli-plugin-pwa": "^5.0.4",
-    "@vue/cli-plugin-router": "^5.0.4",
-    "@vue/cli-plugin-vuex": "^5.0.4",
-    "@vue/cli-service": "^5.0.4",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^7.0.0",
-    "vue-cli-plugin-i18n": "^0.6.1"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "@types/node": "^16.11.10",
+    "@vitejs/plugin-vue": "^1.10.0",
+    "typescript": "~4.4.4",
+    "vite": "^2.6.14",
+    "vite-plugin-html-env": "^1.2.7",
+    "vue-tsc": "^0.29.6"
+  }
 }
