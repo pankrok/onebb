@@ -6,10 +6,20 @@ import { user } from '@/store/user/user.module';
 import { obb } from '@/store/api/api.module';
 import { boxes } from '@/store/boxes/boxes.module';
 
+interface IBaseUrl {
+  url: string,
+  obb: string,
+}
+
+// @ts-ignore
+let cfg: IBaseUrl = document.getElementById('app').dataset;
+const API_URL = cfg.url + cfg.obb;
+
 export interface State {
   user: any,
   loading: boolean,
   defaultTitle: string,
+  baseUrl: string
 }
 
 const initialState: State = {
@@ -18,7 +28,8 @@ const initialState: State = {
     id: 0,
   },
   loading: false,
-  defaultTitle: document.title
+  defaultTitle: document.title,
+  baseUrl: API_URL
 }
 
 const actions = {

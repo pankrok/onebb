@@ -13,7 +13,7 @@ export const getCategory = async ({ commit }: any, id?: number | null) => {
 
 export const getBoard = async ({ commit }: any, id?: number | null) => {
   api
-    .setResource(CATEGORY)
+    .setResource(BOARD)
     .get(id)
     .then((res) => {
       commit("setData", res);

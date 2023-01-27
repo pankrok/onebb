@@ -45,6 +45,52 @@ export interface ISkinResponse {
   skinBoxes: IBoxes;
 }
 
+export interface IUser {
+    id: number;
+    username: string;
+    banned: boolean;
+    user_group: {
+      html_code: string;
+      group_name: string;
+    };
+    avatar: string;
+    slug: string;
+    posts_no: number;
+    plots_no: number;
+    warn_lvl: number;
+}
+
+export interface IPlot {
+  id: number;
+  name: string;
+  tags?: unknown;
+  user: IUser;
+  active: boolean;
+  pinned: boolean;
+  pinned_order: number;
+  locked: boolean;
+  hidden: boolean;
+  views: number;
+  stars: number;
+  updated_at: string;
+  slug: string;
+  post_no: number;
+  last_active_user: {
+    id: number;
+    username: string;
+    banned: boolean;
+    user_group: {
+      html_code: string;
+      group_name: string
+    };
+    avatar: string;
+    slug: string;
+    posts_no: number;
+    plots_no: number;
+    warn_lvl: number;
+  }
+}
+
 export interface IBoard {
   id: number;
   name: string;
@@ -65,6 +111,7 @@ export interface IBoard {
     avatar: string;
     slug: string;
   };
+  plots?: IPlot[];
 }
 
 export interface ICategory {

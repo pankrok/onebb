@@ -1,49 +1,37 @@
-<script>
-// TODO move to composition api
-// TODO use parser.ts for parsing names and dates
+<script setup lang="ts">
 import Skeleton from "@/components/ui/elements/Skeleton/CategorySkeleton.vue";
-import moment from "moment";
+import { IBoard } from "@/interfaces/obbApiInterface";
+import { defineProps } from "vue";
+import { useStore } from 'vuex';
+import {parseUsername, parseDate} from '@/services/helpers/parsers';
 
-export default {
-  name: "BoardComponent",
-  props: {
-    board: Object,
-    loading: Boolean,
-    boxes: Number,
-  },
-  methods: {
-    parseUsername(username, groupe) {
-      return groupe.replace("{{username}}", username);
-    },
-    dateFormat(value) {
-      return moment(String(value)).format("YYYY-MM-DD");
-    },
-  },
-  components: {
-    Skeleton,
-  },
-};
+const store = useStore();
+const CategorySkeleton = Skeleton;
+
+const props = defineProps<{
+  board: IBoard,
+  loading: boolean,
+  boxes: number
+}>();
+
+const $t = (t: any) => {
+  return t;
+}
 </script>
 
 
 <template>
   <Transition name="fade" mode="out-in">
     <div v-if="loading" key="skeleton">
-      <Skeleton :boxes="boxes" />
+      <CategorySkeleton :boxes="boxes" />
     </div>
-    <div v-else :key="$route.name">
+    <div v-else :key="board.id">
       <div class="box">
         <div class="box-header">
           <h2>{{ board.name }}</h2>
         </div>
       </div>
-      <div v-if="$store.state.onebb.status.loggedIn" class="row mx-1">
-        <router-link
-          :to="{ name: 'NewPlot', params: { id: board.id } }"
-          class="btn btn-secondary"
-          ><i class="fas fa-plus"></i> {{ $t("new plot") }}</router-link
-        >
-      </div>
+      
       <div class="box my-1">
         <ul class="box-content list">
           <li
@@ -56,17 +44,7 @@ export default {
             </div>
             <div class="content f-grow">
               <h3>
-                <router-link
-                  :to="{
-                    name: 'Plot',
-                    params: {
-                      slug: plot.slug,
-                      id: plot.id,
-                      page: Math.ceil(plot.post_no / 20),
-                    },
-                  }"
-                  >{{ plot.name }}</router-link
-                >
+                {{ plot.name }}
               </h3>
               <span
                 >przez:
@@ -94,11 +72,11 @@ export default {
                   "
                 ></div>
                 <div class="text-center">
-                  <i class="far fa-clock"></i> {{ dateFormat(plot.updated_at) }}
+                  <i class="far fa-clock"></i> {{ parseDate(plot.updated_at) }}
                 </div>
               </div>
               <img
-                :src="$store.state.baseUrl + plot.last_active_user.avatar"
+                :src="store.state.baseUrl + plot.last_active_user.avatar"
                 alt="Avatar"
                 class="avatar"
               />
