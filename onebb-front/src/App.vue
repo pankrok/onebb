@@ -15,6 +15,7 @@ const boxComponents: any = {
 }
 
 const boxes = computed(() => {
+  console.log({r:route.fullPath})
   return store.state.boxes[(route.name ?? 'Home')];
 })
 
@@ -43,8 +44,11 @@ const boxes = computed(() => {
       </div>
 
       <div class="f-grow list-complete-item p-relative" key="main">
-        <router-view v-slot="{ Component }" :key="$route.fullPath">
-          <component :is="Component" />
+        <router-view v-slot="{ Component }" :key="route.fullPath">
+          <Transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </Transition>
+          
         </router-view>
       </div>
 

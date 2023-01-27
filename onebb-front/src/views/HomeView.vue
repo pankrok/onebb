@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
-import { onBeforeMount, computed } from "vue";
+import { onBeforeUnmount, onBeforeMount, computed } from "vue";
 import { ICategory } from "@/interfaces/obbApiInterface";
 import Category from "@/components/ui/partial/Category.vue";
 
@@ -14,8 +14,12 @@ onBeforeMount(() => {
   store.dispatch("obb/getCategory");
 });
 
+onBeforeUnmount(() => {
+  store.dispatch('obb/clear');
+})
+
 </script>
 
 <template>
-  <Category v-for="category in categories" :category="category" />
+  <Category v-if="categories" v-for="category in categories" :category="category" />
 </template>

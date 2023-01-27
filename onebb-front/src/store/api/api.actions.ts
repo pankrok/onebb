@@ -19,3 +19,7 @@ export const getBoard = async ({ commit }: any, id?: number | null) => {
       commit("setData", res);
     });
 };
+
+export const clear = async ({ commit }: any) => {
+  commit("setData", null);
+}

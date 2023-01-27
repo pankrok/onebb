@@ -31,7 +31,6 @@ const $t = (t: any) => {
           <h2>{{ board.name }}</h2>
         </div>
       </div>
-      
       <div class="box my-1">
         <ul class="box-content list">
           <li

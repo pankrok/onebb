@@ -5,16 +5,17 @@ import { defineProps } from "vue";
 const props = defineProps<{
   category: ICategory;
 }>();
+
 </script>
 
 <template>
-  <div :key="category.id" class="box">
+  <div v-if="category" :key="props.category.id" class="box">
     <div class="box-header">
       <h2>
         <router-link
           :to="{
             name: 'Category',
-            params: { slug: category.slug, id: category.id },
+            params: { slug: props.category.slug, id: props.category.id },
           }"
           >{{ category.name }}
         </router-link>
@@ -22,7 +23,7 @@ const props = defineProps<{
     </div>
     <div class="box-content">
       <ul class="list">
-        <li v-for="board in category.boards" :key="board.id" class="list-item">
+        <li v-for="board in props.category.boards" :key="board.id" class="list-item">
           <div class="content f-grow">
             <h3>
               <router-link

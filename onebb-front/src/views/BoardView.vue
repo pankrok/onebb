@@ -8,10 +8,12 @@ import { IBoard } from "@/interfaces/obbApiInterface";
 const store = useStore();
 const route = useRoute();
 const routeName = ref<RouteRecordName>("");
-const loading = ref<boolean>(false);
+const loading = ref<boolean>(true);
 
 routeName.value = route.name ?? "";
-store.dispatch("obb/getBoard", route.params.id);
+store.dispatch("obb/getBoard", route.params.id).then(() => {
+  loading.value = false;
+});
 
 const board = computed<IBoard>(() => store.getters["obb/getData"]);
 </script>

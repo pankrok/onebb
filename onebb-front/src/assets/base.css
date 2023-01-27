@@ -143,10 +143,10 @@ span .chat-wrapper[data-v-c13df938] {
     position: relative;
 }
 .slide-fade-enter-active {
-    transition: all 0.2s ease-out !important;
+    transition: all 0.3s ease-out !important;
 }
 .slide-fade-leave-active {
-    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1) !important;
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1) !important;
 }
 .slide-fade-enter-from,
 .slide-fade-leave-to {
@@ -155,7 +155,7 @@ span .chat-wrapper[data-v-c13df938] {
 }
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease;
+    transition: opacity 0.6s ease;
 }
 .fade-enter-from,
 .fade-leave-to {

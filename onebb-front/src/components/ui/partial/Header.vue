@@ -4,14 +4,16 @@
     <div class="header">
       <div class="header-wrapper">
         <div class="logo">
-          <a
-            href="/"
-            class="router-link-active router-link-exact-active"
-            aria-current="page"
-            ><img
+          <router-link
+            :to="{
+              name: 'Home',
+            }"
+          >
+            <img
               class="logo-img"
               src="http://bdev.s89.eu/skins/standard/img/logo.png"
-          /></a>
+            />
+          </router-link>
         </div>
         <ul class="second_menu">
           <li class="list-complete-item" style="">
@@ -41,11 +43,12 @@
       <div class="header-wrapper">
         <ul class="menu">
           <li>
-            <a
-              href="/"
-              class="router-link-active router-link-exact-active"
-              aria-current="page"
-              >Home</a
+            <router-link
+              :to="{
+                name: 'Home',
+              }"
+            >
+              Home</router-link
             >
           </li>
           <li>
