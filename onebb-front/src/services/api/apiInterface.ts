@@ -28,13 +28,14 @@ export interface ApiClientInterface {
   }
 }
 
-export interface ResponseInterface {
+export interface ResponseInterface<T> {
   code: number,
-  body: any,
+  body?: T,
 }
 
-export interface RequestInterface {
+export interface RequestInterface<T> {
   url: string,
   config: ConfigInterface,
+  body?: T
 }
 

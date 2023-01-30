@@ -4,22 +4,28 @@ import { useStore } from "vuex";
 import { ref, computed, onBeforeMount } from "vue";
 import BoardComponent from "@/components/ui/partial/Board.vue";
 import { IBoard } from "@/interfaces/obbApiInterface";
+import { BOARD } from "@/services/api/obbResources";
+import api from "@/services/api/api";
 
 const store = useStore();
 const route = useRoute();
 const routeName = ref<RouteRecordName>("");
-const loading = ref<boolean>(true);
 
-routeName.value = route.name ?? "";
-store.dispatch("obb/getBoard", route.params.id).then(() => {
-  loading.value = false;
+const board = ref<IBoard>();
+const id: number = Number(route.params.id);
+
+store.dispatch('loading');
+api.get<IBoard>({ resource: BOARD, id: id }).then((response) => {
+  if (response?.body) {
+    board.value = response.body;
+    store.dispatch("setTitle", board.value.name);
+  }
+  store.dispatch('loaded');
 });
-
-const board = computed<IBoard>(() => store.getters["obb/getData"]);
 </script>
 
 <template>
-  <div class="f-grow" :key="routeName">
-    <BoardComponent :boxes="1" :loading="loading" :board="board" />
+  <div class="f-grow" v-if="board" :key="routeName">
+    <BoardComponent :boxes="1" :loading="store.state.loading" :board="board" />
   </div>
 </template>

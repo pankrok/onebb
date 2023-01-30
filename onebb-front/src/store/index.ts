@@ -1,50 +1,48 @@
-import { createStore, GetterTree } from 'vuex'
-import api from '@/services/api/api'
-import { ResponseInterface } from '@/services/api/apiInterface';
-import * as resources from '@/services/api/obbResources';
-import { user } from '@/store/user/user.module';
-import { obb } from '@/store/api/api.module';
-import { boxes } from '@/store/boxes/boxes.module';
+import { createStore, GetterTree } from "vuex";
+import { ResponseInterface } from "@/services/api/apiInterface";
+import { user } from "@/store/user/user.module";
+import { boxes } from "@/store/boxes/boxes.module";
+import { IUser } from "@/interfaces/obbApiInterface";
 
 interface IBaseUrl {
-  url: string,
-  obb: string,
+  url: string;
+  obb: string;
 }
 
 // @ts-ignore
-let cfg: IBaseUrl = document.getElementById('app').dataset;
+let cfg: IBaseUrl = document.getElementById("app").dataset;
 const API_URL = cfg.url + cfg.obb;
 
 export interface State {
-  user: any,
-  loading: boolean,
-  defaultTitle: string,
-  baseUrl: string
+  user: any; //fixme
+  loading: boolean;
+  defaultTitle: string;
+  baseUrl: string;
 }
 
 const initialState: State = {
   user: {
-    name: '',
+    name: "",
     id: 0,
   },
-  loading: false,
+  loading: true,
   defaultTitle: document.title,
-  baseUrl: API_URL
-}
+  baseUrl: API_URL,
+};
 
 const actions = {
-  async fetchUser({ commit }: any, id?: string) {
-    
-    api.setResource(resources.USER).get(id)
-    .then((res) => { 
-      console.log(res);
-      commit('setUser', res)
-    })
-  },
   setTitle({ state }: any, title?: string) {
-    document.title = title ? `${state.defaultTitle} - ${title}` : state.defaultTitle;
-  }
-}
+    document.title = title
+      ? `${state.defaultTitle} - ${title}`
+      : state.defaultTitle;
+  },
+  loading({commit}: any) {
+    commit("loading");
+  },
+  loaded({commit}: any) {
+    commit("loaded");
+  },
+};
 
 const mutations = {
   loading(state: State) {
@@ -53,29 +51,30 @@ const mutations = {
   loaded(state: State) {
     state.loading = false;
   },
-  setUser(state: State, res: ResponseInterface) {
-    state.user = {
-      name: res.body.username,
-      id: res.body.id
+  setUser(state: State, res: ResponseInterface<IUser>) {
+    if (res?.body) {
+      state.user = {
+        name: res.body.username,
+        id: res.body.id,
+      };
     }
-  }
-}
+  },
+};
 
 const getters = {
   getUser(state: State) {
-    return `user id: ${state.user.id} || username: ${state.user.name}`
-  }
-}
+    return `user id: ${state.user.id} || username: ${state.user.name}`;
+  },
+};
 
 const store = createStore<State>({
   state: initialState,
   actions: actions,
   mutations: mutations,
-  getters:  getters,
+  getters: getters,
   modules: {
     user,
-    obb,
-    boxes
-  }
-})
-export default store
+    boxes,
+  },
+});
+export default store;

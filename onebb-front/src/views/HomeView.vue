@@ -1,25 +1,28 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
-import { onBeforeUnmount, onBeforeMount, computed } from "vue";
+import { onBeforeUnmount, onBeforeMount, ref } from "vue";
 import { ICategory } from "@/interfaces/obbApiInterface";
 import Category from "@/components/ui/partial/Category.vue";
+import api from "@/services/api/api";
 
 const store = useStore();
-const categories = computed<ICategory[]>(
-  () => store.getters["obb/getData"]
-);
+const categories = ref<ICategory[]>();
 
-onBeforeMount(() => {
   store.dispatch("setTitle", "Home");
-  store.dispatch("obb/getCategory");
-});
+  api.get<ICategory[]>({ resource: "api/categories" }).then((response) => {
+    if (response?.body) {
+      categories.value = response.body;
+    }
+    store.dispatch('loaded');
+  });
 
-onBeforeUnmount(() => {
-  store.dispatch('obb/clear');
-})
 
 </script>
 
 <template>
-  <Category v-if="categories" v-for="category in categories" :category="category" />
+  <Category
+    v-if="categories"
+    v-for="category in categories"
+    :category="category"
+  />
 </template>

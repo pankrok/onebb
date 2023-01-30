@@ -38,7 +38,7 @@ class Api {
     config: this.#defaultConfig,
   };
 
-  #request: RequestInterface = {
+  #request: RequestInterface<unknown> = {
     url: "",
     config: this.#defaultConfig,
   };
@@ -69,13 +69,12 @@ class Api {
     this.#request.config = this.#client.config;
   }
 
-  #fetchRequest(): Promise<ResponseInterface> {
+  #fetchRequest<T>(): Promise<ResponseInterface<T>> {
     this.#prepareRequest();
 
     return new Promise((reslove) => {
-      const response: ResponseInterface = {
+      const response: ResponseInterface<T> = {
         code: 0,
-        body: "",
       };
       // @ts-ignore
       fetch(this.#request.url, this.#request.config)
@@ -108,6 +107,7 @@ class Api {
   }
 
   setResource(resource: string) {
+    console.warn('[OBB API] setResource method is depreceted!');
     this.#client.resource = resource;
     return this;
   }
@@ -116,21 +116,31 @@ class Api {
     this.#client.token = token;
   }
 
-  async get(id?: string | number | null): Promise<ResponseInterface> {
+  async get<T>(cfg: {resource: string, id?: number | null, query?: string | null}): Promise<ResponseInterface<T>> {
+    const { id, resource, query } = cfg;
     this.#client.config.method = GET;
+
+    if (resource) {
+      this.#client.resource = resource;
+    }
+
     if (id) {
       this.#client.resource += `/${id}`;
+    }
+
+    if(query) {
+      this.#client.resource += `/${query}`;
     }
 
     if (this.#client.config.body !== null) {
       this.#client.config.body = null;
     }
 
-    const response: ResponseInterface = await this.#fetchRequest();
+    const response: ResponseInterface<T> = await this.#fetchRequest();
     return response;
   }
 
-  async post(body?: any, id?: string | null): Promise<ResponseInterface> {
+  async post<ReqT, ResT>(body?: ReqT, id?: number | null): Promise<ResponseInterface<ResT>> {
     this.#client.config.method = POST;
     if (id) {
       this.#client.resource += `/${id}`;
@@ -140,11 +150,11 @@ class Api {
       this.#client.config.body = JSON.stringify(body);
     }
 
-    const response: ResponseInterface = await this.#fetchRequest();
+    const response: ResponseInterface<ResT> = await this.#fetchRequest();
     return response;
   }
 
-  async put(body?: any, id?: string | null): Promise<ResponseInterface> {
+  async put<T>(body?: any, id?: number | null): Promise<ResponseInterface<T>> {
     this.#client.config.method = PUT;
     if (id) {
       this.#client.resource += `/${id}`;
@@ -154,15 +164,15 @@ class Api {
       this.#client.config.body = JSON.stringify(body);
     }
 
-    const response: ResponseInterface = await this.#fetchRequest();
+    const response: ResponseInterface<T> = await this.#fetchRequest();
     return response;
   }
 
-  async delete(id: string | null): Promise<ResponseInterface> {
+  async delete<T>(id: number | null): Promise<ResponseInterface<T>> {
     this.#client.config.method = DELETE;
     this.#client.resource += `/${id}`;
 
-    const response: ResponseInterface = await this.#fetchRequest();
+    const response: ResponseInterface<T> = await this.#fetchRequest();
     return response;
   }
 }

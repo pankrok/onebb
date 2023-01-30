@@ -3,7 +3,6 @@ import Header from '@/components/ui/partial/Header.vue';
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router'
-import { IBoxes } from '@/interfaces/obbApiInterface';
 import PluginBox from '@/components/ui/elements/Box/PluginBox.vue';
 
 const store = useStore();
@@ -15,7 +14,6 @@ const boxComponents: any = {
 }
 
 const boxes = computed(() => {
-  console.log({r:route.fullPath})
   return store.state.boxes[(route.name ?? 'Home')];
 })
 
