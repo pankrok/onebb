@@ -43,7 +43,7 @@ const $t = (t: any) => {
             </div>
             <div class="content f-grow">
               <h3>
-                {{ plot.name }}
+                <router-link :to="{ name: 'Plot', params: { slug: plot.slug, id: plot.id, page:(Math.ceil(plot.post_no/20)) }}">{{ plot.name }}</router-link>
               </h3>
               <span
                 >przez:

@@ -1,4 +1,22 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+import type { Component } from 'vue';
+import Modal from '@/components/ui/elements/Modal.vue';
+import SignIn from '@/components/ui/partial/SignIn.vue';
+
+const signInModal = ref<boolean>(false);
+const signIn: Component = SignIn;
+const signInButton = () => {
+  signInModal.value = !signInModal.value;
+}
+
+const properties = {
+  callback: (e: string) => {
+    console.log('hello ' + e);
+  }
+}
+
+</script>
 <template>
   <nav>
     <div class="header">
@@ -22,7 +40,7 @@
             </button>
           </li>
           <li class="list-complete-item">
-            <a href="#" class="px-1"
+            <a @click="signInButton" href="#" class="px-1"
               ><i class="fas fa-sign-in-alt fa-lg"></i>
               <span class="d-sm-none">Sign in</span></a
             >
@@ -57,5 +75,6 @@
         </ul>
       </div>
     </div>
+    <Modal :component="signIn" :properties="properties" :show="signInModal" />
   </nav>
 </template>

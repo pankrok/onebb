@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import Header from '@/components/ui/partial/Header.vue';
 import { computed } from 'vue';
+import type { Component } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router'
 import PluginBox from '@/components/ui/elements/Box/PluginBox.vue';
+import Modal from './components/ui/elements/Modal.vue';
+import SignIn from './components/ui/partial/SignIn.vue';
 
 const store = useStore();
 const route = useRoute();
 store.dispatch('boxes/get');
 
-const boxComponents: any = {
+const component: Component = {
   PluginBox,
+  SignIn,
 }
 
 const boxes = computed(() => {
@@ -30,13 +34,13 @@ const boxes = computed(() => {
     >
       <div class="col-12 list-complete-item" v-if="boxes.top.length > 0">
         <div v-for="box in boxes.top" :key="box.name">
-          <component :is="boxComponents[box.engine]" :name="box.name" :content="box.html" />
+          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
         </div>
       </div>
 
       <div class="col-3 list-complete-item" v-if="boxes.left.length > 0">
         <div v-for="box in boxes.left" :key="box.name">
-          <component :is="boxComponents[box.engine]" :name="box.name" :content="box.html" />
+          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
           
         </div>
       </div>
@@ -52,13 +56,13 @@ const boxes = computed(() => {
 
       <div class="col-3 list-complete-item" v-if="boxes.right.length > 0">
         <div v-for="box in boxes.right" :key="box.name">
-          <component :is="boxComponents[box.engine]" :name="box.name" :content="box.html" />
+          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
         </div>
       </div>
 
       <div class="col-12 list-complete-item" v-if="boxes.bottom.length > 0">
         <div v-for="box in boxes.bottom" :key="box.name">
-          <component :is="boxComponents[box.engine]" :name="box.name" :content="box.html" />
+          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
         </div>
       </div>
     </TransitionGroup>

@@ -5,11 +5,12 @@ export const actions = {
   async login({ commit }: any) {
     
     api.setResource(LOGIN).post({
-        username: "grzyb",
-        password: 'grzyb@s89.eu'
+        username: "",
+        password: ''
     })
-    .then((res) => { 
-      console.log(res);
+    .then((res) => {
+      // FIXME  
+      // @ts-ignore
       api.setToken(res.body.token)
     })
   }

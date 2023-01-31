@@ -22,6 +22,12 @@ const router = createRouter({
       name: 'Board',
       component: () => import('../views/BoardView.vue')
     },
+    {
+      path: '/plot/:slug/:id/page/:page?',
+      alias: '/plot/:slug/:id/page/:page?/limit/:limit?',
+      name: 'Plot',
+      component: () => import('../views/PlotView.vue')
+    },
   ]
 })
 

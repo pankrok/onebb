@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { useStore } from "vuex";
-import { onBeforeUnmount, onBeforeMount, ref } from "vue";
+import { ref } from "vue";
 import { ICategory } from "@/interfaces/obbApiInterface";
+import { CATEGORY } from "@/services/api/obbResources";
 import Category from "@/components/ui/partial/Category.vue";
 import api from "@/services/api/api";
 
 const store = useStore();
 const categories = ref<ICategory[]>();
 
-  store.dispatch("setTitle", "Home");
-  api.get<ICategory[]>({ resource: "api/categories" }).then((response) => {
-    if (response?.body) {
-      categories.value = response.body;
-    }
-    store.dispatch('loaded');
-  });
-
-
+store.dispatch("setTitle", "Home");
+api.get<ICategory[]>({ resource: CATEGORY }).then((response) => {
+  if (response?.body) {
+    categories.value = response.body;
+  }
+  store.dispatch("loaded");
+});
 </script>
 
 <template>
