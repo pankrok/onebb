@@ -4,5 +4,6 @@ export const state: IUser =  {
     loggedIn: false,  
     acp: false,
     mcp: false,
+    avatar: undefined,
     slug: '',
 };

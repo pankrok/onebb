@@ -11,7 +11,7 @@ import SignIn from './components/ui/partial/SignIn.vue';
 const store = useStore();
 const route = useRoute();
 store.dispatch('boxes/get');
-
+store.dispatch('user/refresh');
 const component: Component = {
   PluginBox,
   SignIn,

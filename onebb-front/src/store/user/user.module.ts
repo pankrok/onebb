@@ -1,9 +1,10 @@
 import { state } from './user.state';
 import { actions } from './user.actions';
+import { mutations } from './user.mutations';
 
 export const user = {
     namespaced: true,
-    state: state,
-    actions: actions,
-    mutations: {}
+    state,
+    actions,
+    mutations
 }

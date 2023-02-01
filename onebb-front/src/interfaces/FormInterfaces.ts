@@ -1,4 +1,4 @@
 export interface ISignIn {
-    login: string,
+    username: string,
     password: string
 }

@@ -79,8 +79,12 @@ class Api {
       // @ts-ignore
       fetch(this.#request.url, this.#request.config)
         .then((res) => {
+          if (res.status > 399 && res.status < 500) {
+            console.error(res);
+          }
+
           if (res.status < 200 || res.status > 299) {
-            throw new Error("Something bad happened with API");
+            console.warn({res});
           }
 
           response.code = res.status;
@@ -140,8 +144,14 @@ class Api {
     return response;
   }
 
-  async post<ReqT, ResT>(body?: ReqT, id?: number | null): Promise<ResponseInterface<ResT>> {
+  async post<ReqT, ResT>(cfg: {resource: string, body?: ReqT, id?: number | null}): Promise<ResponseInterface<ResT>> {
+    const {resource, body, id} = cfg;
     this.#client.config.method = POST;
+    
+    if (resource) {
+      this.#client.resource = resource;
+    }
+    
     if (id) {
       this.#client.resource += `/${id}`;
     }

@@ -28,6 +28,11 @@ const router = createRouter({
       name: 'Plot',
       component: () => import('../views/PlotView.vue')
     },
+    {
+      path: '/user/:slug/:id',
+      name: 'Profile',
+      component: () => import( '../views/ProfileView.vue')
+    },
   ]
 })
 

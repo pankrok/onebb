@@ -4,6 +4,7 @@ export const CATEGORY = '/api/categories';
 export const CONFIGURATION = '/api/configuration';
 export const GROUP = '/api/groups';
 export const LOGIN = '/api/login';
+export const LOGOUT = '/api/logout';
 export const MESSAGE = '/api/messages';
 export const MESSENGER = '/api/one_messengers';
 export const PAGE = '/api/pages';
