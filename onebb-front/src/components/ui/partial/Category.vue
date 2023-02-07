@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ICategory } from "@/interfaces/obbApiInterface";
 import { defineProps } from "vue";
+import { parseAvatar, parseUsername, parseDate } from '@/services/helpers/parsers';
 
 const props = defineProps<{
   category: ICategory;
@@ -43,19 +44,21 @@ const props = defineProps<{
               {{ board.posts_no }} <i class="fas fa-comment-dots"></i
             ></strong>
           </div>
-          <div class="autor col-sm-3">
+          <div v-if="board.last_active_user" class="autor col-sm-3">
             <div class="px-xl-1 m-0">
-              <div v-if="board.last_active_user" class="d-sm-none">
-                {{ board.last_active_user.username }}
+              <div class="d-sm-none" v-html="parseUsername(board.last_active_user)">
               </div>
-              <div class="text-center">2022-12-03</div>
+              <div class="text-center">{{ parseDate(board.updated_at)}}</div>
             </div>
             <img
-              src="https://onebb.mazda5.pl/upload/img/55fef6c86f3b7e1a8da813d6384d8755.png"
+              
+              :src="parseAvatar(board.last_active_user.avatar ?? null)"
               alt="Avatar"
               class="avatar"
             />
           </div>
+          <div v-else class="autor col-sm-3"></div>
+
         </li>
       </ul>
     </div>

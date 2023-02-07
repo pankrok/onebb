@@ -102,15 +102,7 @@ export interface IBoard {
   priority: number;
   plots_no: number;
   posts_no: number;
-  last_active_user: {
-    username: number;
-    banned: boolean;
-    user_group: {
-      html_code: string;
-    };
-    avatar: string;
-    slug: string;
-  };
+  last_active_user?: IUser;
   plots?: IPlot[];
 }
 

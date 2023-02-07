@@ -155,7 +155,7 @@ const signInProps = ref({
         </ul>
       </div>
     </div>
-    <Modal :show="signInModal">
+    <Modal :show="signInModal" :callback="signInButton">
       <SignIn v-bind="signInProps"/>
     </Modal>
   </nav>

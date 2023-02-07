@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import Skeleton from '../components/skeletons/SkeletonPlot';
-import { useStore } from 'vuex';
+import Skeleton from '@/components/ui/elements/Skeleton/BoardSkeleton.vue';
+import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { IPlot } from '@/interfaces/obbApiInterface';
+import { useStore } from 'vuex';
 
-cont { t } = useI18n();
+const store = useStore();
+const route = useRoute();
+const { t } = useI18n();
+const props = defineProps<{
+  plot: IPlot,
+  loading: boolean,
+}>();
 
 </script>
 
 <template>
-    <div class="f-grow" :key="$route.name">
+    <div class="f-grow" :key="route.name?.toString()">
         <div class="box">
             <div class="box-header">
             <Transition name="fade" mode="out-in">
-               <span v-if="plot.name" :key="plot.name" class="d-flex j-c-space-between a-i-center"><h1>{{ plot.name }}</h1> <button v-if="$store.state.onebb.status.mcp" class="btn btn-warning" @click="plotMod = plot.id">EDIT PLOT</button></span>
-               <h1 v-else :key="loading">{{ t('loading') }}</h1>
+               <span v-if="props.plot.name" :key="props.plot.name" class="d-flex j-c-space-between a-i-center"><h1>{{ props.plot.name }}</h1> <button v-if="store.state.user.mcp" class="btn btn-warning" @click="props.plotMod = props.plot.id">EDIT props.PLOT</button></span>
+               <h1 v-else key="loading">{{ t('loading') }}</h1>
                
             </Transition>
             </div>
@@ -23,7 +31,7 @@ cont { t } = useI18n();
                 <span><button v-if="this.next" class="btn btn-secondary j-s-end" type="button" @click="nextPage">{{ t('Next') }}</button></span>
             </div>
         <Transition name="fade" mode="out-in">
-        <div v-if="loading" :key="plotLoader">
+        <div v-if="loading" key="props.plotLoader">
             <Skeleton :boxes="10"/>
         </div>
         
@@ -61,7 +69,7 @@ cont { t } = useI18n();
                         {{ t('Posts') }} - {{ post.user.posts_no }}
                     </li>
                     <li class="list-item">
-                        {{ t('Plots') }} - {{ post.user.plots_no }}
+                        {{ t('props.Plots') }} - {{ post.user.props.plots_no }}
                     </li>
                 </ul>
                </div>
@@ -100,7 +108,7 @@ cont { t } = useI18n();
         </div>  
     </div>
     <!-- 
-    <PlotMod v-model:pid="plotMod" />
+    <props.PlotMod v-model:pid="props.plotMod" />
     <PostMod v-model:pid="postMod" />
     -->
 </template>

@@ -4,6 +4,7 @@ import {
   ApiClientInterface,
   ResponseInterface,
   RequestInterface,
+  HydraInterface,
 } from "./apiInterface";
 
 const GET = "GET";
@@ -13,8 +14,8 @@ const DELETE = "DELETE";
 
 class Api {
   #defaultHeaders: HeadersInterface = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+    "Content-Type": "application/ld+json",
+    Accept: "application/ld+json",
     "X-ONEBB-ADMIN": "true",
     Authorization: "",
   };
@@ -75,6 +76,10 @@ class Api {
     return new Promise((reslove) => {
       const response: ResponseInterface<T> = {
         code: 0,
+        count: undefined,
+        next: false,
+        prev: false,
+        body: undefined,
       };
       // @ts-ignore
       fetch(this.#request.url, this.#request.config)
@@ -97,7 +102,12 @@ class Api {
               "application/ld+json; charset=utf-8"
           ) {
             res.json().then((data) => {
-              response.body = data;
+              response.count = data['hydra:totalItems'] ? data['hydra:totalItems'] : undefined;
+              if (data['hydra:view']){
+                response.next = data['hydra:view']['hydra:next'] ? true : false;
+                response.prev = data['hydra:view']['hydra:previous'] ? true : false;
+              }
+              response.body = data['hydra:member'] ? data['hydra:member'] : data;
               reslove(response);
             });
           } else {
