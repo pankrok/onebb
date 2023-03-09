@@ -18,7 +18,7 @@ const router = createRouter({
       component: () => import('../views/CategoryView.vue')
     },
     {
-      path: '/board/:slug/:id',
+      path: '/board/:slug/:id/:page?',
       name: 'Board',
       component: () => import('../views/BoardView.vue')
     },

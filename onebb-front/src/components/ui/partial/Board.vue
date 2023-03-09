@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Skeleton from "@/components/ui/elements/Skeleton/CategorySkeleton.vue";
-import { IBoard } from "@/interfaces/obbApiInterface";
+import { IBoard, IPlot } from "@/interfaces/obbApiInterface";
 import { defineProps } from "vue";
 import { useStore } from 'vuex';
 import {parseUsername, parseDate} from '@/services/helpers/parsers';
@@ -10,6 +10,7 @@ const CategorySkeleton = Skeleton;
 
 const props = defineProps<{
   board: IBoard,
+  plots: IPlot[],
   loading: boolean,
   boxes: number
 }>();
@@ -17,6 +18,8 @@ const props = defineProps<{
 const $t = (t: any) => {
   return t;
 }
+
+console.log(props.plots);
 </script>
 
 
@@ -34,7 +37,7 @@ const $t = (t: any) => {
       <div class="box my-1">
         <ul class="box-content list">
           <li
-            v-for="plot in board.plots"
+            v-for="plot in plots"
             class="list-item-no-border"
             :key="plot.id"
           >
