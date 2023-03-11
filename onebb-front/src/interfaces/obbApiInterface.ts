@@ -60,6 +60,16 @@ export interface IUser {
     warn_lvl: number;
 }
 
+export interface IPost {
+  id: number,
+  user: IUser,
+  content: string,
+  reputation: number,
+  hidden: boolean,
+  edit_by: IUser,
+  created_at: string,
+}
+
 export interface IPlot {
   id: number;
   name: string;

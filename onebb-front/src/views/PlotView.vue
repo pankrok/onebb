@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api/api";
-import { IPlot } from "@/interfaces/obbApiInterface";
+import { IPlot, IPost } from "@/interfaces/obbApiInterface";
 import { PLOT } from "@/services/api/obbResources";
 import { parseUsername, parseDate } from "@/services/helpers/parsers";
 
@@ -14,7 +14,7 @@ const route = useRoute();
 const id: number = Number(route.params.id);
 const page: number = Number(route.params.page) ?? 1;
 const plot = ref<IPlot>();
-const posts = ref<any>(); // FIXME
+const posts = ref<IPost[]>();
 const next = ref<boolean>(false);
 const prev = ref<boolean>(false);
 
@@ -22,7 +22,7 @@ api.get<IPlot>({ resource: PLOT, id: id }).then((res) => {
   plot.value = res.body;
 
   api
-    .get<any>({ resource: PLOT, id: id, query: `/posts?page=${page}` })
+    .get<IPost[]>({ resource: PLOT, id: id, query: `/posts?page=${page}` })
     .then((postsResponse) => {
       posts.value = postsResponse.body;
       next.value = postsResponse.next;
