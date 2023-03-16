@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Skeleton from "@/components/ui/elements/Skeleton/CategorySkeleton.vue";
+import Paginator from "@/components/ui/elements/Paginator.vue";
 import { IBoard, IPlot } from "@/interfaces/obbApiInterface";
 import { defineProps } from "vue";
 import { useStore } from 'vuex';
@@ -12,7 +13,8 @@ const props = defineProps<{
   board: IBoard,
   plots: IPlot[],
   loading: boolean,
-  boxes: number
+  boxes: number,
+  paginator?: Function,
 }>();
 
 const $t = (t: any) => {
@@ -35,6 +37,7 @@ console.log(props.plots);
         </div>
       </div>
       <div class="box my-1">
+        <Paginator v-if="paginator" :active="paginator('active')" :next="paginator('isNext')" :prev="paginator('isPrev')" :callBack="paginator" />
         <ul class="box-content list">
           <li
             v-for="plot in plots"
@@ -85,6 +88,7 @@ console.log(props.plots);
             </div>
           </li>
         </ul>
+        <Paginator v-if="paginator" :active="paginator('active')" :next="paginator('isNext')" :prev="paginator('isPrev')" :callBack="paginator" />
       </div>
     </div>
   </Transition>

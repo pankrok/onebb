@@ -17,6 +17,11 @@ const next = () => {
   router.push({ name: 'Board', params: { slug: route.params.slug, id: route.params.id, page: p} })
 }
 
+const prev = () => {
+  const p =  route.params.page ?  Number(route.params.page) - 1 : 2;
+  router.push({ name: 'Board', params: { slug: route.params.slug, id: route.params.id, page: p} })
+}
+
 const currentPage = () => {
   return route.params.page ? Number(route.params.page) : 1;
 }
@@ -26,6 +31,30 @@ const board = ref<IBoard>();
 const plots = ref<IPlot[]>();
 const id: number = Number(route.params.id);
 
+const paginator = (f?: string) => {
+  if (f === 'active') {
+    if (currentPage() === 1) {
+      return (plots.value?.length === limit.value)
+    }
+    return true;
+  }
+
+  if (f === 'isPrev') {
+    return (currentPage() > 1);
+  }
+
+  if (f === 'isNext') {
+    return (plots.value?.length === limit.value);
+  }
+
+  if (f === 'next') {
+    next();
+  }
+
+  if (f === 'prev') {
+    prev();
+  }
+}
 
 store.dispatch('loading');
 api.get<IBoard>({ resource: BOARD, id: id }).then((response) => {
@@ -48,7 +77,6 @@ api.get<IBoard>({ resource: BOARD, id: id }).then((response) => {
 
 <template>
   <div class="f-grow" v-if="board && plots" :key="routeName">
-    <button @click="next()">+++</button>
-    <BoardComponent :boxes="1" :loading="store.state.loading" :board="board" :plots="plots" />
+    <BoardComponent :boxes="1" :loading="store.state.loading" :board="board" :plots="plots" :paginator="paginator" />
   </div>
 </template>
