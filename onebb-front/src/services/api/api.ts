@@ -44,11 +44,38 @@ class Api {
     config: this.#defaultConfig,
   };
 
-  #prepareRequest() {
+  #storedRequest = this.#request;
+
+  #intercept: Function | null = null;
+  maxRetry: number = 3;
+  retryMsDelay = 1000;
+  #retryHandler = 0;
+
+  async saveRequest(): Promise<boolean> {
+    return new Promise(reslove => {
+      this.#storedRequest = this.#request;
+      reslove(true);
+    })
+    
+  }
+
+  getPreviosRequest() {
+    return this.#storedRequest;
+  }
+
+  setRequestToken() {
     if (this.#client.token) {
-      this.#client.config.headers.Authorization = `Bearer ${
+      this.#request.config.headers.Authorization = `Bearer ${
         this.#client.token
       }`;
+    }
+  }
+
+  #prepareRequest(request: RequestInterface<unknown> | null = null) {
+    if (request) {
+      this.#request = request;
+      this.setRequestToken();
+      return null;
     }
 
     if (this.#client.resource == "") {
@@ -68,12 +95,15 @@ class Api {
       };
     }
     this.#request.config = this.#client.config;
+    this.setRequestToken();
   }
 
-  #fetchRequest<T>(): Promise<ResponseInterface<T>> {
-    this.#prepareRequest();
+  #fetchRequest<T>(
+    req: null | RequestInterface<unknown> = null
+  ): Promise<ResponseInterface<T>> {
+    this.#prepareRequest(req);
 
-    return new Promise((reslove) => {
+    return new Promise(async (reslove) => {
       const response: ResponseInterface<T> = {
         code: 0,
         count: undefined,
@@ -82,55 +112,85 @@ class Api {
         body: undefined,
       };
       // @ts-ignore
-      fetch(this.#request.url, this.#request.config)
-        .then((res) => {
-          if (res.status > 399 && res.status < 500) {
-            console.error(res);
-          }
+      let res = await fetch(this.#request.url, this.#request.config);
+      if (this.#intercept) {
+        res = await this.#intercept(this.#request, res);
+      }
+      //console.log({res})
+      if (res.status > 399 && res.status < 500) {
+        if (this.#retryHandler < this.maxRetry) {
+          this.#retryHandler++;
+          setTimeout(() => {
+            reslove(this.#fetchRequest());
+          }, this.retryMsDelay);
+        }
+        console.error("API ERROR");
+        //console.error(res);
+      }
 
-          if (res.status < 200 || res.status > 299) {
-            console.warn({res});
-          }
+      if (res.status < 200 || res.status > 299) {
+        console.warn("API ERROR");
+        //console.warn({ res });
+      }
+      if (req) {
+        // TODO: fixe interface
+        reslove(res);
+        return null;
+      }
 
-          response.code = res.status;
-          if (
-            res.headers.get("content-type") ===
-              "application/json" ||
-            res.headers.get("content-type") ===
-              "application/json; charset=utf-8" ||
-            res.headers.get("content-type") ===
-              "application/ld+json; charset=utf-8"
-          ) {
-            res.json().then((data) => {
-              response.count = data['hydra:totalItems'] ? data['hydra:totalItems'] : undefined;
-              if (data['hydra:view']){
-                response.next = data['hydra:view']['hydra:next'] ? true : false;
-                response.prev = data['hydra:view']['hydra:previous'] ? true : false;
-              }
-              response.body = data['hydra:member'] ? data['hydra:member'] : data;
-              reslove(response);
-            });
-          } else {
-            throw new Error("Not a json response");
+      response.code = res.status;
+      if (
+        res.headers.get("content-type") === "application/json" ||
+        res.headers.get("content-type") === "application/json; charset=utf-8" ||
+        res.headers.get("content-type") === "application/ld+json; charset=utf-8"
+      ) {
+        res.json().then((data) => {
+          response.count = data["hydra:totalItems"]
+            ? data["hydra:totalItems"]
+            : undefined;
+          if (data["hydra:view"]) {
+            response.next = data["hydra:view"]["hydra:next"] ? true : false;
+            response.prev = data["hydra:view"]["hydra:previous"] ? true : false;
           }
-        })
-        .catch((error) => {
-          console.error("API Error:", error);
+          response.body = data["hydra:member"] ? data["hydra:member"] : data;
+          reslove(response);
         });
+      } else {
+        throw new Error("Not a json response");
+      }
     });
+    //.catch((error) => {
+    //   console.error("API Error:", error);
+    //  });
+  }
+
+  intercept(cb: Function) {
+    this.#intercept = cb;
+  }
+
+  async retry(req: RequestInterface<unknown>) {
+    const response = await this.#fetchRequest(req);
+    return response;
   }
 
   setResource(resource: string) {
-    console.warn('[OBB API] setResource method is depreceted!');
+    console.warn("[OBB API] setResource method is depreceted!");
     this.#client.resource = resource;
     return this;
   }
 
-  setToken(token: string) {
-    this.#client.token = token;
+  async setToken(token: string): Promise<boolean> {
+    return new Promise(reslove => {
+      this.#client.token = token;
+      reslove(true);
+    })
   }
 
-  async get<T>(cfg: {resource: string, id?: number | null, query?: string | null}): Promise<ResponseInterface<T>> {
+  async get<T>(cfg: {
+    resource: string;
+    id?: number | null;
+    query?: string | null;
+  }): Promise<ResponseInterface<T>> {
     const { id, resource, query } = cfg;
     this.#client.config.method = GET;
 
@@ -142,7 +202,7 @@ class Api {
       this.#client.resource += `/${id}`;
     }
 
-    if(query) {
+    if (query) {
       this.#client.resource += `/${query}`;
     }
 
@@ -154,14 +214,18 @@ class Api {
     return response;
   }
 
-  async post<ReqT, ResT>(cfg: {resource: string, body?: ReqT, id?: number | null}): Promise<ResponseInterface<ResT>> {
-    const {resource, body, id} = cfg;
+  async post<ReqT, ResT>(cfg: {
+    resource: string;
+    body?: ReqT;
+    id?: number | null;
+  }): Promise<ResponseInterface<ResT>> {
+    const { resource, body, id } = cfg;
     this.#client.config.method = POST;
-    
+
     if (resource) {
       this.#client.resource = resource;
     }
-    
+
     if (id) {
       this.#client.resource += `/${id}`;
     }

@@ -3,6 +3,7 @@ import { ResponseInterface } from "@/services/api/apiInterface";
 import { user } from "@/store/user/user.module";
 import { boxes } from "@/store/boxes/boxes.module";
 import { IUser } from "@/interfaces/obbApiInterface";
+import api from "@/services/api/api";
 
 interface IBaseUrl {
   url: string;
@@ -36,10 +37,10 @@ const actions = {
       ? `${state.defaultTitle} - ${title}`
       : state.defaultTitle;
   },
-  loading({commit}: any) {
+  loading({ commit }: any) {
     commit("loading");
   },
-  loaded({commit}: any) {
+  loaded({ commit }: any) {
     commit("loaded");
   },
 };
@@ -77,4 +78,26 @@ const store = createStore<State>({
     boxes,
   },
 });
+// TODO: fix types
+api.intercept(async (req, res) => {
+  
+  let response = res.clone();
+  response = await response.json();
+
+  if (
+    response.code === 401 &&
+    response.message == "Expired JWT Token"
+  ) {
+    const reqClone = JSON.stringify(req);
+    const save = await api.saveRequest();
+    
+    if(save === true) {
+      await store.dispatch("user/refresh");
+    }
+    
+    return await api.retry(JSON.parse(reqClone));
+  }
+  return res;
+});
+
 export default store;

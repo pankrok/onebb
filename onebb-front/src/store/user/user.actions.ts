@@ -8,13 +8,15 @@ export const actions = {
     return new Promise((resolve) => {
       // FIXME
       api.post<ISignIn, any>({ resource: LOGIN, body: data }).then((res) => {
-        console.log("--------LOGIN--------", { res });
+        //console.log("--------LOGIN--------", { res });
+        localStorage.setItem('logged', 'true');
         // FIXME
         // @ts-ignore
         if (res.code === 200) {
           commit("setUser", res.body);
           api.setToken(res.body.token);
         } else {
+          localStorage.removeItem('logged');
           commit("unsetUser");
         }
 
@@ -24,21 +26,24 @@ export const actions = {
   },
 
   async refresh({ commit }: any) {
-    api.post({ resource: REFRESH_TOKEN }).then((res) => {
-      console.log("--------REFRESH_TOKEN--------", { res });
+    const refresh = api.post({ resource: REFRESH_TOKEN }).then((res) => {
+      //console.log("--------REFRESH_TOKEN--------", { res });
       if (res.code === 200) {
         commit("setUser", res.body);
         // @ts-ignore
         api.setToken(res.body.token);
       } else {
+        localStorage.removeItem('logged');
         commit("unsetUser");
       }
     });
+    return refresh;
   },
 
   async logout({ commit }: any) {
     api.post({ resource: LOGOUT }).then((res) => {
-      console.log("--------LOGOUT--------", { res });
+      //console.log("--------LOGOUT--------", { res });
+      localStorage.removeItem('logged');
       commit("unsetUser");
     });
   },

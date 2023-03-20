@@ -42,8 +42,8 @@ const store = useStore();
                       userData.user_group.html_code
                     )
                   "
-                > <!-- fixme -->
-                </span>
+                > 
+                </span><!-- fixme -->
               </li>
               <li class="list-item text-center px-1">
                 <span>Postów:</span> <span>{{ userData.posts_no }}</span>
