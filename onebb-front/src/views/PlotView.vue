@@ -1,33 +1,33 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import api from "@/services/api/api";
 import { IPlot, IPost } from "@/interfaces/obbApiInterface";
 import { PLOT } from "@/services/api/obbResources";
-import { parseUsername, parseDate } from "@/services/helpers/parsers";
+import { parseUsername, parseDate, currentPage, usePaginator } from "@/services/helpers/parsers";
+import Paginator from "@/components/ui/elements/Paginator.vue";
+import JoditEditor from "@/components/ui/partial/JoditEditor.vue";
 
 const { t } = useI18n();
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 const id: number = Number(route.params.id);
-const page: number = Number(route.params.page) ?? 1;
 const plot = ref<IPlot>();
 const posts = ref<IPost[]>();
-const next = ref<boolean>(false);
-const prev = ref<boolean>(false);
+const paginator = usePaginator(posts, 'Plot', route, router);
+const openTextEditor = ref(false);
+const textValue = ref<string>('');
 
 api.get<IPlot>({ resource: PLOT, id: id }).then((res) => {
   plot.value = res.body;
 
   api
-    .get<IPost[]>({ resource: PLOT, id: id, query: `/posts?page=${page}` })
+    .get<IPost[]>({ resource: PLOT, id: id, query: `/posts?page=${currentPage(route)}` })
     .then((postsResponse) => {
       posts.value = postsResponse.body;
-      next.value = postsResponse.next;
-      prev.value = postsResponse.prev;
-      console.log({ postsResponse });
     });
 });
 </script>
@@ -48,6 +48,13 @@ api.get<IPlot>({ resource: PLOT, id: id }).then((res) => {
         </div>
       </div>
     </div>
+    <Paginator
+        v-if="paginator"
+        :active="paginator('active')"
+        :next="paginator('isNext')"
+        :prev="paginator('isPrev')"
+        :callBack="paginator"
+      />
     <TransitionGroup name="list-complete" tag="div" mode="out-in">
       <div
         v-for="post in posts"
@@ -123,6 +130,17 @@ api.get<IPlot>({ resource: PLOT, id: id }).then((res) => {
           </span>
           
         </div>
+      </div>
+      <span v-if="!openTextEditor" class="m-4 d-flex j-c-end">
+        <button class="btn btn-secondary" @click="openTextEditor = !openTextEditor">Reply</button>
+      </span>
+      <div v-if="openTextEditor" class="box">
+        <div class="py-2">
+        <JoditEditor :value="textValue" />
+      </div>
+        <span class="d-flex j-c-end">
+        <button class="btn btn-secondary" >Send</button>
+      </span>
       </div>
     </TransitionGroup>
   </div>

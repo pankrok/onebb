@@ -40,8 +40,8 @@ const props = defineProps<{
           </div>
           <div class="row col-2 text-right d-sm-none">
             <strong
-              >{{ board.plots_no }} <i class="fas fa-comments"></i> /
-              {{ board.posts_no }} <i class="fas fa-comment-dots"></i
+              >{{ board.plots_no ?? '0'}} <i class="fas fa-comments"></i> /
+              {{ board.posts_no ?? '0' }} <i class="fas fa-comment-dots"></i
             ></strong>
           </div>
           <div v-if="board.last_active_user" class="autor col-sm-3">

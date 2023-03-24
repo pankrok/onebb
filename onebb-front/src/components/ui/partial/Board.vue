@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Skeleton from "@/components/ui/elements/Skeleton/CategorySkeleton.vue";
+import CategorySkeleton from "@/components/ui/elements/Skeleton/CategorySkeleton.vue";
 import Paginator from "@/components/ui/elements/Paginator.vue";
 import { IBoard, IPlot } from "@/interfaces/obbApiInterface";
 import { defineProps } from "vue";
@@ -7,7 +7,6 @@ import { useStore } from "vuex";
 import { parseUsername, parseDate } from "@/services/helpers/parsers";
 
 const store = useStore();
-const CategorySkeleton = Skeleton;
 
 const props = defineProps<{
   board: IBoard;
@@ -73,8 +72,8 @@ console.log(props.plots);
             </div>
             <div class="row col-2 text-center d-sm-none">
               <strong
-                >{{ plot.post_no }} <i class="fas fa-comments"></i> /
-                {{ plot.views }} <i class="fas fa-eye"></i
+                >{{ plot.post_no ?? '0' }} <i class="fas fa-comments"></i> /
+                {{ plot.views ?? '0' }} <i class="fas fa-eye"></i
               ></strong>
             </div>
             <div class="autor col-sm-4">

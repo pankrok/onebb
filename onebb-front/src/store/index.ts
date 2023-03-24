@@ -79,6 +79,7 @@ const store = createStore<State>({
   },
 });
 // TODO: fix types
+// @ts-ignore
 api.intercept(async (req, res) => {
   
   let response = res.clone();

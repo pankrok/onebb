@@ -134,6 +134,7 @@ class Api {
       }
       if (req) {
         // TODO: fixe interface
+        // @ts-ignore
         reslove(res);
         return null;
       }
