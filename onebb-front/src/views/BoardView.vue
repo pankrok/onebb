@@ -1,45 +1,29 @@
 <script setup lang="ts">
-import { useRoute, useRouter, RouteRecordName } from "vue-router";
-import { useStore } from "vuex";
-import { ref, watch, computed } from "vue";
-import BoardComponent from "@/components/ui/partial/Board.vue";
-import { IBoard, IPlot } from "@/interfaces/obbApiInterface";
-import { BOARD, PLOT } from "@/services/api/obbResources";
-import api from "@/services/api/api";
-import {usePaginator, currentPage} from '@/services/helpers/parsers';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import useBoard from '@/hooks/useBoard';
+import Box from '@/components/box/BoxComponent.vue';
+import type { IBoard, IPlot } from '@/interfaces/OnebbInterfaces';
+import type PlotComponent from '@/components/ui/PlotComponent.vue';
 
-const store = useStore();
+const boxStyles = ['background-blue', 'border-radius-5', 'color-white', 'font-size-18', 'font-weight-500', 'padding-l', 'margin-x-l', 'margin-top-l'];
 const route = useRoute();
-const router = useRouter();
-const routeName = ref<RouteRecordName>("");
-
-const limit = ref(20);
 const board = ref<IBoard>();
 const plots = ref<IPlot[]>();
-const id: number = Number(route.params.id);
-const paginator = usePaginator(plots, 'Board', route, router);
-
-store.dispatch('loading');
-api.get<IBoard>({ resource: BOARD, id: id }).then((response) => {
-  if (response?.body) {
-    board.value = response.body;
-    store.dispatch("setTitle", board.value.name);
-  }
-}).then(() =>{
-  api.get<IPlot[]>({ resource: PLOT, query: `?page=${currentPage(route)}&limit=${limit.value}&order%5Bupdated_at%5D=asc&board.id=${id}`}).then((response) => {
-  if (response?.body) {
-    plots.value = response.body;
-  }
-  store.dispatch('loaded');
-});
-});
-
-
+useBoard(route.params.id, route.params.page ?? 1).then(response => {
+    const { boardResponse, plotsResponse } = response;
+    board.value = boardResponse;
+    plots.value = plotsResponse;
+})
 
 </script>
-
 <template>
-  <div class="f-grow" v-if="board && plots" :key="routeName">
-    <BoardComponent :boxes="1" :loading="store.state.loading" :board="board" :plots="plots" :paginator="paginator" />
-  </div>
+    <div class="column" v-if="board">
+        <Box :boxClass="boxStyles">
+            {{ board.name }}
+        </Box>
+        <Box v-if="plots" v-for="plot in plots">
+           <PlotComponent :plot="plot" />
+        </Box>
+    </div>
 </template>

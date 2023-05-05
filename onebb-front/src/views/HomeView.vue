@@ -1,27 +1,44 @@
 <script setup lang="ts">
-import { useStore } from "vuex";
-import { ref } from "vue";
-import { ICategory } from "@/interfaces/obbApiInterface";
-import { CATEGORY } from "@/services/api/obbResources";
-import Category from "@/components/ui/partial/Category.vue";
-import api from "@/services/api/api";
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import useCategory from '@/hooks/useCategory';
+import Box from '@/components/box/BoxComponent.vue';
+import CategoryComponent from '@/components/ui/CategoryComponent.vue';
+import type { ICategory } from '@/interfaces/OnebbInterfaces';
+import { useUser } from '@/hooks/useUser';
 
-const store = useStore();
-const categories = ref<ICategory[]>();
+const route = useRoute();
+const user = useUser();
+const home = ref<ICategory[]>([]);
+useCategory(route.params.id ?? undefined).then(categories => {
+  // @ts-ignore
+  home.value = categories['hydra:member'] ? categories['hydra:member'] : [categories];
+  console.log({ response: home.value })
+})
 
-store.dispatch("setTitle", "Home");
-api.get<ICategory[]>({ resource: CATEGORY }).then((response) => {
-  if (response?.body) {
-    categories.value = response.body;
-  }
-  store.dispatch("loaded");
-});
+const boxStyle: string[] = [
+  "row",
+  'justify-content-space-between'
+];
+
 </script>
 
 <template>
-  <Category
-    v-if="categories"
-    v-for="category in categories"
-    :category="category"
-  />
+  <div class="column" v-if="home" :key="route.fullPath">
+    <Box v-for="category in home" header>
+      <template #header>
+        <router-link :to="{
+            name: 'Category',
+            params: { slug: category.slug, id: category.id },
+          }">
+          <h3 class="margin-y-s margin-x-m">{{ category.name }}</h3>
+        </router-link>
+      </template>
+      <p class="margin-m">
+        <Box v-for="board in category.boards" :boxClass="boxStyle">
+          <CategoryComponent :board="board" />
+        </Box>
+      </p>
+    </Box>
+  </div>
 </template>

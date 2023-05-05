@@ -1,80 +1,23 @@
 <script setup lang="ts">
-import Header from '@/components/ui/partial/Header.vue';
-import { computed } from 'vue';
-import type { Component } from 'vue';
-import { useStore } from 'vuex';
-import { useRoute } from 'vue-router'
-import PluginBox from '@/components/ui/elements/Box/PluginBox.vue';
-import Modal from './components/ui/elements/Modal.vue';
-import SignIn from './components/ui/partial/SignIn.vue';
+import useCategory from '@/hooks/useCategory';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import Nav from './components/NavComponent.vue';
 
-const store = useStore();
 const route = useRoute();
-store.dispatch('boxes/get');
-if (localStorage.getItem('logged') === 'true') {
-  store.dispatch('user/refresh');
-}
-
-const component: Component = {
-  PluginBox,
-  SignIn,
-}
-
-const boxes = computed(() => {
-  return store.state.boxes[(route.name ?? 'Home')];
-})
+const home = ref();
+home.value = useCategory();
 
 </script>
 
 <template>
-  <main>
-    <Header />
-    <TransitionGroup
-      name="list-complete"
-      tag="div"
-      class="container"
-      mode="out-in"
-    >
-      <div class="col-12 list-complete-item" v-if="boxes.top.length > 0">
-        <div v-for="box in boxes.top" :key="box.name">
-          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
-        </div>
-      </div>
-
-      <div class="col-3 list-complete-item" v-if="boxes.left.length > 0">
-        <div v-for="box in boxes.left" :key="box.name">
-          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
-          
-        </div>
-      </div>
-
-      <div class="f-grow list-complete-item p-relative" key="main">
-        <router-view v-slot="{ Component }" :key="route.fullPath">
-          <Transition name="fade" mode="out-in">
-            <component :is="Component" />
-          </Transition>
-          
-        </router-view>
-      </div>
-
-      <div class="col-3 list-complete-item" v-if="boxes.right.length > 0">
-        <div v-for="box in boxes.right" :key="box.name">
-          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
-        </div>
-      </div>
-
-      <div class="col-12 list-complete-item" v-if="boxes.bottom.length > 0">
-        <div v-for="box in boxes.bottom" :key="box.name">
-          <component :is="component[box.engine]" :name="box.name" :content="box.html" />
-        </div>
-      </div>
-    </TransitionGroup>
-    <!-- <Transition name="fade">
-      <Messenger v-if="logged" />
-    </Transition> -->
+  <Nav />
+  <main class="container">
+    <router-view v-slot="{ Component }" :key="route.fullPath">
+      <Transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </router-view>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </main>
 </template>
-
-<style>
-@import "@/assets/base.css";
-</style>

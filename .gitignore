@@ -20,7 +20,6 @@
 ###< phpunit/phpunit ###
 
 ###> local files and fixer ###
-index.html
 /onebb-backend/.php-cs-fixer.cache
 /onebb-backend/php-cs-fixer
 ###< local files ###
@@ -33,7 +32,6 @@ index.html
 /onebb-front/node_modules
 /onebb-front/dist
 /onebb-front/obb1
-
 
 
 # local env files
