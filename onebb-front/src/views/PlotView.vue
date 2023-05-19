@@ -5,6 +5,7 @@ import usePlot from '@/hooks/usePlot';
 import Box from '@/components/box/BoxComponent.vue'
 import type { IPost, IPlot } from '@/interfaces/OnebbInterfaces';
 import PostComponent from '@/components/ui/PostComponent.vue';
+import PaginatorComponent from '@/components/PaginatorComponent.vue';
 
 const boxStyles = ['background-blue', 'border-radius-5', 'color-white', 'font-size-18', 'font-weight-500', 'padding-l', 'margin-l'];
 const route = useRoute();
@@ -28,6 +29,7 @@ usePlot(route.params.id, route.params.page ?? 1).then(response => {
         <Box v-for="post in posts">
            <PostComponent :post="post" />
         </Box>
+        <PaginatorComponent />
     </div>
 
 </template>
