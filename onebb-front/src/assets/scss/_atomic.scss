@@ -119,6 +119,11 @@ $rads: (5, 10, 15, 20, 25);
         box-shadow: 0px 0px 5px $color;
     }
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* RWD */
 .row,
 .column {

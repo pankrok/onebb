@@ -3,10 +3,12 @@
 import { defineProps } from 'vue';
 import type { IPlot } from '@/interfaces/OnebbInterfaces';
 import { useUser } from '@/hooks/useUser';
+import { useMoment } from '@/hooks/useMoment';
 
 const props = defineProps<{plot: IPlot}>()
 const user = useUser();
-console.log({props})
+const moment = useMoment();
+const updated_at = moment.parse(props.plot.updated_at);
 
 </script>
 <template>
@@ -29,7 +31,7 @@ console.log({props})
                 <div v-html="user.parseUsername(plot.last_active_user)">
                 </div>
                 <div>
-                    {{ plot.updated_at }}
+                    {{ updated_at }}
                 </div>
             </div>
             <div class="col-3 row align-items-center justify-content-flex-end">

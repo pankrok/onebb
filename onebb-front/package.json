@@ -12,6 +12,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "jodit": "^4.0.0-beta.50",
+    "moment": "^2.29.4",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

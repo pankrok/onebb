@@ -12,15 +12,21 @@ const useApi = () => {
 
     const get = async <T>(endpoint: string, query?: string):Promise<T> => {
         const url = settings.url + endpoint + (query ? query : '');
-        console.log({url, settings, query})
         const response = await fetch(url, options);
+        const jsonData:Promise<T> = await response.json();
+        return jsonData;
+    }
+
+    const post = async <T, R>(endpoint: string, body: R):Promise<T> => {
+        const url = settings.url + endpoint;
+        const response = await fetch(url, {method: 'POST',  body: JSON.stringify(body), ...options});
         const jsonData:Promise<T> = await response.json();
         return jsonData;
     }
 
     return {
         get,
-        // post,
+        post,
         // put,
         // delete,
     }

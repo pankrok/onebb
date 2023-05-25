@@ -3,10 +3,12 @@ import { defineProps } from 'vue';
 import type { IPost } from '@/interfaces/OnebbInterfaces';
 import { useUser } from '@/hooks/useUser';
 import Image from '@/components/ui/ImageComponent.vue'
+import { useMoment } from '@/hooks/useMoment';
 
-defineProps<{ post: IPost }>()
+const props = defineProps<{ post: IPost }>()
 const user = useUser();
-
+const {parse} = useMoment();
+const created_at = parse(props.post.created_at)
 </script>
 <template>
     <div class="row margin-m">
@@ -30,7 +32,7 @@ const user = useUser();
         <div class="col-10">
             <div class="col-12 margin-x-m border-bottom-1">
                 <div class="padding-x-m">
-                {{ post.created_at }}
+                {{ created_at }}
             </div>
             </div>
             <div class="margin-l" v-html="post.content"></div>

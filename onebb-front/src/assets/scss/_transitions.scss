@@ -1,13 +1,16 @@
-.list-complete-item {
-    transition: all 0.3s;
+.list-move, 
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
 }
-.list-complete-enter-from,
-.list-complete-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
-.list-complete-leave-active {
-    position: relative;
+.list-leave-active {
+  position: absolute;
 }
 .slide-fade-enter-active {
     transition: all 0.3s ease-out !important;

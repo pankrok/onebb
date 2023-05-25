@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-const route = useRoute();
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const s = ()=>{
-    console.log({route})
-}
+const props = defineProps<{next: boolean}>()
+
+const route = useRoute();
+const router = useRouter();
+const disablePrev = computed(()=>( Number(route.params.page) <= 1))
+const disableNext = computed(()=>( props.next))
 
 </script>
 <template>
-<div class="row justify-content-space-between">
+<div class="row justify-content-space-between margin-l">
     <div>
-        <button class="button button-primary">Back</button>
+        <router-link :to="{params: {page: `${Number(route.params.page) -1}`}}" v-if="!disablePrev" class="button button-background-blue button-color-white border-radius-5 padding-x-s margin-bottom-m" :class="{'button-disabled': disablePrev}">Back</router-link>
     </div>
     <div>
-        <button class="button button-primary" @click="s()">Next</button>
+        <router-link :to="{params: {page: `${Number(route.params.page) +1}`}}" v-if="!disableNext" class="button button-background-blue button-color-white border-radius-5 padding-x-s margin-bottom-m" :class="{'button-disabled': disableNext}">Next</router-link>
     </div>
 </div>
 
