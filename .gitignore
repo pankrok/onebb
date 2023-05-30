@@ -20,7 +20,7 @@
 ###< phpunit/phpunit ###
 
 ###> local files and fixer ###
-index.html
+# index.html
 /onebb-backend/.php-cs-fixer.cache
 /onebb-backend/php-cs-fixer
 ###< local files ###
