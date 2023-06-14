@@ -19,8 +19,11 @@ usePlot(route.params.id, route.params.page ?? 1).then(response => {
     console.log({debugPlotResponse: response})
     const { plotResponse, postsResponse } = response;
     plot.value = plotResponse;
-    posts.value = postsResponse;
-    next.value = postsResponse.length < 20
+    if (postsResponse) {
+        posts.value = postsResponse['hydra:member'];
+        next.value = postsResponse['hydra:next'] ? true : false
+        
+    }
 })
 
 </script>

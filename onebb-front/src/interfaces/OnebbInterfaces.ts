@@ -141,3 +141,20 @@ export interface ICategory {
   prioity: number;
   meta_desc: string;
 }
+
+export interface IHydraView {
+    '@id': string,
+    '@type': string,
+    'hydra:first'?: string,
+    'hydra:last'?: string,
+    'hydra:previous'?: string,
+    'hydra:next'?: string,
+}
+
+export interface IHydra<T> {
+  '@context': string,
+  '@id': string,
+  '@type': string, 
+  'hydra:member': T[],
+  'hydra:view'?: IHydraView
+}

@@ -26,10 +26,10 @@ const updated_at = moment.parse(props.board.updated_at);
                 name: 'Board',
                 params: { slug: board.slug, id: board.id, page: 1 },
               }">
-              <span class="margin-s ">{{ board.name }}</span>
+              <span class="margin-s">{{ board.name }}</span>
             </router-link>
           </div>
-          <div v-if="board.last_active_user" class="col-3 row ">
+          <div v-if="board.last_active_user" class="col-3 row">
             <div class="col-9 column text-align-end">
               <div v-html="last_active_user">
               </div>

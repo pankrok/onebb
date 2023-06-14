@@ -13,7 +13,7 @@ const defaultClass = [
     'border-1', 
     'border-color-dark', 
     'border-radius-5', 
-    'background-color-white', 
+    'background-white', 
     'color-black',
     "box-shadow-dark",
     'margin-x-l',

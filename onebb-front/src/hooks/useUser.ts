@@ -1,56 +1,55 @@
 import type { IUser, ILoginCreditionals, ITokenResponse } from "@/interfaces/OnebbInterfaces"
 import useApi from "./useApi";
 
-class OnebbUser {
-
-    #data: ITokenResponse;
-    #initialState: ITokenResponse;
     
-    constructor() {
-        this.#initialState = {
-            token: '',
-            acp_enabled: false,
-            mcp_enabled: false,
-            avatar: '',
-            slug: '',
-            uid: 0,
-        }
-        this.#data = this.#initialState;
-    }
-
-    getData = () => {
-        return this.#data;
-    }
-
-    setData = (data: ITokenResponse) => {
-        this.#data = data;
-    }
-
-    logout = () => {
-        this.#data = this.#initialState;
-    }
+const initialState: ITokenResponse = {
+    token: '',
+    acp_enabled: false,
+    mcp_enabled: false,
+    avatar: '',
+    slug: '',
+    uid: 0,
 }
 
-const obbUser = new OnebbUser();
+const data: ITokenResponse = {...initialState};
+    
 
 export const useUser = () => {
     const api = useApi();
+
+    const setData = (newData: ITokenResponse) => {
+        for (const key of Object.keys(data)) {
+            (data as {[key: string]:any })[key] = (newData as {[key: string]:any })[key];
+        }
+    }
+
     const parseUsername = (user: IUser) => {
         return user.user_group.html_code.replace("{{username}}", user.username);
     }
 
     const getUser = () => {
-        return obbUser.getData();
+        return {...data}
+    }
+
+    const getToken = () => {
+        return data.token;
     }
 
     const login = async (creditionals: ILoginCreditionals) => {
         const endpoint = 'login'
+        console.log({creditionals});
+        
         try {
-            const response = await api.post<ITokenResponse, ILoginCreditionals>(endpoint, creditionals);
-            if (response?.code) {
-                throw new Error(response.message)
+            const {parsedResponse} = await api.post<ITokenResponse>(endpoint, creditionals);
+            if (parsedResponse?.code) {
+                throw new Error(parsedResponse.message)
             }
-            obbUser.setData(response);
+            if (!parsedResponse) {
+                throw new Error('Data fetch error!')
+            }
+            setData(parsedResponse);
+            api.setHeaders({Authorization: `Bearer ${parsedResponse.token}`});
+            
             return true;
         } catch(e) {
             console.error(e);
@@ -59,7 +58,7 @@ export const useUser = () => {
     }
 
     const logout = () => {
-        obbUser.logout();
+        setData(initialState);
     }
 
     return {
@@ -67,5 +66,6 @@ export const useUser = () => {
         getUser,
         login,
         logout,
+        getToken,
     }
 }

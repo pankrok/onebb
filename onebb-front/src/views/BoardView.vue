@@ -13,8 +13,11 @@ const plots = ref<IPlot[]>();
 useBoard(route.params.id, route.params.page ?? 1).then(response => {
     console.log({response})
     const { boardResponse, plotsResponse } = response;
-    board.value = boardResponse;
-    plots.value = plotsResponse;
+    console.log({ boardResponse, plotsResponse })
+    if (boardResponse && plotsResponse) {
+        board.value = boardResponse;
+        plots.value = plotsResponse['hydra:member'];
+    }
 })
 
 </script>
@@ -23,9 +26,8 @@ useBoard(route.params.id, route.params.page ?? 1).then(response => {
         <Box :boxClass="boxStyles">
             {{ board.name }}
         </Box>
-        
         <Box v-if="plots" v-for="plot in plots">
-           <PlotComponent :plot="plot" />
+            <PlotComponent :plot="plot" />
         </Box>
     </div>
 </template>
