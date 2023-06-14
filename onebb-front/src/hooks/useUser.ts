@@ -40,7 +40,7 @@ export const useUser = () => {
         console.log({creditionals});
         
         try {
-            const {parsedResponse} = await api.post<ITokenResponse>(endpoint, creditionals);
+            const {parsedResponse} = await api.post<ITokenResponse>(endpoint, {username: creditionals.username, password: creditionals.password});
             if (parsedResponse?.code) {
                 throw new Error(parsedResponse.message)
             }

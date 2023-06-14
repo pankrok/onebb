@@ -23,7 +23,7 @@ let configuration: ICfg = {
         method: 'GET',
         //redirect: "follow",
         headers: {
-            'Content-Type': 'application/ld+json',
+            'Content-Type': 'application/json+ld',
           //  'Accept': 'application/ld+json',
           //  Authentication: ''
         },
@@ -51,6 +51,7 @@ class ObbFetch {
             }
  
             return new Promise(async (reslove) => {
+                console.log(baseUrl + this.#url, this.#request)
                 let response = await fetch(baseUrl + this.#url, this.#request)
                 if (response.status >= 429 && this.#ret !== 0) {
                     setTimeout(async () => {
@@ -79,7 +80,7 @@ const factory = async <T>(method?: string) => {
       request.method = method;
  
     if (method !== Method.GET && method !== Method.DELETE) {
-        request.body = body;
+        request.body = JSON.stringify(body);
     }
  
     const obbFetch = new ObbFetch(request);
@@ -107,6 +108,7 @@ const useApi = () => {
         post: async <T>(setUrl: string, bodyInit: object) => {
             url = setUrl;
             body = bodyInit
+            console.log({body})
             const {request, response, parsedResponse} = await factory<T>(Method.POST);
             return {request, response, parsedResponse} 
             
