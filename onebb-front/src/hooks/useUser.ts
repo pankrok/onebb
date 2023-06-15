@@ -12,7 +12,7 @@ const initialState: ITokenResponse = {
 }
 
 const data: ITokenResponse = {...initialState};
-    
+let isRefreshing = 0;    
 
 export const useUser = () => {
     const api = useApi();
@@ -21,6 +21,8 @@ export const useUser = () => {
         for (const key of Object.keys(data)) {
             (data as {[key: string]:any })[key] = (newData as {[key: string]:any })[key];
         }
+
+        localStorage.setItem('obbLogged', '1');
     }
 
     const parseUsername = (user: IUser) => {
@@ -48,8 +50,31 @@ export const useUser = () => {
                 throw new Error('Data fetch error!')
             }
             setData(parsedResponse);
-            api.setHeaders({Authorization: `Bearer ${parsedResponse.token}`});
+            console.log({parsedResponse})
+            api.setToken(parsedResponse.token);
             
+            return true;
+        } catch(e) {
+            console.error(e);
+            return false;
+        }
+    }
+
+    const refresh = async () => {
+        const endpoint = 'refresh'
+        
+        try {
+            const {parsedResponse} = await api.post<ITokenResponse>(endpoint,{});
+            if (parsedResponse?.code) {
+                throw new Error(parsedResponse.message)
+            }
+            if (!parsedResponse) {
+                throw new Error('Data fetch error!')
+            }
+            setData(parsedResponse);
+            console.log({parsedResponse})
+            api.setToken(parsedResponse.token);
+            isRefreshing = 0;
             return true;
         } catch(e) {
             console.error(e);
@@ -59,6 +84,11 @@ export const useUser = () => {
 
     const logout = () => {
         setData(initialState);
+    }
+
+    if (localStorage.getItem('obbLogged') === '1' && data.token === '' && isRefreshing === 0) {
+        isRefreshing = 1;
+        refresh();
     }
 
     return {
