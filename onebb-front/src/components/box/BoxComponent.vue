@@ -16,8 +16,7 @@ const defaultClass = [
     'background-white', 
     'color-black',
     "box-shadow-dark",
-    'margin-x-l',
-    'magin-y-s',
+    'margin-s',
 ];
 
 const classList = props.boxClass ?? defaultClass;

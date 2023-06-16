@@ -1,12 +1,18 @@
 
 $font-sizes: (14, 16, 18, 20, 22, 24, 26, 28, 30, 32);
+$font-weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
 @each $size in $font-sizes {
-
   .font-size-#{$size} {
     font-size: #{$size}px;
     line-height: #{$size + 2}px;
   }
 }
+
+@each $weight in $font-weights {
+    .font-weight-#{$weight} {
+      font-weight: #{$weight};
+    }
+  }
 
 $sizes: ("-s": .25rem, "-m": .5rem, "-l": 1rem, "-xl": 2rem);
 $positions:("-top", "-bottom", "-left", "-right", "-x", "-y", "");
@@ -122,6 +128,14 @@ $rads: (5, 10, 15, 20, 25);
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+$elpositions:(relative, absolute);
+
+@each $name in $elpositions {
+    .position-#{$name} {
+        position: $name;
+    }
 }
 
 /* RWD */

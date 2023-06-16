@@ -1,3 +1,5 @@
+import { useUser } from "./useUser";
+
 enum Method {
     POST = "POST",
     GET = "GET",
@@ -12,14 +14,15 @@ interface ICfg {
 }
 
 // FIXME
-const baseUrl = 'https://bdev.s89.eu/api/';
+const baseUrl = import.meta.env.VITE_BASE_URL_TMP
 let url = '';
 let body: any = {};
 let token: string | null = null;
+const queue:any[] = [];
 
 let configuration: ICfg = {
     retry: 3,
-    timeout: 3000,
+    timeout: 1000,
     fetch: {
         method: 'GET',
         credentials: 'include',
@@ -36,7 +39,7 @@ let configuration: ICfg = {
 }
 
 const defaultConfiguration = { ...configuration }
-
+let isRefreshing = false;
 
 class ObbFetch {
     #ret: number;
@@ -49,25 +52,42 @@ class ObbFetch {
         this.#url = url;
         this.#request = request;
         this.prepareRequest = () => {
+
             if (this.#ret < 0) {
                 this.#ret = configuration.retry;
                 throw new Error('Retry beyond limit')
             }
+            
+            if (token) {
+                if (request.headers) {
+                    request.headers = { ...request.headers, Authorization: `Bearer ${token}` }
+                } else {
+                    request.headers = {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            }
 
             return new Promise(async (reslove) => {
                 let response = await fetch(baseUrl + this.#url, this.#request)
-                if (response.status >= 429 && this.#ret !== 0) {
+                if ((response.status >= 429 || response.status === 401) && this.#ret !== 0) {
+                    if (response.status === 401 && isRefreshing === false) {
+                        isRefreshing = true;
+                        const {refresh} = useUser();
+                        await refresh();
+                        isRefreshing = false;
+                    }
                     setTimeout(async () => {
                         this.#ret--;
                         reslove(await this.prepareRequest())
                     }, configuration.timeout)
                 }
 
-                if (this.#ret === 0 || response.status < 404) {
+                if ((this.#ret === 0 || (response.status < 404 && response.status !== 401))) {
                     const contentType = response.headers.get("content-type");
-                    if (contentType 
+                    if (contentType
                         && (contentType.indexOf("application/ld+json") !== -1
-                        || contentType.indexOf("application/json") !== -1)) {
+                            || contentType.indexOf("application/json") !== -1)) {
                         const parsedResponse = await response.json()
                         reslove({ request, response, parsedResponse });
                     }
@@ -84,16 +104,6 @@ const factory = async <T>(method?: string) => {
     if (method) {
         request.method = method;
     }
-    console.log({ token })
-    if (token) {
-        if (request.headers) {
-            request.headers = { ...request.headers, Authorization: `Bearer ${token}` }
-        } else {
-            request.headers = {
-                Authorization: `Bearer ${token}`
-            }
-        }
-    }
 
     if (method !== Method.GET && method !== Method.DELETE) {
         request.body = JSON.stringify(body);
@@ -103,8 +113,7 @@ const factory = async <T>(method?: string) => {
     url = '';
     body = {};
     configuration = defaultConfiguration;
-
-    return await obbFetch.prepareRequest<T>()
+    return await obbFetch.prepareRequest<T>();
 }
 
 const useApi = () => {
@@ -124,9 +133,9 @@ const useApi = () => {
         post: async <T>(setUrl: string, bodyInit: object) => {
             url = setUrl;
             body = bodyInit
-            
+
             const { request, response, parsedResponse } = await factory<T>(Method.POST);
-            
+
             return { request, response, parsedResponse }
 
         },
@@ -136,7 +145,7 @@ const useApi = () => {
             return await <T>factory();
         },
 
-        setToken: (newToken: string) => {
+        setToken: (newToken: string | null) => {
             token = newToken;
         },
 

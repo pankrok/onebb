@@ -24,8 +24,8 @@ const boxStyle: string[] = [
 </script>
 
 <template>
-  <div class="column" v-if="home" :key="route.fullPath">
-    <Box v-for="category in home" header>
+  <div class="column align-items-center justify-content-center" v-if="home" :key="route.fullPath">
+    <Box v-for="category in home" :header="true" :wrapperClass="['margin-y-s col-12']">
       <template #header>
         <router-link :to="{
             name: 'Category',

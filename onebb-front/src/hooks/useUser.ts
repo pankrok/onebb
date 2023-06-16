@@ -1,8 +1,9 @@
 import type { IUser, ILoginCreditionals, ITokenResponse } from "@/interfaces/OnebbInterfaces"
 import useApi from "./useApi";
+import { ref, reactive } from "vue";
 
     
-const initialState: ITokenResponse = {
+const initialState: ITokenResponse ={
     token: '',
     acp_enabled: false,
     mcp_enabled: false,
@@ -11,7 +12,7 @@ const initialState: ITokenResponse = {
     uid: 0,
 }
 
-const data: ITokenResponse = {...initialState};
+const data: ITokenResponse = reactive({...initialState});
 let isRefreshing = 0;    
 
 export const useUser = () => {
@@ -30,7 +31,7 @@ export const useUser = () => {
     }
 
     const getUser = () => {
-        return {...data}
+        return data;
     }
 
     const getToken = () => {
@@ -62,7 +63,6 @@ export const useUser = () => {
 
     const refresh = async () => {
         const endpoint = 'refresh'
-        
         try {
             const {parsedResponse} = await api.post<ITokenResponse>(endpoint,{});
             if (parsedResponse?.code) {
@@ -72,9 +72,26 @@ export const useUser = () => {
                 throw new Error('Data fetch error!')
             }
             setData(parsedResponse);
-            console.log({parsedResponse})
             api.setToken(parsedResponse.token);
             isRefreshing = 0;
+            return true;
+        } catch(e) {
+            if (e === 'Missing JWT Refresh Token') {
+                localStorage.removeItem('obbLogged')
+            }
+            console.error(e);
+            return false;
+        }
+    }
+
+    const logout = async () => {
+        const endpoint = 'logout'
+        
+        try {
+            await api.get<{logged_out: boolean}>(endpoint);
+            setData(initialState);
+            api.setToken(null);
+            localStorage.removeItem('obbLogged')
             return true;
         } catch(e) {
             console.error(e);
@@ -82,20 +99,22 @@ export const useUser = () => {
         }
     }
 
-    const logout = () => {
-        setData(initialState);
-    }
-
     if (localStorage.getItem('obbLogged') === '1' && data.token === '' && isRefreshing === 0) {
         isRefreshing = 1;
         refresh();
+    }
+
+    const isLogged = () => {
+        return data.uid > 0;
     }
 
     return {
         parseUsername,
         getUser,
         login,
+        refresh,
         logout,
         getToken,
+        isLogged,
     }
 }

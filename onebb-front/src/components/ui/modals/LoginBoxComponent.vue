@@ -5,20 +5,47 @@ import { useUser } from '@/hooks/useUser'
 import BoxComponent from '@/components/box/BoxComponent.vue';
 import type { ILoginCreditionals } from '@/interfaces/OnebbInterfaces'
 
-defineProps<{ loginToggle: Function }>()
+const props = defineProps<{ loginToggle: Function }>()
 
 const creditionals = ref<ILoginCreditionals>({
     username: '',
     password: '',
 });
-
+const msg = ref<{
+    show: boolean,
+    msg: string,
+    class?: string[],
+}>({
+    show: false,
+    msg: '',
+    class: []
+})
 const { login } = useUser();
 
-const auth = () => {
-    login({
+const auth = async () => {
+    const isLogged = await login({
         username: creditionals.value.username,
         password: creditionals.value.password
     });
+
+    if (isLogged) {
+        msg.value.show = true;
+        msg.value.msg = 'logged';
+        msg.value.class = ['background-green', 'box-shadow-green'];
+        setTimeout(() => {
+            msg.value.show = false;
+            props.loginToggle();
+        }, 3000)
+        return;
+    }
+
+    msg.value.show = true;
+    msg.value.msg = 'Invalid creditionals !';
+    msg.value.class = ['background-red', 'box-shadow-red'];
+
+    setTimeout(() => {
+        msg.value.show = false;
+    }, 3000)
 }
 
 </script>
@@ -40,11 +67,22 @@ const auth = () => {
                 </div>
             </template>
             <div class="column padding-xl background-color-white">
+                <Transition name="fade" mode="in-out">
+                    <div class="position-relative" key="auth-box">
+                        <div v-if="msg.show"
+                            class="padding-m border-radius-5 text-align-center font-weight-600 color-light position-absolute"
+                            :class="msg.class"
+                            style="top: -45px;">
+                            {{ msg.msg }}
+                        </div>
+                    </div>
+                </Transition>
                 <label class="label" for="username">Username</label>
                 <input class="form-control" id="username" type="text" v-model="creditionals.username" />
                 <label class="label" for="password">Password</label>
-                <input class="form-control" id="password" type="text" v-model="creditionals.password" />
+                <input class="form-control" id="password" type="password" v-model="creditionals.password" />
                 <button class="button" @click="auth()">Login</button>
             </div>
-    </BoxComponent>
-</Modal></template>
+        </BoxComponent>
+    </Modal>
+</template>

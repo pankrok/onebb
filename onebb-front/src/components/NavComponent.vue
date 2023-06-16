@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { useUser } from '@/hooks/useUser';
 import ImageComponent from './ui/ImageComponent.vue';
-const {getUser} = useUser();
-const {avatar, slug, uid} = getUser()
+
+const {getUser, logout} = useUser();
+const user = getUser()
+
 defineProps<{
     loginToggle: Function,
 }>()
+
+
 </script>
 <template>
     <div
@@ -18,8 +22,8 @@ defineProps<{
             </router-link>
         </div>
         <div class="col-9 row justify-content-flex-end">
-            <span v-if="uid > 0">
-                <ImageComponent :size="[20, 20]" :src="avatar" :alt="slug" />
+            <span v-if="user.uid > 0">
+                <ImageComponent :size="[20, 20]" :src="user.avatar" :alt="user.slug" @click="logout()"/>
             </span>
             <span 
                 v-else
