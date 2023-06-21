@@ -21,6 +21,7 @@ usePlot(route.params.id, route.params.page ?? 1).then(response => {
     plot.value = plotResponse;
     if (postsResponse) {
         posts.value = postsResponse['hydra:member'];
+        // @ts-ignore
         next.value = postsResponse['hydra:next'] ? true : false
         
     }

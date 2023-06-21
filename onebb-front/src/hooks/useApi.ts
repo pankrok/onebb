@@ -1,4 +1,5 @@
 import { useUser } from "./useUser";
+import useLoading from "./useLoading";
 
 enum Method {
     POST = "POST",
@@ -15,6 +16,7 @@ interface ICfg {
 
 // FIXME
 const baseUrl = import.meta.env.VITE_BASE_URL_TMP
+const {loading, loaded} = useLoading();
 let url = '';
 let body: any = {};
 let token: string | null = null;
@@ -31,7 +33,7 @@ let configuration: ICfg = {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         headers: {
-            'Content-Type': 'application/json+ld',
+            'Content-Type': 'application/ld+json',
             Accept: 'application/ld+json',
         },
         body: null,
@@ -83,12 +85,13 @@ class ObbFetch {
                     }, configuration.timeout)
                 }
 
-                if ((this.#ret === 0 || (response.status < 404 && response.status !== 401))) {
+                if ((this.#ret === 0 || (response.status < 429 && response.status !== 401))) {
                     const contentType = response.headers.get("content-type");
                     if (contentType
                         && (contentType.indexOf("application/ld+json") !== -1
                             || contentType.indexOf("application/json") !== -1)) {
                         const parsedResponse = await response.json()
+                        
                         reslove({ request, response, parsedResponse });
                     }
 
@@ -100,6 +103,7 @@ class ObbFetch {
 }
 
 const factory = async <T>(method?: string) => {
+    loading();
     const request = { ...configuration.fetch }
     if (method) {
         request.method = method;
@@ -113,7 +117,9 @@ const factory = async <T>(method?: string) => {
     url = '';
     body = {};
     configuration = defaultConfiguration;
-    return await obbFetch.prepareRequest<T>();
+    const response = await obbFetch.prepareRequest<T>();
+    loaded();
+    return response;
 }
 
 const useApi = () => {

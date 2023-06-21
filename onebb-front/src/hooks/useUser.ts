@@ -1,4 +1,4 @@
-import type { IUser, ILoginCreditionals, ITokenResponse } from "@/interfaces/OnebbInterfaces"
+import type { IUser, ILoginCreditionals, ITokenResponse, IRegister, IViolations } from "@/interfaces/OnebbInterfaces"
 import useApi from "./useApi";
 import { ref, reactive } from "vue";
 
@@ -108,11 +108,24 @@ export const useUser = () => {
         return data.uid > 0;
     }
 
+    const register = async (creditionals: IRegister) => {
+        const endpoint = 'users';
+
+        try {
+            const response = await api.post<IUser|IViolations>(endpoint, creditionals);
+            
+            return response;
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
     return {
         parseUsername,
         getUser,
         login,
         refresh,
+        register,
         logout,
         getToken,
         isLogged,

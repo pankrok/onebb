@@ -7,6 +7,7 @@ const user = getUser()
 
 defineProps<{
     loginToggle: Function,
+    registerToggle: Function,
 }>()
 
 
@@ -27,10 +28,16 @@ defineProps<{
             </span>
             <span 
                 v-else
-                class="button cursor-pointer border-radius-10 text-align-center padding-s"
+                class="button cursor-pointer border-radius-10 text-align-center padding-s color-black"
                 @click="loginToggle()"
             >
-                Login
+                Sign in
+            </span>
+            <span 
+                class="button cursor-pointer border-radius-10 text-align-center padding-s  color-black"
+                @click="registerToggle()"
+            >
+                Sign up
             </span>
         </div>
     </div>

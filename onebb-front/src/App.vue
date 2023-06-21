@@ -1,29 +1,50 @@
 <script setup lang="ts">
 import useCategory from '@/hooks/useCategory';
-import { ref } from 'vue';
+import { ref, defineAsyncComponent  } from 'vue';
 import { useRoute } from 'vue-router';
-import Nav from './components/NavComponent.vue';
-import LoginBoxComponent from './components/ui/modals/LoginBoxComponent.vue';
-
+import useLoading from '@/hooks/useLoading'
+// import Nav from './components/NavComponent.vue';
+// import LoginModalComponent from './components/ui/modals/LoginModalComponent.vue';
+const Nav = defineAsyncComponent(() =>
+  import('./components/NavComponent.vue')
+)
+const LoginModalComponent = defineAsyncComponent(() =>
+  import('./components/ui/modals/LoginModalComponent.vue')
+)
+const RegisterModalComponent = defineAsyncComponent(() =>
+  import('./components/ui/modals/RegisterModalComponent.vue')
+)
+const {isLoading} = useLoading();
 const route = useRoute();
 const home = ref();
 const login = ref(false)
+const register = ref(false)
 
 const loginToggle = () => {
   login.value = !login.value;
 }
 
-home.value = useCategory();
+const registerToggle = () => {
+  register.value = !register.value;
+}
 
+home.value = useCategory();
 
 </script>
 
 <template>
+  
   <Transition name="fade" mode="out-in">
-    <LoginBoxComponent v-if="login" key="loginBox" :loginToggle="loginToggle" />
+    <LoginModalComponent v-if="login" key="loginBox" :loginToggle="loginToggle" />  
+  </Transition>
+  <Transition name="fade" mode="out-in">
+    <RegisterModalComponent v-if="register" key="registerBox" :toggleModal="registerToggle" /> 
   </Transition>
   
-  <Nav :loginToggle="loginToggle" />
+  <Nav :loginToggle="loginToggle" :registerToggle="registerToggle" />
+  <Transition name="fade" mode="out-in">
+    <div v-if="isLoading" class="col-12 position-relative" key="loading-bar"><span class="box-loader box-shadow-blue"></span></div>
+  </Transition>
   <main class="container margin-top-m">
     <router-view v-slot="{ Component }">
       <Transition name="fade" mode="out-in">

@@ -76,6 +76,21 @@ export interface IUser {
   warn_lvl: number;
 }
 
+export interface IRegister {
+  username: string,
+  email: string,
+  password: string,
+}
+
+export interface IViolations{
+  '@context': string, 
+  violations: Array<{
+    code: string,
+    message: string,
+    propertyPath: string
+  }>
+}
+
 export interface IPost {
   id: number,
   user: IUser,
