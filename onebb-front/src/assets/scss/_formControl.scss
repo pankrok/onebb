@@ -2,7 +2,7 @@
 
 .form-control, .button {
     background-color: transparent;
-    color: map.get($colors, "white");
+    color: map.get($colors, "black");
     transition: box-shadow .3s,border-color .3s;
     font-size: 14px;
     padding: .5rem;
