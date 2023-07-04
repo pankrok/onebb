@@ -120,9 +120,22 @@ export const useUser = () => {
         }
     }
 
+    const getUserById = async (id: number) => {
+        const endpoint = `users/${id}`;
+
+        try {
+            const response = await api.get<IUser>(endpoint);
+            
+            return response;
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
     return {
         parseUsername,
         getUser,
+        getUserById,
         login,
         refresh,
         register,

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import JoditComponent from '../JoditComponent.vue';
+import { defineAsyncComponent, ref } from 'vue';
 import { useUser } from '@/hooks/useUser';
 import useApi from '@/hooks/useApi';
 import { useRoute } from 'vue-router';
 
+const JoditComponent = defineAsyncComponent(() =>
+  import('../JoditComponent.vue')
+)
 
 const {callback} = defineProps<{callback: Function}>();
 const route = useRoute();

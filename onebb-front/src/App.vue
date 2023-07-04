@@ -33,7 +33,7 @@ home.value = useCategory();
 </script>
 
 <template>
-  
+  <div class="mode staging">!!STAGING MODE!!</div>
   <Transition name="fade" mode="out-in">
     <LoginModalComponent v-if="login" key="loginBox" :loginToggle="loginToggle" />  
   </Transition>
@@ -54,3 +54,24 @@ home.value = useCategory();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </main>
 </template>
+
+<style>
+.mode {
+   position: fixed;
+    top: 0;
+    right: 0;
+    padding: .25rem 2.5rem;
+    border-radius: 0 0 0 5px;
+    opacity: 0.7;
+    font-size: 18px;
+    font-weight: 900;
+    z-index: 10000;
+}
+
+.staging {
+  color: rgb(0, 0, 0);
+  background-color: #ffbc00;
+  box-shadow: 0px 0px 10px #ffbc00;
+}
+
+</style>

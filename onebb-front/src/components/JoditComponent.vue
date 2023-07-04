@@ -6,7 +6,7 @@
   
   <script setup lang="ts">
  //import { objectExpression } from "@babel/types";
-  import 'jodit/es2021/jodit.min.css'
+  
   import {
     ref,
     computed,
@@ -41,6 +41,7 @@
   };
   
   onMounted(() => {
+    import ('jodit/es2021/jodit.min.css');
     loadJodit();
   });
   
