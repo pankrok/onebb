@@ -21,7 +21,7 @@ const cb = (addedPost: IPost | undefined) => {
 }
 const plot = ref<IPlot>();
 const posts = ref<IPost[]>();
-const next = ref(false);
+const hydraView = ref();
 const reply = ref(false);
 
 usePlot(route.params.id, route.params.page ?? 1).then(response => {
@@ -30,7 +30,7 @@ usePlot(route.params.id, route.params.page ?? 1).then(response => {
     if (postsResponse) {
         posts.value = postsResponse['hydra:member'];
         // @ts-ignore
-        next.value = postsResponse['hydra:next'] ? true : false
+        hydraView.value = postsResponse['hydra:view'];
 
     }
 })
@@ -56,6 +56,6 @@ usePlot(route.params.id, route.params.page ?? 1).then(response => {
             </Box>
         </div>
 
-        <PaginatorComponent :next="next" />
+        <PaginatorComponent :hydraView="hydraView" />
     </TransitionGroup>
 </template>

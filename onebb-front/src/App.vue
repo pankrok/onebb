@@ -3,8 +3,7 @@ import useCategory from '@/hooks/useCategory';
 import { ref, defineAsyncComponent  } from 'vue';
 import { useRoute } from 'vue-router';
 import useLoading from '@/hooks/useLoading'
-// import Nav from './components/NavComponent.vue';
-// import LoginModalComponent from './components/ui/modals/LoginModalComponent.vue';
+
 const Nav = defineAsyncComponent(() =>
   import('./components/NavComponent.vue')
 )
@@ -13,6 +12,10 @@ const LoginModalComponent = defineAsyncComponent(() =>
 )
 const RegisterModalComponent = defineAsyncComponent(() =>
   import('./components/ui/modals/RegisterModalComponent.vue')
+)
+
+const Alert = defineAsyncComponent(() =>
+  import('./components/ui/AlertComponent.vue')
 )
 const {isLoading} = useLoading();
 const route = useRoute();
@@ -33,7 +36,7 @@ home.value = useCategory();
 </script>
 
 <template>
-  <div class="mode staging">!!STAGING MODE!!</div>
+  <!-- <div class="mode staging">!!STAGING MODE!!</div> -->
   <Transition name="fade" mode="out-in">
     <LoginModalComponent v-if="login" key="loginBox" :loginToggle="loginToggle" />  
   </Transition>
@@ -42,6 +45,9 @@ home.value = useCategory();
   </Transition>
   
   <Nav :loginToggle="loginToggle" :registerToggle="registerToggle" />
+  <div class="position-asolute">
+    <Alert />
+  </div>
   <Transition name="fade" mode="out-in">
     <div v-if="isLoading" class="col-12 position-relative" key="loading-bar"><span class="box-loader box-shadow-blue"></span></div>
   </Transition>
@@ -53,6 +59,7 @@ home.value = useCategory();
     </router-view>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </main>
+  
 </template>
 
 <style>

@@ -4,6 +4,9 @@ import Modal from './ModalComponent.vue';
 import { useUser } from '@/hooks/useUser'
 import BoxComponent from '@/components/box/BoxComponent.vue';
 import type { ILoginCreditionals } from '@/interfaces/OnebbInterfaces'
+import { useToast } from '@/hooks/useToast';
+
+const {setAlert} = useToast();
 
 const props = defineProps<{ loginToggle: Function }>()
 
@@ -11,15 +14,7 @@ const creditionals = ref<ILoginCreditionals>({
     username: '',
     password: '',
 });
-const msg = ref<{
-    show: boolean,
-    msg: string,
-    class?: string[],
-}>({
-    show: false,
-    msg: '',
-    class: []
-})
+
 const { login } = useUser();
 
 const auth = async () => {
@@ -29,23 +24,20 @@ const auth = async () => {
     });
 
     if (isLogged) {
-        msg.value.show = true;
-        msg.value.msg = 'logged';
-        msg.value.class = ['background-green', 'box-shadow-green'];
-        setTimeout(() => {
-            msg.value.show = false;
-            props.loginToggle();
-        }, 3000)
+        props.loginToggle();
+        setAlert({
+            name: 'Auth',
+            text: 'You are successful logged in!',
+            type: 'success'
+        });
         return;
     }
 
-    msg.value.show = true;
-    msg.value.msg = 'Invalid creditionals !';
-    msg.value.class = ['background-red', 'box-shadow-red'];
-
-    setTimeout(() => {
-        msg.value.show = false;
-    }, 3000)
+    setAlert({
+            name: 'Auth',
+            text: 'Invalid creditionals !',
+            type: 'warning'
+    });
 }
 
 </script>
@@ -67,16 +59,6 @@ const auth = async () => {
                 </div>
             </template>
             <div class="column padding-xl background-color-white">
-                <Transition name="fade" mode="in-out">
-                    <div class="position-relative" key="auth-box">
-                        <div v-if="msg.show"
-                            class="padding-m border-radius-5 text-align-center font-weight-600 color-light position-absolute"
-                            :class="msg.class"
-                            style="top: -45px;">
-                            {{ msg.msg }}
-                        </div>
-                    </div>
-                </Transition>
                 <label class="label" for="username">Username</label>
                 <input class="form-control" id="username" type="text" v-model="creditionals.username" />
                 <label class="label" for="password">Password</label>

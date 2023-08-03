@@ -31,3 +31,24 @@
 .fade-leave-to {
     opacity: 0;
 }
+
+
+.alert-move, 
+.alert-enter-active,
+.alert-leave-active {
+  transition: all 0.5s ease;
+}
+
+.alert-enter-from,
+.alert-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.alert-leave-to {
+  transform: translateY(-30px);
+}
+
+.alert-leave-active {
+  position: absolute;
+}

@@ -173,3 +173,9 @@ export interface IHydra<T> {
   'hydra:member': T[],
   'hydra:view'?: IHydraView
 }
+
+export interface IAlert {
+  name: string,
+  text: string, 
+  type: 'success' | 'warning' | 'alert' | 'info'
+}

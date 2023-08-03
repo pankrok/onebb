@@ -3,20 +3,32 @@ import type { IHydraView } from '@/interfaces/OnebbInterfaces';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const { hydraView } = defineProps<{ hydraView?: IHydraView }>()
+const props = defineProps<{ hydraView?: IHydraView }>()
 
 const route = useRoute();
-const router = useRouter();
-
+const {hydraView} = props;
 
 
 const paginator = computed(() => {
+    const p = {
+        goPrev: false,
+        goNext: false,
+        goFirst: false,
+        goLast: '',
+    }
 
-    const goPrev = hydraView ? (hydraView['hydra:previous'] ? false : true) : false;
-    const goNext = hydraView ? (hydraView['hydra:previous'] ? false : true) : false;
-    const goFirst = hydraView ? (hydraView['hydra:first'] ? false : true) : false;
-    const goLast = hydraView ? (hydraView['hydra:last'] ? Number(hydraView['hydra:last']) : true) : false;
-    return { goPrev, goNext, goFirst, goLast }
+    if(hydraView) {
+        if (hydraView['hydra:last']) {
+            let [uri, page] = hydraView['hydra:last'].split('=');
+            p.goLast = page;
+        }
+        p.goPrev = hydraView['hydra:previous'] ? true : false;
+        p.goNext = hydraView['hydra:next'] ? true : false;
+        p.goFirst = hydraView['hydra:first'] ? true : false;
+        
+    }
+    console.log({p, hydraView, props})
+    return p;
 })
 //const goNext = computed(()=>( hydraView['hydra:next'] ? false : true) )) ( hydraView['hydra:previous'] ? false : true)
 
@@ -24,7 +36,7 @@ const paginator = computed(() => {
 <template>
     <div class="row justify-content-space-between margin-l">
         <div>
-            <router-link v-if="!paginator.goFirst" :to="{ params: { page: 1 } }"
+            <router-link v-if="paginator.goFirst" :to="{ params: { page: 1 } }"
                 class="button button-background-blue button-color-white border-radius-5 padding-x-s margin-bottom-m"
                 :class="{ 'button-disabled': !paginator.goFirst }">
                 First
@@ -41,7 +53,7 @@ const paginator = computed(() => {
                 :class="{ 'button-disabled': !paginator.goNext }">
                 Next
             </router-link>
-            <router-link v-if="paginator.goLast" :to="{ params: { page: paginator.goLast } }" 
+            <router-link v-if="paginator.goLast.length > 0" :to="{ params: { page: paginator.goLast } }" 
                 class="button button-background-blue button-color-white border-radius-5 padding-x-s margin-bottom-m"
                 :class="{ 'button-disabled': !paginator.goLast }">
                 Last
