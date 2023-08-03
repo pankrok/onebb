@@ -3,19 +3,19 @@ import type { IHydraView } from '@/interfaces/OnebbInterfaces';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const props = defineProps<{ hydraView?: IHydraView }>()
+const { hydraView } = defineProps<{ hydraView?: IHydraView }>()
 
 const route = useRoute();
 const router = useRouter();
 
-const { hydraView } = props;
+
 
 const paginator = computed(() => {
 
-    const goPrev = hydraView ? (hydraView['hydra:previous'] ? false : true) : true;
-    const goNext = hydraView ? (hydraView['hydra:previous'] ? false : true) : true;
-    const goFirst = hydraView ? (hydraView['hydra:first'] ? false : true) : true;
-    const goLast = hydraView ? (hydraView['hydra:last'] ? false : true) : true;
+    const goPrev = hydraView ? (hydraView['hydra:previous'] ? false : true) : false;
+    const goNext = hydraView ? (hydraView['hydra:previous'] ? false : true) : false;
+    const goFirst = hydraView ? (hydraView['hydra:first'] ? false : true) : false;
+    const goLast = hydraView ? (hydraView['hydra:last'] ? Number(hydraView['hydra:last']) : true) : false;
     return { goPrev, goNext, goFirst, goLast }
 })
 //const goNext = computed(()=>( hydraView['hydra:next'] ? false : true) )) ( hydraView['hydra:previous'] ? false : true)
@@ -41,9 +41,9 @@ const paginator = computed(() => {
                 :class="{ 'button-disabled': !paginator.goNext }">
                 Next
             </router-link>
-            <router-link v-if="paginator.goNext" :to="{ params: { page: `${Number(route.params.page) + 1}` } }" 
+            <router-link v-if="paginator.goLast" :to="{ params: { page: paginator.goLast } }" 
                 class="button button-background-blue button-color-white border-radius-5 padding-x-s margin-bottom-m"
-                :class="{ 'button-disabled': !paginator.goNext }">
+                :class="{ 'button-disabled': !paginator.goLast }">
                 Last
             </router-link>
         </div>

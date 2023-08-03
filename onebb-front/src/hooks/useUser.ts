@@ -34,6 +34,10 @@ export const useUser = () => {
         return data;
     }
 
+    const getUserId = ()=> {
+        return data.uid ?? 0;
+    }
+
     const getToken = () => {
         return data.token;
     }
@@ -135,6 +139,7 @@ export const useUser = () => {
     return {
         parseUsername,
         getUser,
+        getUserId,
         getUserById,
         login,
         refresh,

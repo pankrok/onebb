@@ -146,6 +146,16 @@ const useApi = () => {
 
         },
 
+        put: async <T>(setUrl: string, bodyInit: object) => {
+            url = setUrl;
+            body = bodyInit
+
+            const { request, response, parsedResponse } = await factory<T>(Method.PUT);
+
+            return { request, response, parsedResponse }
+
+        },
+
         retry: async <T>(requestInit: RequestInit) => {
             configuration.fetch = { ...requestInit }
             return await <T>factory();

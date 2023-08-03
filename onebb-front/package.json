@@ -15,6 +15,7 @@
     "jodit": "^4.0.0-beta.50",
     "moment": "^2.29.4",
     "vue": "^3.2.47",
+    "vue-advanced-cropper": "^2.8.8",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
