@@ -7,6 +7,7 @@
 /onebb-backend/var/
 /onebb-backend/var/migrations/*
 /onebb-backend/vendor/
+/nexe
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -32,6 +33,10 @@
 /onebb-front/node_modules
 /onebb-front/dist
 /onebb-front/obb1
+/onebb-front-2
+/onebb-front-3
+/onebb-front-old
+/onebb-module-front
 
 
 # local env files
