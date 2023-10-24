@@ -8,7 +8,7 @@ const JoditComponent = defineAsyncComponent(() =>
   import('../JoditComponent.vue')
 )
 
-const {callback} = defineProps<{callback: Function}>();
+const props = defineProps<{callback: Function}>();
 const route = useRoute();
 const {isLogged} = useUser();
 const {post} = useApi();
@@ -30,7 +30,7 @@ const sendReply = async () => {
     <div v-if="isLogged()">
         <JoditComponent :value="textValue" @update-event="(e)=>{textValue = e}"/>
         <div class="row margin-m justify-content-flex-end">
-            <button class="button button-background-blue button-color-white border-radius-5" @click="sendReply()">
+            <button class="button button-color-green" @click="sendReply()">
                 Send
             </button>
         </div>
