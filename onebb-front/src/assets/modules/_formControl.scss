@@ -1,0 +1,56 @@
+@use "sass:map";
+
+.form-control, .button {
+    background-color: transparent;
+    color: map.get($colors, "black");
+    transition: box-shadow .3s,border-color .3s;
+    font-size: 14px;
+    font-weight: 300;
+    padding: .25rem;
+    margin: .15rem;
+    border: 1px solid;
+    border-color: map.get($colors, "dark");
+    border-radius: 4px;
+}
+
+
+.form-control:focus, button:hover {
+    border-color: map.get($colors, "blue");
+    outline: 0;
+    box-shadow: 0 0 8px 1px map.get($colors, "blue");
+}
+
+.label {
+    font-size: 16px;
+    padding: 0.5rem 0.5rem 0;
+}
+
+.button {
+    cursor: pointer;
+    font-size: 12px;
+    color: map.get($colors, "black");
+}
+
+@each $name, $color in $colors {
+    .button-color-#{$name} {
+        border-color: $color;
+        color: $color;
+    }
+
+    .button-color-#{$name}:hover {
+        border-color: $color;
+        outline: 0;
+        box-shadow: 0 0 8px 1px $color;
+    }
+
+    .button-background-#{$name} {
+        background-color: $color;
+        border: 1px solid $color;
+    }
+
+}
+
+.button-disabled {
+    opacity: .7;
+    filter:blur(1px);
+}

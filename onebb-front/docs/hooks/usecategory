@@ -1,0 +1,11 @@
+# useCategory()
+
+```ts
+async () => [cateogries: ICategory[]]
+```
+
+return array of categories or array with one category based on uri id parameter
+
+```
+/category/:slug/:id
+```

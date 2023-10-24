@@ -1,6 +1,8 @@
 # ONEBB DEV
 > Single page discussion board.    
 official forum: [OneBB Forum](https://onebb.org)
+this is development branch, last stable version can be see [here](https://github.com/pankrok/onebb/tree/0.1.X)    
+all not refactored features is available there
 
 ## Table of contents
 * [General info](#general-info)
@@ -27,12 +29,12 @@ OneBB are an open source discussion software that is simple to use and extended 
 
 Ready features:
 * RWD designe,
-* plugins system,
-* plugin store,
+* plugins system (not refactored yet),
+* plugin store (not refactored yet),
 * easy to use module system,
-* email templates with editor,
-* messenger,
-* updater,
+* email templates with editor (not refactored yet),
+* messenger (not refactored yet),
+* updater (not refactored yet),
 
 In progress:
 * chat,

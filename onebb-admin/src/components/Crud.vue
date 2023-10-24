@@ -20,10 +20,10 @@
                 <div class="px-2"> <b>{{ crud.values.name }}</b></div>
                 <div class="row a-i-center">
                     <div v-if="crud.values.checkbox" class="px-2 border-right">
-                        <b>{{ crud.values.checkbox }}</b>
+                        <b><i class="fas fa-toggle-on"></i></b>
                     </div>
                     <div class="px-2">
-                        <b>{{ $t('actions') }}</b>
+                        <b><i class="fa-solid fa-gear"></i></b>
                     </div>
                 </div>
             </div>
