@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 import Box from '@/components/box/BoxComponent.vue';
 import Image from '@/components/ui/ImageComponent.vue';
 import Cropper from '@/components/ui/Cropper.vue';
-import type { IUser } from '@/interfaces/OnebbInterfaces';
+import type { IUser } from '@/interfaces';
 
 const route = useRoute();
 const { getUserById, parseUsername, getUserId } = useUser();

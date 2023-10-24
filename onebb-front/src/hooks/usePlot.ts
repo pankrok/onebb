@@ -8,9 +8,9 @@ export default async function usePlot() {
   const plotEndpoint = `plots/${route.params.id}`
   const postsEndpoint = `plots/${route.params.id}/posts?page=${route.params.page}`
   const plotFullResponse = await api.get<IPlot>(plotEndpoint)
-  const plotResponse: IPlot | undefined = plotFullResponse.parsedResponse
+  const plotResponse: IPlot | null = plotFullResponse.parsedResponse
   const postFillResponse = await api.get<IHydra<IPost>>(postsEndpoint)
-  const postsResponse: IHydra<IPost> | undefined = postFillResponse.parsedResponse
+  const postsResponse: IHydra<IPost> | null = postFillResponse.parsedResponse
 
   return { plotResponse, postsResponse }
 }

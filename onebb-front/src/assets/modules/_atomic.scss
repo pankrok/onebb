@@ -1,5 +1,5 @@
 
-$font-sizes: (10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32);
+$font-sizes: (8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32);
 $font-weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
 @each $size in $font-sizes {
   .font-size-#{$size} {
@@ -14,7 +14,15 @@ $font-weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
     }
   }
 
-$sizes: ("-s": .25rem, "-m": .5rem, "-l": 1rem, "-xl": 2rem);
+$imageSizes: ("-s": 25px, "-m": 50px, "-l": 75px, "-xl": 100px);
+@each $name, $size in $imageSizes {
+    .img-size-mobile#{$name} {
+      width: #{$size};
+      height: auto;
+    }
+  }
+
+$sizes: ("-none": 0, "-s": .25rem, "-m": .5rem, "-l": 1rem, "-xl": 2rem);
 $positions:("-top", "-bottom", "-left", "-right", "-x", "-y", "");
 
 @each $position in $positions {
@@ -66,11 +74,11 @@ $text-alignes: (left, center, right);
 $flexes: (flex-start, center, flex-end, space-between, space-around);
 
 @each $flex in $flexes {
-    .justify-content-#{$flex} {
+    .justify-content-mobile-#{$flex} {
         justify-content: $flex;
     }
 
-    .align-items-#{$flex} {
+    .align-items-mobile-#{$flex} {
         align-items: $flex;
     }
 }
@@ -113,6 +121,10 @@ $rads: (5, 10, 15, 20, 25);
         color: $color;
     }
 
+    .text-shadow-#{$name} {
+        text-shadow: 0 0 2px $color;
+    }
+
     .background-#{$name} {
         background-color: $color;
     }
@@ -130,7 +142,7 @@ $rads: (5, 10, 15, 20, 25);
     cursor: pointer;
 }
 
-$elpositions:(relative, absolute);
+$elpositions:(relative, absolute, fixed);
 
 @each $name in $elpositions {
     .position-#{$name} {
@@ -143,6 +155,14 @@ $elpositions:(relative, absolute);
 }
 
 /* RWD */
+
+$displays: (flex, grid, block, inline, none);
+@each $name in $displays {
+    .display-mobile-#{$name} {
+        display: $name;
+    }
+}
+
 .row,
 .column {
     display: flex;
@@ -151,7 +171,7 @@ $elpositions:(relative, absolute);
 
 .row {
     flex-direction: row;
-}
+} 
 
 .column {
     flex-direction: column;
@@ -161,102 +181,61 @@ $elpositions:(relative, absolute);
     width: 100%;
 }
 
-.col-sm-1 {
-    width: 8.33%;
+$boxSizes: ("1": 8.33%, "2": 16.66%, "3": 25%, "4": 33.33%, "5": 41.66%, "6": 50%, "7": 58.33%, "8": 66.66%, "9": 75%, "10": 83.33%, "11": 91.66%, "12": 100%);
+
+@each $name, $size in $boxSizes {
+    .col-sm-#{$name} {
+        width: $size;
+    }
+
+    .height-sm-#{$name} {
+        height: $size;
+    }
 }
 
-.col-sm-2 {
-    width: 16.66%;
-}
-
-.col-sm-3 {
-    width: 25%;
-}
-
-.col-sm-4 {
-    width: 33.33%;
-}
-
-.col-sm-5 {
-    width: 41.66%;
-}
-
-.col-sm-6 {
-    width: 50%;
-}
-
-.col-sm-7 {
-    width: 58.33%;
-}
-
-.col-sm-8 {
-    width: 66.66%;
-}
-
-.col-sm-9 {
-    width: 75%;
-}
-
-.col-sm-10 {
-    width: 83.33%;
-}
-
-.col-sm-11 {
-    width: 91.66%;
-}
-
-.col-sm-12 {
-    width: 100%;
+.col-sm-auto {
+    width: auto;
+    flex: 1;
 }
 
 @media only screen and (min-width: 768px) {
 
+    @each $name in $displays {
+        .display-desktop-#{$name} {
+            display: $name;
+        }
+    }
+
+    @each $flex in $flexes {
+        .justify-content-#{$flex} {
+            justify-content: $flex;
+        }
+    
+        .align-items-#{$flex} {
+            align-items: $flex;
+        }
+    }
+
     /* For desktop: */
-    .col-1 {
-        width: 8.33%;
+    @each $name, $size in $boxSizes {
+        .col-#{$name} {
+            width: $size;
+        }
+
+        .height-#{$name} {
+            height: $size;
+        }
     }
 
-    .col-2 {
-        width: 16.66%;
+    .col-auto {
+        width: auto;
+        flex: 1;
     }
 
-    .col-3 {
-        width: 25%;
-    }
-
-    .col-4 {
-        width: 33.33%;
-    }
-
-    .col-5 {
-        width: 41.66%;
-    }
-
-    .col-6 {
-        width: 50%;
-    }
-
-    .col-7 {
-        width: 58.33%;
-    }
-
-    .col-8 {
-        width: 66.66%;
-    }
-
-    .col-9 {
-        width: 75%;
-    }
-
-    .col-10 {
-        width: 83.33%;
-    }
-
-    .col-11 {
-        width: 91.66%;
-    }
-
-    .col-12 {
-        width: 100%;
-    }
+    @each $name, $size in $imageSizes {
+        .img-size#{$name} {
+          width: #{$size};
+          height: auto;
+        }
+      }
 }

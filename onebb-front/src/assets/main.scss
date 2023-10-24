@@ -1,11 +1,11 @@
-@import 'scss/colors';
-@import 'scss/core';
+@import 'modules/colors';
+@import 'modules/core';
 /* custom modules */
-@import 'scss/nav';
-@import 'scss/modal';
-@import 'scss/formControl';
-@import 'scss/transitions';
+@import 'modules/nav';
+@import 'modules/modal';
+@import 'modules/formControl';
+@import 'modules/transitions';
 /* !custom modules */
-@import 'scss/buttons';
-@import 'scss/loader';
-@import 'scss/atomic';
+// @import 'modules/buttons';
+@import 'modules/loader';
+@import 'modules/atomic';

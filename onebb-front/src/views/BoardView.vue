@@ -2,9 +2,16 @@
 import useBoard from '@/hooks/useBoard'
 import Box from '@/components/box/BoxComponent.vue'
 import PlotComponent from '@/components/ui/PlotComponent.vue'
+import { reactive } from 'vue';
+import type { IBoard, IPlot } from '@/interfaces';
+
+interface IBoardData {
+  board: IBoard|null,
+  plots: IPlot[]|null,
+}
 
 const boxStyles = [
-  'background-blue',
+  'background-background',
   'border-radius-5',
   'color-white',
   'font-size-18',
@@ -14,15 +21,29 @@ const boxStyles = [
   'margin-top-l'
 ]
 
-const { board, plots } = await useBoard()
+const data = reactive<IBoardData>({
+  board: null,
+  plots: null,
+})
+
+async function init() {
+  const { board, plots } = await useBoard();
+
+  data.board = board;
+  data.plots = plots;
+}
+
+init();
+
 </script>
 <template>
-  <div class="column" v-if="board && plots">
-    <Box :boxClass="boxStyles">
-      {{ board.name }}
+  <div class="column">
+    <Box v-if="data.board" :boxClass="boxStyles">
+      {{ data.board.name }}
     </Box>
-    <Box v-for="plot in plots" :key="plot.id + plot.name">
+    <Box v-for="plot in data.plots" :key="plot.id + plot.name">
       <PlotComponent :plot="plot" />
     </Box>
   </div>
+
 </template>

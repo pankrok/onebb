@@ -1,0 +1,124 @@
+@use "sass:map";
+
+body {
+    background-color: map.get($colors, "background");
+    padding: 0;
+    margin: 0;
+    font-family: Verdana, sans-serif;
+    height: 100dvh;
+}
+
+#app, .container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+}
+header, main, footer {
+    width: 100%;
+}
+
+#app{
+    align-items: center;
+    height: 100dvh;
+}
+.container {
+    max-width: 1440px;
+}
+
+a {
+    color:  map.get($colors, "white");
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+}
+
+li > a:after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 0%;
+    transition: all .2s ease-in-out;
+    background-color: map.get($colors, "white");
+}
+
+a.active {
+    color:  map.get($colors, "green");
+}
+
+li > a.active:after {
+    width: 100%;
+    background-color: map.get($colors, "green");
+}
+
+a:hover {
+    opacity: .7;
+}
+
+a:hover::after {
+    width: 100%;
+}
+
+.sidemenu {
+    top: 45px;
+    right: 0;
+}
+
+.messenger {
+    position: fixed;
+    bottom: .25rem;
+    right: .25rem;
+}
+
+
+.pulse {
+    -webkit-animation: pulse-animation 2s infinite;
+    animation: pulse-animation 2s infinite
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: -4px;
+    right: -4px
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+@-webkit-keyframes pulse-animation {
+    0% {
+        scale: 0;
+        opacity: 1
+    }
+
+    50% {
+        scale: 1;
+        opacity: 1
+    }
+
+    to {
+        scale: 1;
+        opacity: 0
+    }
+}
+
+@keyframes pulse-animation {
+    0% {
+        scale: 0;
+        opacity: 1
+    }
+
+    50% {
+        scale: 1;
+        opacity: 1
+    }
+
+    to {
+        scale: 1;
+        opacity: 0
+    }
+}

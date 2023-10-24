@@ -11,10 +11,12 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%
+    width: 100%;
+    transition: width .3s ease-out;
 }
 
 .box-loader {
+    z-index: 10;
     display: inline-block;
     height: .25rem;
     overflow: hidden;

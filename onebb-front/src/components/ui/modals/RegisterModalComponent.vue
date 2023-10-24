@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import Modal from './ModalComponent.vue';
 import { useUser } from '@/hooks/useUser'
 import BoxComponent from '@/components/box/BoxComponent.vue';
-import type { IRegister } from '@/interfaces/OnebbInterfaces'
+import type { IRegister } from '@/interfaces'
 
 const props = defineProps<{ toggleModal: Function }>()
 

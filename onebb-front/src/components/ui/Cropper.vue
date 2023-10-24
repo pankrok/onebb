@@ -6,7 +6,7 @@ import ModalComponent from "./modals/ModalComponent.vue";
 import 'vue-advanced-cropper/dist/style.css';
 import useApi from "@/hooks/useApi";
 import { useUser } from "@/hooks/useUser";
-import type { IUser } from "@/interfaces/OnebbInterfaces";
+import type { IUser } from "@/interfaces";
 
 defineProps<{
     isOpen: boolean
@@ -60,8 +60,8 @@ const change = async () => {
                     Profile picture
                 </div>
             </template>
-            <div class="padding-l">
-                <Cropper v-if="image"
+            <div  v-if="image" class="padding-l">
+                <Cropper
                     ref="cropper"
                     :src="image"
                     :transitions="true"
@@ -91,11 +91,11 @@ const change = async () => {
         </div>
         <template #footer>
             <div class="row margin-m justify-content-space-between">
-                <span class="button button-background-blue button-color-white border-radius-5">
+                <span class="button button-color-white border-radius-5">
                     <input id="userImg" class="btn-file" type="file" accept="image/jpeg" @change="uploadImage" />
                     <label for="userImg">Choose image</label>
                 </span>
-                <button v-if="saveBtn" class="button button-background-blue button-color-white border-radius-5" @click="change()" type="button">{{ 'save' }}</button>
+                <button v-if="saveBtn" class="button button-color-white" @click="change()" type="button">{{ 'save' }}</button>
             </div>
         </template>
     </BoxComponent>

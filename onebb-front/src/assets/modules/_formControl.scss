@@ -5,9 +5,10 @@
     color: map.get($colors, "black");
     transition: box-shadow .3s,border-color .3s;
     font-size: 14px;
-    padding: .5rem;
-    margin: .25rem;
-    border: 2px solid;
+    font-weight: 300;
+    padding: .25rem;
+    margin: .15rem;
+    border: 1px solid;
     border-color: map.get($colors, "dark");
     border-radius: 4px;
 }
@@ -26,13 +27,20 @@
 
 .button {
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
     color: map.get($colors, "black");
 }
 
 @each $name, $color in $colors {
     .button-color-#{$name} {
+        border-color: $color;
         color: $color;
+    }
+
+    .button-color-#{$name}:hover {
+        border-color: $color;
+        outline: 0;
+        box-shadow: 0 0 8px 1px $color;
     }
 
     .button-background-#{$name} {

@@ -10,14 +10,7 @@ import ReplyComponent from '@/components/ui/ReplyComponent.vue'
 import { useUser } from '@/hooks/useUser'
 
 const { isLogged } = useUser()
-const boxStyles = [
-  'background-blue',
-  'border-radius-5',
-  'color-white',
-  'font-size-18',
-  'font-weight-500',
-  'padding-l'
-]
+
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {
     return
@@ -29,6 +22,25 @@ const plot = ref<IPlot>()
 const posts = ref<IPost[]>()
 const hydraView = ref<IHydraView>()
 const reply = ref(false)
+const plotClassBox = [
+  'row',
+  'margin-m',
+  'border-1',
+  'color-white',
+  'border-color-primary',
+  'border-radius-5',
+  'padding-m'
+]
+
+const headerClassBox = [
+'color-white',
+  'margin-m',
+  'border-1',
+  'border-color-primary',
+  'border-radius-5',
+  'padding-m',
+  'font-size-12'
+]
 
 usePlot().then(({ plotResponse, postsResponse }) => {
   plot.value = plotResponse
@@ -47,18 +59,19 @@ usePlot().then(({ plotResponse, postsResponse }) => {
     mode="in-out"
     v-if="plot"
   >
-    <Box :boxClass="boxStyles" key="plot-header">
-      {{ plot.name }}
+    <Box :boxClass="headerClassBox" key="plot-header">
+      <h2 class="font-size-14 font-weight-600 padding-bottom-m margin-none">Plot name</h2>
+      <span class="font-size-10"> Pankrok - 4h temu </span>
     </Box>
-
-    <Box v-for="post in posts" :key="post.id">
+    <PaginatorComponent :hydraView="hydraView" />
+    <Box v-for="post in posts" :box-class="plotClassBox" :key="post.id">
       <PostComponent :post="post" />
     </Box>
     <div class="row justify-content-flex-end" v-if="isLogged()">
-      <button
+      
+      <button class="button button-color-white col-12 margin-m"                         
         key="reply-btn"
         v-if="!reply"
-        class="button button-background-green button-color-white border-radius-5"
         @click="reply = !reply"
       >
         Reply

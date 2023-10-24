@@ -46,7 +46,7 @@ let isRefreshing = false
 class ObbFetch {
   #ret: number
   #request: RequestInit
-  prepareRequest: <T>() => Promise<{ request: RequestInit; response: Response; parsedResponse?: T }>
+  prepareRequest: <T>() => Promise<{ request: RequestInit; response: Response; parsedResponse: T|null }>
   #url: string
 
   constructor(request: RequestInit) {
@@ -96,7 +96,7 @@ class ObbFetch {
                 reslove({ request, response, parsedResponse })
               })
             } else {
-              reslove({ request, response })
+              reslove({ request, response, parsedResponse: null })
             }
           }
         })

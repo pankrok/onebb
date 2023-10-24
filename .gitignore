@@ -8,6 +8,7 @@
 /onebb-backend/var/migrations/*
 /onebb-backend/vendor/
 /nexe
+/docs
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###
@@ -35,6 +36,7 @@
 /onebb-front/obb1
 /onebb-front-2
 /onebb-front-3
+/onebb-front-4
 /onebb-front-old
 /onebb-module-front
 

@@ -28,7 +28,7 @@ const boxStyle: string[] = ['row', 'justify-content-space-between']
             params: { slug: category.slug, id: category.id }
           }"
         >
-          <h3 class="margin-y-s margin-x-m">{{ category.name }}</h3>
+          <h2 class="font-size-16 font-weight-600 padding-bottom-m margin-none">{{ category.name }}</h2>
         </router-link>
       </template>
       <p class="margin-m">
