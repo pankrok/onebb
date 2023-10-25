@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 import type { IAlert } from '@/interfaces'
 
 const alerts = reactive<IAlert[]>([])
-const defaultTimeout = 300000
+const defaultTimeout = 3000
 
 export function useToast() {
   const setAlert = (props: IAlert, msTimeout?: number) => {

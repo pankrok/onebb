@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+ // @ts-ignore
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -16,17 +17,17 @@ const router = createRouter({
     },
     {
       path: '/board/:slug/:id/:page?',
-      name: 'Board',
+      name: 'Board', // @ts-ignore
       component: () => import('../views/BoardView.vue')
     },
     {
       path: '/plot/:slug/:id/:page?',
-      name: 'Plot',
+      name: 'Plot', // @ts-ignore
       component: () => import('../views/PlotView.vue')
     },
     {
       path: '/user/:slug/:id',
-      name: 'Profile',
+      name: 'Profile', // @ts-ignore
       component: () => import( '../views/UserView.vue')
     },
     // {
@@ -34,11 +35,11 @@ const router = createRouter({
     //   name: 'Page',
     //   component: () => import( '../views/Page.vue')
     // },
-    // {
-    //   path: '/user/configuration/:id',
-    //   name: 'UserConfig',
-    //   component: () => import( '../views/UserConfig.vue')
-    // },
+    {
+      path: '/user/configuration/:id',
+      name: 'UserConfiguration', // @ts-ignore
+      component: () => import( '../views/UserConfigView.vue')
+    },
     // {
     //   path: '/validation/:hash',
     //   name: 'Validation',

@@ -5,11 +5,13 @@ import { useRoute } from 'vue-router';
 import Box from '@/components/box/BoxComponent.vue';
 import Image from '@/components/ui/ImageComponent.vue';
 import Cropper from '@/components/ui/Cropper.vue';
+import UserPostsComponent from '@/components/user/UserPostsComponent.vue';
 import type { IUser } from '@/interfaces';
 
 const route = useRoute();
 const { getUserById, parseUsername, getUserId } = useUser();
 const user = ref<IUser>();
+const canEdit = ref(false);
 const cropper = ref(false);
 const change = () => {
     if (!user.value) {
@@ -36,7 +38,9 @@ onMounted(async () => {
     const userdata = await getUserById(id);
     // @ts-ignore
     user.value = userdata?.parsedResponse ?? null
-    console.log(user.value)
+    if(id === getUserId()) {
+        canEdit.value = true;
+    }
 })
 
 
@@ -48,9 +52,13 @@ onMounted(async () => {
         <div class="col-3">
             <Box :wrapper-class="['margin-s']">
                 <div class="column align-items-center margin-y-m">
-                    <Cropper :is-open="cropper" @update="update"/>
-                    <Image :size="[90, 90]" :src="user.avatar" :alt="user.username" :rounded="true" @click="change()" />
-                    <div class="padding-m text-align-center font-size-16 margin-y-l" v-html="parseUsername(user)"></div>
+                    <Cropper :is-open="cropper" :handle-close="()=>{cropper = false;}" @update="update"/>
+                    <div class="position-relative">
+                        <Image :size="[90, 90]" :src="user.avatar" :alt="user.username" :rounded="true"  />
+                        <button v-if="canEdit" class="position-absolute button button-color-blue button-background-background" @click="change()">Zmień</button>
+                    </div>
+                    <div class="padding-m text-align-center font-size-16 margin-top-l" v-html="parseUsername(user)"></div>
+                    <div class="padding-m text-align-center font-size-16 margin-bottom-l" v-html="user.user_group.group_name"></div>
                     <div class="col-12 row text-align-center padding-top-l">
                         <div class="col-sm-6">
                             Posts:
@@ -67,12 +75,21 @@ onMounted(async () => {
                             {{ user.plots_no }}
                         </div>
                     </div>
+                    <div v-if="canEdit" class="col-12 row justify-content-center padding-top-l">
+                        <RouterLink 
+                            :to="{
+                                name: 'UserConfiguration',
+                                params: { id: getUserId() }
+                            }"
+                            class="button button-color-blue"
+                        >Edytuj profil</RouterLink>
+                    </div>
                 </div>
             </Box>
         </div>
         <div class="col-9">
             <Box :wrapper-class="['margin-s']">
-                [NOT IMPMEMENTED YET]
+                <UserPostsComponent :user="user"/>
             </Box>
         </div>
     </div>
