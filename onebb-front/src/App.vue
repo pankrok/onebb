@@ -3,7 +3,8 @@ import { ref, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import useLoading from '@/hooks/useLoading'
 import useSkin from './hooks/useSkin'
-import BoxComponent from './components/box/BoxComponent.vue'
+import CustomBoxComponent  from './components/custom_boxes/CustomBoxComponent.vue'
+import PluginBoxComponent from './components/custom_boxes/PluginBoxComponent.vue'
 
 const Nav = defineAsyncComponent(() => import('./components/NavComponent.vue'))
 const LoginModalComponent = defineAsyncComponent(
@@ -20,7 +21,8 @@ const login = ref(false)
 const register = ref(false)
 const boxes = ref(null)
 const boxComponents = {
-  PluginBox: BoxComponent
+  PluginBox: PluginBoxComponent,
+  CustomBox: CustomBoxComponent,
 }
 
 const loginToggle = () => {
@@ -33,8 +35,9 @@ const registerToggle = () => {
 
 onMounted(async () => {
   const handler = await useSkin()
+  console.log({handler})
   boxes.value = handler?.Home;
-
+  console.log({handler: boxes.value})
 })
 </script>
 
@@ -69,7 +72,7 @@ onMounted(async () => {
     <!-- top modules section -->
     <aside v-if="boxes?.top" class="col-12">
       <div v-for="box in boxes.top" :key="box.name">
-       <component :is="boxComponents[box.engine]" :name="box.name" :content="box.html" />
+       <component :is="boxComponents[box.engine]"  :inner-html="box.html" />
       </div>
     </aside>
     <!-- /top modules section -->
