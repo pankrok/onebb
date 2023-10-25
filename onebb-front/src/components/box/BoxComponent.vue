@@ -17,7 +17,7 @@ const defaultClass = [
   'border-radius-5',
   'background-background',
   'padding-m',
-  'font-size-12'
+  'font-size-14'
 ]
 
 const classList = props.boxClass ?? defaultClass

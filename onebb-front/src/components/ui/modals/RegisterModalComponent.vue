@@ -95,16 +95,16 @@ const signUp = async () => {
                 </Transition>
                 <label class="label" for="username">Username</label>
                 <input class="form-control" :class="[errors.username.length > 0 ? 'border-color-red' : '']" id="username" type="text" v-model="creditionals.username" />
-                <span class="color-red font-size-12 margin-x-m">{{ errors.username }}</span>
+                <span class="color-red font-size-14 margin-x-m">{{ errors.username }}</span>
                 <label class="label" :class="[errors.email.length > 0 ? 'border-color-red' : '']" for="Email">Email</label>
                 <input class="form-control" id="Email" type="text" v-model="creditionals.email" />
-                <span class="color-red font-size-12 margin-x-m">{{ errors.email }}</span>
+                <span class="color-red font-size-14 margin-x-m">{{ errors.email }}</span>
                 <label class="label" for="password">Password</label>
                 <input class="form-control" :class="[errors.password.length > 0 ? 'border-color-red' : '']" id="password" type="password" v-model="creditionals.password" />
-                <span class="color-red font-size-12 margin-x-m">{{ errors.password }}</span>
+                <span class="color-red font-size-14 margin-x-m">{{ errors.password }}</span>
                 <label class="label" for="vpassword">Confirm password</label>
                 <input class="form-control" :class="[errors.vpassword.length > 0 ? 'border-color-red' : '']" id="vpassword" type="password" v-model="vpassword" />
-                <span class="color-red font-size-12 margin-x-m">{{ errors.vpassword }}</span>
+                <span class="color-red font-size-14 margin-x-m">{{ errors.vpassword }}</span>
                 <button class="button" @click="signUp()">Sign up</button>
             </div>
         </BoxComponent>

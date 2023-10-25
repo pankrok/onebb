@@ -46,7 +46,7 @@ const updated_at = moment.parse(props.board.updated_at)
         >
           <div :class="['display-desktop-block', 'display-mobile-none']" v-html="last_active_user"></div>
         </RouterLink>
-        <div class="font-size-10 color-white text-align-center">
+        <div class="font-size-14 color-white text-align-center">
           {{ updated_at }}
         </div> 
       </div>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useCategory from '@/hooks/useCategory'
 import { ref, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import useLoading from '@/hooks/useLoading'
@@ -60,7 +59,7 @@ onMounted(async () => {
     <!-- breadcrumbs section -->
     <section class="col-12">
       <div
-        class="row margin-x-m align-items-center border-1 border-radius-5 border-color-primary font-size-10"
+        class="row margin-x-m align-items-center border-1 border-radius-5 border-color-primary font-size-14"
       >
         <a href="#" class="padding-m">Home</a> > <a href="#" class="padding-m">Home</a> >
         <a href="#" class="padding-m">Home</a> > <a href="#" class="padding-m active">Home</a>

@@ -18,7 +18,7 @@ const cb = (addedPost: IPost | undefined) => {
 
   posts.value?.push(addedPost)
 }
-const plot = ref<IPlot>()
+const plot = ref<IPlot|null>()
 const posts = ref<IPost[]>()
 const hydraView = ref<IHydraView>()
 const reply = ref(false)
@@ -39,7 +39,7 @@ const headerClassBox = [
   'border-color-primary',
   'border-radius-5',
   'padding-m',
-  'font-size-12'
+  'font-size-14'
 ]
 
 usePlot().then(({ plotResponse, postsResponse }) => {
@@ -61,7 +61,7 @@ usePlot().then(({ plotResponse, postsResponse }) => {
   >
     <Box :boxClass="headerClassBox" key="plot-header">
       <h2 class="font-size-14 font-weight-600 padding-bottom-m margin-none">Plot name</h2>
-      <span class="font-size-10"> Pankrok - 4h temu </span>
+      <span class="font-size-14"> Pankrok - 4h temu </span>
     </Box>
     <PaginatorComponent :hydraView="hydraView" />
     <Box v-for="post in posts" :box-class="plotClassBox" :key="post.id">
