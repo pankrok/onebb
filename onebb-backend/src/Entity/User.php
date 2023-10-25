@@ -46,7 +46,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
             },
             "put"={
                 "security"="is_granted('ROLE_USER_EDIT') or (object == user)",
-                "denormalization_context"={"groups": {"user"}}                
+                "denormalization_context"={"groups": {"user_put"}}                
             },
            "put_img"={
                 "method"="PUT",
@@ -109,7 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups("admin_user_put")
+     * @Groups("admin_user_put", "user_put")
      * @Assert\Length(
      *      min = 8,
      *      max = 64,
@@ -122,7 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
-     * @Groups({"user", "admin_user_put"})
+     * @Groups({"admin_user_put", "user_put"})
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
