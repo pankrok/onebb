@@ -48,9 +48,9 @@ async function updateUserData() {
   }
 
   try {
-    await put(`users/${getUserId()}`, {
+    await put(`users/${getUserId()}`, 
         payload
-    })
+    )
   } catch (e) {
     setAlert({
       name: 'User update',
