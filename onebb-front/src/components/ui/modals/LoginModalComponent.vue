@@ -5,6 +5,7 @@ import { useUser } from '@/hooks/useUser'
 import BoxComponent from '@/components/box/BoxComponent.vue';
 import type { ILoginCreditionals } from '@/interfaces'
 import { useToast } from '@/hooks/useToast';
+import useAuth from '@/hooks/useAuth';
 
 const {setAlert} = useToast();
 
@@ -18,26 +19,29 @@ const creditionals = ref<ILoginCreditionals>({
 const { login } = useUser();
 
 const auth = async () => {
-    const isLogged = await login({
-        username: creditionals.value.username,
-        password: creditionals.value.password
-    });
+    const {signIn} = useAuth();
+    const res = await signIn(creditionals.value);
+    console.log({res})
+    // const isLogged = await login({
+    //     username: creditionals.value.username,
+    //     password: creditionals.value.password
+    // });
 
-    if (isLogged) {
-        props.loginToggle();
-        setAlert({
-            name: 'Auth',
-            text: 'You are successful logged in!',
-            type: 'success'
-        });
-        return;
-    }
+    // if (isLogged) {
+    //     props.loginToggle();
+    //     setAlert({
+    //         name: 'Auth',
+    //         text: 'You are successful logged in!',
+    //         type: 'success'
+    //     });
+    //     return;
+    // }
 
-    setAlert({
-            name: 'Auth',
-            text: 'Invalid creditionals !',
-            type: 'warning'
-    });
+    // setAlert({
+    //         name: 'Auth',
+    //         text: 'Invalid creditionals !',
+    //         type: 'warning'
+    // });
 }
 
 </script>

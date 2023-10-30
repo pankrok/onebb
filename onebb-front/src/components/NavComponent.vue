@@ -2,6 +2,10 @@
 import { useUser } from '@/hooks/useUser'
 
 import UserNavComponent from './ui/user/UserNavComponent.vue'
+import useAuthStore from '@/stores/useAuthStore';
+
+const authStore = useAuthStore();
+
 const { getUser, logout } = useUser()
 const user = getUser()
 
@@ -52,7 +56,7 @@ defineProps<{
             </svg>
           </button>
         </li>
-        <li v-if="user.uid">
+        <li v-if="authStore.logged">
           <button class="button button-color-light position-relative">
             <span class="circle pulse background-green box-shadow-green"></span>
             <svg
@@ -70,7 +74,7 @@ defineProps<{
           </button>
         </li>
 
-        <li v-if="user.uid">
+        <li v-if="authStore.logged">
           <RouterLink 
               :to="{
                   name: 'UserConfiguration',

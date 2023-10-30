@@ -51,12 +51,12 @@ export interface ILoginCreditionals {
 }
 
 export interface ITokenResponse {
-  token: string
+  token: string|null
+  uid: number|null
   acp_enabled: boolean
   mcp_enabled: boolean
-  avatar: string
-  slug: string
-  uid: number
+  avatar: string|null
+  slug: string|null
   code?: number
   message?: string
 }
