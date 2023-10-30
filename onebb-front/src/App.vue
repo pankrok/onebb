@@ -6,6 +6,7 @@ import useSkin from './hooks/useSkin'
 import CustomBoxComponent  from './components/custom_boxes/CustomBoxComponent.vue'
 import PluginBoxComponent from './components/custom_boxes/PluginBoxComponent.vue'
 
+
 const Nav = defineAsyncComponent(() => import('./components/NavComponent.vue'))
 const LoginModalComponent = defineAsyncComponent(
   () => import('./components/ui/modals/LoginModalComponent.vue')
@@ -13,6 +14,7 @@ const LoginModalComponent = defineAsyncComponent(
 const RegisterModalComponent = defineAsyncComponent(
   () => import('./components/ui/modals/RegisterModalComponent.vue')
 )
+
 
 const Alert = defineAsyncComponent(() => import('./components/ui/AlertComponent.vue'))
 const { isLoading } = useLoading()
