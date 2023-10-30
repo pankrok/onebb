@@ -1,6 +1,7 @@
 import type { ITokenResponse } from '@/interfaces';
-import {defineStore} from 'pinia';
-import { computed, ref } from 'vue';
+import {defineStore, storeToRefs} from 'pinia';
+import { ref } from 'vue';
+import useAuthStore from './useAuthStore';
 
 const defaultUser: ITokenResponse = {
     token: null,
@@ -11,18 +12,24 @@ const defaultUser: ITokenResponse = {
     uid: null,
 }
 
-export const useUserStore = defineStore('userStore', ()=>{
+const useUserStore = defineStore('userStore', ()=>{
     const user = ref<ITokenResponse>(defaultUser);
 
-    const logged = computed(()=> user.value.uid)
+    const authStore = useAuthStore();
+    const {logged} = storeToRefs(authStore)
 
     function setUserDate(data: ITokenResponse|null) {
         if (data === null) {
             user.value = {...defaultUser}
+            authStore.setLogged(false);
+            return;
         }
 
         user.value = {...user.value, ...data};
+        authStore.setLogged(true)
     }
 
     return {user, logged, setUserDate};
 })
+
+export default useUserStore

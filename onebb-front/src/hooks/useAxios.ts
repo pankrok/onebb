@@ -1,38 +1,67 @@
-import type { ITokenResponse } from "@/interfaces";
-import axios, { type AxiosResponse } from "axios";
+import type { ITokenResponse } from '@/interfaces'
+import axios from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
+import { REFRESH_URL } from '@/helpers/api'
+import useUserStore from '@/stores/useUserStore'
+import { instanceOf } from '@/hooks/helpers'
+import { useUser } from './useUser'
+
+const instance = axios.create({
+  baseURL: 'https://bdev.s89.eu/api/',
+  timeout: 1000,
+//   withCredentials: true,
+//   //mode: 'cors',
+//   //cache: 'no-cache',
+//  // redirect: 'follow',
+//  // referrerPolicy: 'no-referrer',
+//   headers: {
+//     'Content-Type': 'application/ld+json',
+//     Accept: 'application/ld+json',
+//     'X-OBB-Client': '1',
+//     'Cache-Control': 'no-cache',
+//     Pragma: 'no-cache',
+//     Expires: '0'
+//   }
+})
 
 export default function useAxios() {
-    const instance = axios.create({
-        baseURL: 'https://bdev.s89.eu/api/',
-        timeout: 1000,
-        headers: {'X-OBB-Client': '1'}
-    });
-
-    instance.interceptors.response.use(function (response) {
-        // Any status code that lie within the range of 2xx cause this function to trigger
-        // Do something with response data
-        return response;
-      }, function (error) {
-        
-        return Promise.reject(error);
-      });
-
-    function setToken(token: string) {
-        instance.defaults.headers.common['Authorization'] = token;
-    };
-
-    function removeToken() {
-        instance.defaults.headers.common['Authorization'] = null;
-    };
-
-    async function refreshToken() {
-        const {data, status, statusText} = await instance.post<{}, AxiosResponse<ITokenResponse>>('refresh', {});
+  instance.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    async (error: AxiosError) => {
+      console.log({ error })
+      // if (error.code === '401' && error.)
+      // if(instance.defaults.headers.common['Authorization']) {
+      //     const data = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {});
+      //     if (instanceOf<ITokenResponse>(data)) {
+      //         const userStore = useUserStore();
+      //         userStore.setUserDate(data);
+      //     }
+      // }
+      return Promise.reject(error)
     }
+  )
 
-    return {
-        setToken,
-        removeToken,
-        refreshToken,
-        axios: instance,
-    }
+  function setToken(token: string) {
+    instance.defaults.headers.common['Authorization'] = token
+  }
+
+  function removeToken() {
+    instance.defaults.headers.common['Authorization'] = null
+  }
+
+  async function refreshToken() {
+    const { data, status, statusText } = await instance.post<{}, AxiosResponse<ITokenResponse>>(
+      'refresh',
+      {}
+    )
+  }
+
+  return {
+    setToken,
+    removeToken,
+    refreshToken,
+    axios: instance
+  }
 }
