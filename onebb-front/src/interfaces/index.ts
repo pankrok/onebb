@@ -50,6 +50,10 @@ export interface ILoginCreditionals {
   password: string
 }
 
+export interface ILogoutResponse {
+  logged_out: boolean
+}
+
 export interface ITokenResponse {
   token: string|null
   uid: number|null
