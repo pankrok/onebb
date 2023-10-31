@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useUser } from '@/hooks/useUser'
-
+import useUserStore from '@/stores/useUserStore';
 import UserNavComponent from './ui/user/UserNavComponent.vue'
 import useAuthStore from '@/stores/useAuthStore';
+import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
-
-const { getUser, logout } = useUser()
-const user = getUser()
+const userStore = useUserStore()
+const {getUsetId} = userStore;
+const {logged} = storeToRefs(authStore);
 
 defineProps<{
   loginToggle: Function
@@ -31,7 +31,7 @@ defineProps<{
             />
           </router-link>
         </li>
-        <li>
+        <li> 
           <a href="#">Link 1</a>
         </li>
         <li>
@@ -39,7 +39,7 @@ defineProps<{
         </li>
       </ul>
       <TransitionGroup tag="ul" name="list" mode="in-out">
-        <li v-if="user.uid">
+        <li v-if="logged">
           <button class="button button-color-light position-relative">
             <span class="badge circle pulse background-red box-shadow-red"></span>
             <svg
@@ -56,7 +56,7 @@ defineProps<{
             </svg>
           </button>
         </li>
-        <li v-if="authStore.logged">
+        <li v-if="logged">
           <button class="button button-color-light position-relative">
             <span class="circle pulse background-green box-shadow-green"></span>
             <svg
@@ -74,11 +74,11 @@ defineProps<{
           </button>
         </li>
 
-        <li v-if="authStore.logged">
+        <li v-if="logged">
           <RouterLink 
               :to="{
                   name: 'UserConfiguration',
-                  params: { id: user.uid }
+                  params: { id: getUsetId }
               }" class="button button-color-light">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +93,7 @@ defineProps<{
             </svg>
           </RouterLink>
         </li>
-        <li v-if="!user.uid">
+        <li v-if="!logged">
           <button @click="registerToggle()" class="button button-color-light position-relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,7 @@ defineProps<{
             </svg>
           </button>
         </li>
-        <li v-if="!user.uid">
+        <li v-if="!logged">
           <button @click="loginToggle()" class="button button-color-light position-relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ defineProps<{
           </button>
         </li>
         <li class="cursor-pointer">
-          <UserNavComponent :user="user" :logout="logout" />
+          <UserNavComponent />
         </li>
     </TransitionGroup>
     </nav>

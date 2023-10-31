@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import ImageComponent from '../ImageComponent.vue'
-import type { ITokenResponse } from '@/interfaces'
 import BoxComponent from '../../box/BoxComponent.vue'
 import { ref } from 'vue'
+import useUserStore from '@/stores/useUserStore';
+import { storeToRefs } from 'pinia';
+import useAuth from '@/hooks/useAuth';
 
-defineProps<{
-  user: ITokenResponse
-  logout: Function
-}>()
+
+const userStore = useUserStore();
+const auth = useAuth();
+const {user} = storeToRefs(userStore)
 
 const menu = ref(false)
 </script>
 <template>
-  <div v-if="user.uid !== 0" class="row aligne-items-center justify-content-center padding-x-m">
+  <div v-if="user.uid" class="row aligne-items-center justify-content-center padding-x-m">
     <ImageComponent
       :size="[25, 25]"
-      :src="user.avatar"
-      :alt="user.slug"
+      :src="user.avatar ?? ''"
+      :alt="user.slug ?? ''"
       :class="['img-size-mobile-s', 'border-radius-circel']"
       @click="menu = !menu"
     />
@@ -42,7 +44,7 @@ const menu = ref(false)
                     {{ user.slug }}
                 </RouterLink>
             </li>
-          <li class="pointer" @click="logout()">Logout</li>
+          <li class="pointer" @click="auth.signOut()">Logout</li>
         </ul>
       </BoxComponent>
     </Transition>

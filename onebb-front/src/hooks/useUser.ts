@@ -126,7 +126,7 @@ export const useUser = () => {
       console.error(e)
     }
   }
-
+  console.warn('[OneBB warn]: useUser is deprecated')
   return {
     parseUsername,
     getUser,

@@ -148,6 +148,7 @@ const factory = <T>(method?: string) => {
 }
 
 const useApi = () => {
+  console.warn('[OneBB warn]: useApi is deprecetad!')
   return {
     setHeaders: (headers: HeadersInit) => {
       for (const key of Object.keys(headers)) {

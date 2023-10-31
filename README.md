@@ -1,8 +1,11 @@
 # ONEBB DEV
 > Single page discussion board.    
 official forum: [OneBB Forum](https://onebb.org)
-this is development branch, last stable version can be see [here](https://github.com/pankrok/onebb/tree/0.1.X)    
-all not refactored features is available there
+    
+|:warning: WARNING                                                                   |
+|:-----------------------------------------------------------------------------------|
+| This is a development branch, it may contain errors and missing functionalities!   |                                                     |
+| last stable version can be see [here](https://github.com/pankrok/onebb/tree/0.1.X) |  
 
 ## Table of contents
 * [General info](#general-info)
