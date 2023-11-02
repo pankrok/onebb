@@ -7,9 +7,11 @@ import type { IPost, IPlot, IHydraView } from '@/interfaces'
 import PostComponent from '@/components/ui/PostComponent.vue'
 import PaginatorComponent from '@/components/PaginatorComponent.vue'
 import ReplyComponent from '@/components/ui/ReplyComponent.vue'
-import { useUser } from '@/hooks/useUser'
+import useAuthStore from '@/stores/useAuthStore'
+import { storeToRefs } from 'pinia'
 
-const { isLogged } = useUser()
+const authStore = useAuthStore();
+const { logged } = storeToRefs(authStore)
 
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {
@@ -67,7 +69,7 @@ usePlot().then(({ plotResponse, postsResponse }) => {
     <Box v-for="post in posts" :box-class="plotClassBox" :key="post.id">
       <PostComponent :post="post" />
     </Box>
-    <div class="row justify-content-flex-end" v-if="isLogged()">
+    <div class="row justify-content-flex-end" v-if="logged">
       
       <button class="button button-color-white col-12 margin-m"                         
         key="reply-btn"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUser } from '@/hooks/useUser';
+import { parseUsername, getUserById, instanceOf } from '@/hooks/helpers';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Box from '@/components/box/BoxComponent.vue';
@@ -7,9 +7,11 @@ import Image from '@/components/ui/ImageComponent.vue';
 import Cropper from '@/components/ui/Cropper.vue';
 import UserPostsComponent from '@/components/user/UserPostsComponent.vue';
 import type { IUser } from '@/interfaces';
+import useUserStore from '@/stores/useUserStore';
 
 const route = useRoute();
-const { getUserById, parseUsername, getUserId } = useUser();
+const userStore = useUserStore();
+const { getUserId } = userStore;
 const user = ref<IUser>();
 const canEdit = ref(false);
 const cropper = ref(false);
@@ -18,7 +20,7 @@ const change = () => {
         return;
     }
 
-    if (user.value.id === getUserId()) {
+    if (user.value.id === getUserId) {
         cropper.value = true;
     }
 }
@@ -35,10 +37,12 @@ const update = (newAvatar: string) => {
 
 onMounted(async () => {
     const id = Number(route.params.id);
-    const userdata = await getUserById(id);
-    // @ts-ignore
-    user.value = userdata?.parsedResponse ?? null
-    if(id === getUserId()) {
+    const data = await getUserById(id);
+    if(instanceOf<IUser>(data)) {
+        user.value = data;
+    }
+
+    if(id === getUserId) {
         canEdit.value = true;
     }
 })
@@ -79,7 +83,7 @@ onMounted(async () => {
                         <RouterLink 
                             :to="{
                                 name: 'UserConfiguration',
-                                params: { id: getUserId() }
+                                params: { id: getUserId }
                             }"
                             class="button button-color-blue"
                         >Edytuj profil</RouterLink>

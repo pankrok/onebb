@@ -80,7 +80,7 @@ export interface IUser {
   warn_lvl: number
 }
 
-export interface IRegister {
+export interface IRegisterCreditionals {
   username: string
   email: string
   password: string
