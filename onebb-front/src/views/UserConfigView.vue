@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import BoxComponent from '@/components/box/BoxComponent.vue'
 import InputComponentVue from '@/components/ui/InputComponent.vue'
-import { useUser } from '@/hooks/useUser'
-import useApi from '@/hooks/useApi'
+import useUserStore from '@/stores/useUserStore'
+import useAxios from '@/hooks/useAxios'
 import { reactive } from 'vue'
 import { useToast } from '@/hooks/useToast'
+import { USER_URL } from '@/helpers/api'
 
-const { getUserId } = useUser()
-const { put } = useApi()
+const userStore = useUserStore()
+const { getUserId } = userStore
+const { axios } = useAxios()
 const { setAlert } = useToast()
 
 const userData = reactive<{
   password: string
   passwordError: string | null
   vPassword: string
-  email: string,
+  email: string
 }>({
   password: '',
   passwordError: null,
   vPassword: '',
-  email: '',
+  email: ''
 })
 
 async function updateUserData() {
@@ -34,35 +36,39 @@ async function updateUserData() {
   }
 
   userData.passwordError = null
-  const payload: {password?: string, email?: string} = {};
+  const payload: { password?: string; email?: string } = {}
   if (userData.password.length > 1) {
-    payload.password = userData.password;
+    payload.password = userData.password
   }
 
   if (userData.password.length > 1) {
-    payload.password = userData.password;
+    payload.password = userData.password
   }
 
   if (userData.email.length > 1) {
-    payload.email = userData.email;
+    payload.email = userData.email
   }
 
   try {
-    await put(`users/${getUserId()}`, 
-        payload
-    )
+    await axios.put(`${USER_URL}/${getUserId}`, payload)
   } catch (e) {
-    setAlert({
-      name: 'User update',
-      text: 'something went wrong, try again later!',
-      type: 'alert'
-    }, 3000)
+    setAlert(
+      {
+        name: 'User update',
+        text: 'something went wrong, try again later!',
+        type: 'alert'
+      },
+      3000
+    )
   } finally {
-    setAlert({
-      name: 'User update',
-      text: 'Your userdata is update',
-      type: 'success'
-    }, 3000)
+    setAlert(
+      {
+        name: 'User update',
+        text: 'Your userdata is update',
+        type: 'success'
+      },
+      3000
+    )
   }
 }
 </script>

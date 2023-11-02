@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Modal from './ModalComponent.vue'
-import { useUser } from '@/hooks/useUser'
 import BoxComponent from '@/components/box/BoxComponent.vue'
 import type { ILoginCreditionals } from '@/interfaces'
 import { useToast } from '@/hooks/useToast'
@@ -15,8 +14,6 @@ const creditionals = ref<ILoginCreditionals>({
   username: '',
   password: ''
 })
-
-const { login } = useUser()
 
 const auth = async () => {
   const { signIn } = useAuth()

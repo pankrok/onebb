@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 import type { IPost } from '@/interfaces'
-import { useUser } from '@/hooks/useUser'
+import { parseUsername } from '@/hooks/helpers';
 import Image from '@/components/ui/ImageComponent.vue'
 import { useMoment } from '@/hooks/useMoment'
 
 const props = defineProps<{ post: IPost, noQuote: boolean }>()
-const user = useUser()
 const { parse } = useMoment()
 const created_at = parse(props.post.created_at)
 </script>
 <template>
   <div class="col-2">
     <div class="column align-items-center padding-m font-size-14">
-      <span class="font-size-14" v-html="user.parseUsername(post.user)"></span>
+      <span class="font-size-14" v-html="parseUsername(post.user)"></span>
       <Image
         :src="post.user.avatar"
         :alt="post.user.username"

@@ -18,7 +18,7 @@ const useUserStore = defineStore('userStore', ()=>{
     const authStore = useAuthStore();
     const {logged} = storeToRefs(authStore)
 
-    const getUsetId = computed((): number  =>{
+    const getUserId = computed((): number  =>{
         return user.value.uid ?? 0;
     })
 
@@ -38,7 +38,7 @@ const useUserStore = defineStore('userStore', ()=>{
         authStore.setLogged(false);
     }
 
-    return {user, logged, setUserDate, getUsetId, $reset};
+    return {user, logged, setUserDate, getUserId, $reset};
 })
 
 export default useUserStore

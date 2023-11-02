@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { defineProps, ref } from 'vue'
 import Image from './ImageComponent.vue'
-import { useUser } from '@/hooks/useUser'
 import type { IBoard } from '@/interfaces'
 import { useMoment } from '@/hooks/useMoment'
+import { parseUsername } from '@/hooks/helpers';
 
 const props = defineProps<{
   board: IBoard
 }>()
 
-const { parseUsername } = useUser()
 const moment = useMoment()
 const last_active_user = ref()
 

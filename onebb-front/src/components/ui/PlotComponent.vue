@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { defineProps } from 'vue'
 import type { IPlot } from '@/interfaces'
-import { useUser } from '@/hooks/useUser'
 import { useMoment } from '@/hooks/useMoment'
+import { parseUsername } from '@/hooks/helpers';
 
 const props = defineProps<{ plot: IPlot }>()
-const { parseUsername } = useUser()
 const moment = useMoment()
 const updated_at = moment.parse(props.plot.updated_at)
 </script>

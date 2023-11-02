@@ -1,5 +1,4 @@
 import type { IBoard, IPlot, IHydra } from '@/interfaces'
-import useApi from './useApi'
 import { useRoute } from 'vue-router'
 import useAxios from './useAxios'
 

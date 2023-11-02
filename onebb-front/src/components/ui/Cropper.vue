@@ -5,9 +5,11 @@ import { Cropper } from 'vue-advanced-cropper'
 import BoxComponent from '../box/BoxComponent.vue'
 import ModalComponent from './modals/ModalComponent.vue'
 import 'vue-advanced-cropper/dist/style.css'
-import useApi from '@/hooks/useApi'
-import { useUser } from '@/hooks/useUser'
 import type { IUser } from '@/interfaces'
+import useAxios from '@/hooks/useAxios'
+import useUserStore from '@/stores/useUserStore'
+import { USER_URL } from '@/helpers/api'
+import { instanceOf } from '@/hooks/helpers'
 
 defineProps<{
   isOpen: boolean
@@ -18,8 +20,9 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'update', value: string): void
 }>()
+const userStore = useUserStore();
+const {getUserId} = userStore;
 
-const uid = useUser().getUserId()
 // import '../../assets/modal.css';
 const image = ref()
 const cropper = ref()
@@ -38,15 +41,17 @@ const change = async () => {
   saveBtn.value = false
   const { canvas } = cropper.value.getResult()
 
-  const { put } = useApi()
+  const { axios } = useAxios()
   image.value = canvas.toDataURL()
   console.log(image.value)
 
-  const response = await put<IUser>(`users/${uid}/img`, {
+  const {data} = await axios.put<unknown>(`${USER_URL}/${getUserId}/img`, {
     avatar: image.value
   })
 
-  if (response.parsedResponse) emit('update', response.parsedResponse.avatar)
+  if (instanceOf<IUser>(data)) {
+    emit('update', data.avatar)
+  }
 
   saveBtn.value = true
 }

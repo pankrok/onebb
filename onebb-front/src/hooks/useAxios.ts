@@ -1,27 +1,11 @@
 import type { ITokenResponse } from '@/interfaces'
 import axios from 'axios'
 import type { AxiosError, AxiosResponse } from 'axios'
-import { REFRESH_URL } from '@/helpers/api'
-import useUserStore from '@/stores/useUserStore'
-import { instanceOf } from '@/hooks/helpers'
-import { useUser } from './useUser'
+
 
 const instance = axios.create({
   baseURL: 'https://bdev.s89.eu/api/',
-  timeout: 1000,
-//   withCredentials: true,
-//   //mode: 'cors',
-//   //cache: 'no-cache',
-//  // redirect: 'follow',
-//  // referrerPolicy: 'no-referrer',
-//   headers: {
-//     'Content-Type': 'application/ld+json',
-//     Accept: 'application/ld+json',
-//     'X-OBB-Client': '1',
-//     'Cache-Control': 'no-cache',
-//     Pragma: 'no-cache',
-//     Expires: '0'
-//   }
+  timeout: 1000
 })
 
 export default function useAxios() {
