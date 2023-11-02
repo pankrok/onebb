@@ -1,4 +1,6 @@
-import useApi from './useApi'
+import type { IHydra, ISkinResponse } from '@/interfaces';
+import useAxios from './useAxios'
+import { instanceOf } from './helpers';
 
 const boxes = { 
     Home: {
@@ -110,11 +112,11 @@ async function parseBoxes(boxlist) {
 }
 
 export default async function useSkin() {
-    const {get} = useApi();
-    const skinData =  await get('skins?active=1');
-    if (skinData.parsedResponse) {
+    const {axios} = useAxios();
+    const {data} =  await axios.get<unknown>('skins?active=1');
+    if (instanceOf<IHydra<ISkinResponse>>(data)) {
         // @ts-ignore FIXME!!!
-        const handler = skinData.parsedResponse['hydra:member'][0].skinBoxes
+        const handler = data['hydra:member'][0].skinBoxes
         await parseBoxes(handler)
         return boxes;
     }
