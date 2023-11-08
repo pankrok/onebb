@@ -97,6 +97,7 @@ export interface IViolations {
 
 
 export interface IPost {
+  '@id': string
   id: number
   user: IUser
   content: string
@@ -113,6 +114,7 @@ export interface ICreatePlot {
 }
 
 export interface IPlot {
+  '@id': string
   id: number
   name: string
   tags?: unknown
@@ -144,6 +146,7 @@ export interface IPlot {
 }
 
 export interface IBoard {
+  '@id': string
   id: number
   name: string
   description: string
@@ -159,6 +162,7 @@ export interface IBoard {
 }
 
 export interface ICategory {
+  '@id': string
   id: number
   name: string
   active: boolean

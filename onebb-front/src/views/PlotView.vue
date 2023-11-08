@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import usePlot from '@/hooks/usePlot'
 import Box from '@/components/box/BoxComponent.vue'
 import type { IPost, IPlot, IHydraView } from '@/interfaces'
 import PostComponent from '@/components/ui/PostComponent.vue'
@@ -9,20 +7,20 @@ import PaginatorComponent from '@/components/PaginatorComponent.vue'
 import ReplyComponent from '@/components/ui/ReplyComponent.vue'
 import useAuthStore from '@/stores/useAuthStore'
 import { storeToRefs } from 'pinia'
+import usePlotStore from '@/stores/usePlotStore'
 
 const authStore = useAuthStore();
+const plotStore = usePlotStore();
 const { logged } = storeToRefs(authStore)
+const {plot, posts, hydraView} = storeToRefs(plotStore);
 
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {
     return
   }
-
   posts.value?.push(addedPost)
 }
-const plot = ref<IPlot|null>()
-const posts = ref<IPost[]>()
-const hydraView = ref<IHydraView>()
+
 const reply = ref(false)
 const plotClassBox = [
   'row',
@@ -44,14 +42,7 @@ const headerClassBox = [
   'font-size-14'
 ]
 
-usePlot().then(({ plotResponse, postsResponse }) => {
-  plot.value = plotResponse
-  console.log({ plotResponse, postsResponse })
-  if (postsResponse) {
-    posts.value = postsResponse['hydra:member']
-    hydraView.value = postsResponse['hydra:view']
-  }
-})
+
 </script>
 <template>
   <TransitionGroup
@@ -67,7 +58,7 @@ usePlot().then(({ plotResponse, postsResponse }) => {
     </Box>
     <PaginatorComponent :hydraView="hydraView" />
     <Box v-for="post in posts" :box-class="plotClassBox" :key="post.id">
-      <PostComponent :post="post" />
+      <PostComponent :post="post" :quote="logged" />
     </Box>
     <div class="row justify-content-flex-end" v-if="logged">
       
