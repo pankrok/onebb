@@ -6,7 +6,7 @@ const alerts = useToast().getAlerts();
 const types = {
     info: ['background-blue', 'border-color-blue', 'box-shadow-blue'],
     alert: ['background-red', 'border-color-red', 'box-shadow-red'],
-    warning: ['background-yellow', 'border-color-yellow', 'box-shadow-yellow'],
+    warning: ['background-yellow', 'border-color-yellow', 'box-shadow-yellow', 'color-black'],
     success: ['background-green', 'border-color-green', 'box-shadow-green'],
 }
 

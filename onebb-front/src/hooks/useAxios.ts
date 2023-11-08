@@ -1,6 +1,9 @@
 import type { ITokenResponse } from '@/interfaces'
 import axios from 'axios'
+import useLoadingStore from '@/stores/useLoadingStore';
 import type { AxiosError, AxiosResponse } from 'axios'
+
+let numberOfAjaxCAllPending = 0;
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL_API,
@@ -8,11 +11,32 @@ const instance = axios.create({
 })
 
 export default function useAxios() {
+  const loadingStore = useLoadingStore();
+  instance.interceptors.request.use(
+    function (config) {
+      numberOfAjaxCAllPending++
+      loadingStore.isLoading();
+      return config
+    },
+    function (error) {
+      return Promise.reject(error)
+    }
+  )
+
   instance.interceptors.response.use(
     (response) => {
+      numberOfAjaxCAllPending--
+      if (numberOfAjaxCAllPending == 0) {
+        loadingStore.isLoaded();
+      }
       return response
     },
     async (error: AxiosError) => {
+      numberOfAjaxCAllPending--
+      if (numberOfAjaxCAllPending == 0) {
+        loadingStore.isLoaded();
+      }
+
       console.log({ error })
       // if (error.code === '401' && error.)
       // if(instance.defaults.headers.common['Authorization']) {

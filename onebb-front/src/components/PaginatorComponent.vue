@@ -3,7 +3,7 @@ import type { IHydraView } from '@/interfaces';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
-const props = defineProps<{ hydraView?: IHydraView }>()
+const props = defineProps<{ hydraView: IHydraView |null }>()
 
 const route = useRoute();
 

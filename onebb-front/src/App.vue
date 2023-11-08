@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import useLoading from '@/hooks/useLoading'
+import useLoadingStore from '@/stores/useLoadingStore'
 import useSkin from './hooks/useSkin'
-import CustomBoxComponent  from './components/custom_boxes/CustomBoxComponent.vue'
+import CustomBoxComponent from './components/custom_boxes/CustomBoxComponent.vue'
 import PluginBoxComponent from './components/custom_boxes/PluginBoxComponent.vue'
-
+import { storeToRefs } from 'pinia'
 
 const Nav = defineAsyncComponent(() => import('./components/NavComponent.vue'))
 const LoginModalComponent = defineAsyncComponent(
@@ -15,16 +15,16 @@ const RegisterModalComponent = defineAsyncComponent(
   () => import('./components/ui/modals/RegisterModalComponent.vue')
 )
 
-
 const Alert = defineAsyncComponent(() => import('./components/ui/AlertComponent.vue'))
-const { isLoading } = useLoading()
+const loadingStore = useLoadingStore()
+const { loading } = storeToRefs(loadingStore)
 const route = useRoute()
 const login = ref(false)
 const register = ref(false)
 const boxes = ref(null)
 const boxComponents = {
   PluginBox: PluginBoxComponent,
-  CustomBox: CustomBoxComponent,
+  CustomBox: CustomBoxComponent
 }
 
 const loginToggle = () => {
@@ -37,9 +37,10 @@ const registerToggle = () => {
 
 onMounted(async () => {
   const handler = await useSkin()
-  console.log({handler})
-  boxes.value = handler?.Home;
-  console.log({handler: boxes.value})
+  console.log({ handler })
+  // @ts-ignore
+  boxes.value = handler?.Home
+  console.log({ handler: boxes.value })
 })
 </script>
 
@@ -56,7 +57,7 @@ onMounted(async () => {
   <Nav :loginToggle="loginToggle" :registerToggle="registerToggle" />
 
   <Transition name="fade" mode="out-in">
-    <div v-if="isLoading" key="loading-bar">
+    <div v-if="loading" key="loading-bar">
       <span class="position-fixed box-loader col-12"></span>
     </div>
   </Transition>
@@ -74,17 +75,17 @@ onMounted(async () => {
     <!-- top modules section -->
     <aside v-if="boxes?.top" class="col-12">
       <div v-for="box in boxes.top" :key="box.name">
-       <component :is="boxComponents[box.engine]"  :inner-html="box.html" />
+        <component :is="boxComponents[box.engine]" :inner-html="box.html" />
       </div>
     </aside>
     <!-- /top modules section -->
     <div class="row col-12">
       <aside v-if="boxes?.left" class="col-3">
-      <div v-for="box in boxes.left" :key="box.name">
-        {{ box }}
-       <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
-      </div>
-    </aside>
+        <div v-for="box in boxes.left" :key="box.name">
+          {{ box }}
+          <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+        </div>
+      </aside>
       <section class="col-auto column">
         <router-view v-slot="{ Component }">
           <Transition name="fade" mode="out-in">
@@ -93,20 +94,20 @@ onMounted(async () => {
         </router-view>
       </section>
       <aside v-if="boxes?.left" class="col-3">
-      <div v-for="box in boxes.left" :key="box.name">
-        {{ box }}
-       <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
-      </div>
-    </aside>
+        <div v-for="box in boxes.left" :key="box.name">
+          {{ box }}
+          <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+        </div>
+      </aside>
     </div>
     <aside v-if="boxes?.bottom" class="col-12">
       <div v-for="box in boxes.bottom" :key="box.name">
         {{ box }}
-       <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+        <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
       </div>
     </aside>
-    <aside class="row justify-content-flex-end">
-      <div class="col-9 position-relative">
+    <aside style="position: fixed; right: 5%; bottom: 15%; z-index: 25">
+      <div class="col-12 column align-items-center position-relative">
         <Alert />
       </div>
     </aside>
