@@ -2,10 +2,9 @@ import type { ITokenResponse } from '@/interfaces'
 import axios from 'axios'
 import type { AxiosError, AxiosResponse } from 'axios'
 
-
 const instance = axios.create({
-  baseURL: 'https://bdev.s89.eu/api/',
-  timeout: 1000
+  baseURL: import.meta.env.VITE_BASE_URL_API,
+  timeout: 3000
 })
 
 export default function useAxios() {

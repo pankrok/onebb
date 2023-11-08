@@ -2,13 +2,9 @@
 import useBoard from '@/hooks/useBoard'
 import Box from '@/components/box/BoxComponent.vue'
 import PlotComponent from '@/components/ui/PlotComponent.vue'
-import { reactive } from 'vue';
-import type { IBoard, IPlot } from '@/interfaces';
-
-interface IBoardData {
-  board: IBoard|null,
-  plots: IPlot[]|null,
-}
+import { onUnmounted } from 'vue';
+import useBoardStore from '@/stores/useBoardStore';
+import { storeToRefs } from 'pinia';
 
 const boxStyles = [
   'background-background',
@@ -21,27 +17,22 @@ const boxStyles = [
   'margin-top-l'
 ]
 
-const data = reactive<IBoardData>({
-  board: null,
-  plots: null,
+const boardStore = useBoardStore();
+const {board, plots} = storeToRefs(boardStore);
+
+boardStore.getBoard();
+
+onUnmounted(()=>{
+  boardStore.$reset();
 })
-
-async function init() {
-  const { board, plots } = await useBoard();
-
-  data.board = board;
-  data.plots = plots;
-}
-
-init();
 
 </script>
 <template>
   <div class="column">
-    <Box v-if="data.board" :boxClass="boxStyles">
-      {{ data.board.name }}
+    <Box v-if="board" :boxClass="boxStyles">
+      {{ board.name }}
     </Box>
-    <Box v-for="plot in data.plots" :key="plot.id + plot.name">
+    <Box v-for="plot in plots" :key="plot.id + plot.name">
       <PlotComponent :plot="plot" />
     </Box>
   </div>

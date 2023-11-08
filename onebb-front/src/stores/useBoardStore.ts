@@ -1,16 +1,24 @@
+import useBoard from '@/hooks/useBoard';
+import type { IBoard, IPlot } from '@/interfaces';
 import {defineStore} from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const useBoardStore = defineStore('boardStore', ()=>{
-    const loading = ref(true);
-    const board = ref(null);
-    const plots = ref([])
+    const board = ref<IBoard|null>(null);
+    const plots = ref<IPlot[]>([])
     
-    function getBoard(id: number) {
-        
+    async function getBoard() {
+        const response = await useBoard();
+        board.value = response.board;
+        plots.value = response.plots;
     }
 
-    return {loading, board, plots, getBoard}
+    function $reset() {
+        board.value = null;
+        plots.value = [];
+    }
+
+    return {board, plots, getBoard, $reset}
 })
 
 export default useBoardStore;
