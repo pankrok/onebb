@@ -21,6 +21,11 @@ const router = createRouter({
       component: () => import('../views/BoardView.vue')
     },
     {
+      path: '/create/plot/:id/',
+      name: 'CreatePlot', // @ts-ignore
+      component: () => import('../views/CreatePlotView.vue')
+    },
+    {
       path: '/plot/:slug/:id/:page?',
       name: 'Plot', // @ts-ignore
       component: () => import('../views/PlotView.vue')

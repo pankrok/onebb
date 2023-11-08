@@ -6,7 +6,7 @@ import { storeToRefs } from 'pinia';
 
 const authStore = useAuthStore();
 const userStore = useUserStore()
-const {getUsetId} = userStore;
+const {getUserId} = userStore;
 const {logged} = storeToRefs(authStore);
 
 defineProps<{
@@ -78,7 +78,7 @@ defineProps<{
           <RouterLink 
               :to="{
                   name: 'UserConfiguration',
-                  params: { id: getUsetId }
+                  params: { id: getUserId }
               }" class="button button-color-light">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,10 @@ defineProps<{
             </svg>
           </button>
         </li>
-        <li v-if="!logged">
+        <li v-if="logged" class="cursor-pointer">
+          <UserNavComponent />
+        </li>
+        <li v-else>
           <button @click="loginToggle()" class="button button-color-light position-relative">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -122,9 +125,6 @@ defineProps<{
               />
             </svg>
           </button>
-        </li>
-        <li class="cursor-pointer">
-          <UserNavComponent />
         </li>
     </TransitionGroup>
     </nav>

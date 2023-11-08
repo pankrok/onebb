@@ -95,6 +95,7 @@ export interface IViolations {
   }>
 }
 
+
 export interface IPost {
   id: number
   user: IUser
@@ -103,6 +104,12 @@ export interface IPost {
   hidden: boolean
   edit_by: IUser
   created_at: string
+}
+
+// fixme: add interface props
+export interface ICreatePlot {
+  plot: unknown
+  post: unknown
 }
 
 export interface IPlot {
