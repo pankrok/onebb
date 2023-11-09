@@ -8,6 +8,7 @@ const home = ref()
 
 useCategory().then((data) => {
   home.value = data
+  console.log({data})
 })
 
 const boxStyle: string[] = ['row', 'justify-content-space-between']

@@ -4,7 +4,7 @@ import type { IPlot, IPost, IHydraView } from '@/interfaces'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-const useBoardStore = defineStore('boardStore', () => {
+const usePlotStore = defineStore('plotStore', () => {
   const posts = ref<IPost[]>([])
   const plot = ref<IPlot | null>(null)
   const hydraView = ref<IHydraView | null>(null)
@@ -44,4 +44,4 @@ const useBoardStore = defineStore('boardStore', () => {
   return { plot, posts, hydraView, getPlotData, addPost, $reset }
 })
 
-export default useBoardStore
+export default usePlotStore

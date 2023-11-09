@@ -61,8 +61,6 @@ export interface ITokenResponse {
   mcp_enabled: boolean
   avatar: string|null
   slug: string|null
-  code?: number
-  message?: string
 }
 
 export interface IUser {

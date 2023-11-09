@@ -35,7 +35,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
             },
             "get"={
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
-                "normalization_context"={"groups": {"board"}}
+                "normalization_context"={"groups": {"category", "board"}}
             }
         },
     itemOperations={
@@ -58,7 +58,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
             },
             "get"={
                 "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
-                "normalization_context"={"groups": {"user"}}
+                "normalization_context"={"groups": {"category", "board", "user"}}
            },
            "get_admin"={
                "security"="is_granted('ROLE_USER_EDIT')",
@@ -79,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"board", "plot", "plot_subresource", "user"}) 
+     * @Groups({"category", "board", "plot", "plot_subresource", "user"}) 
      * @ApiFilter(SearchFilter::class, strategy="ipartial")
      */
     private $id;

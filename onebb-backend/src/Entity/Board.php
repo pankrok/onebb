@@ -17,8 +17,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("slug")
 
  * @ApiResource(
-       order={"priority": "DESC", "created_at": "DESC"},
-       normalizationContext={"groups": {"board"}},
+ *      order={"priority": "DESC", "created_at": "DESC"},
+ *      normalizationContext={"groups": {"board"}},
  *      collectionOperations={
  *          "get" = {"normalization_context"={"groups": {"category"}}, "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
  *          "post" = {"normalization_context"={"groups": {"board"}}, "security"="is_granted('ROLE_BOARD_CREATE')"}
@@ -122,8 +122,8 @@ class Board
     private $posts_no;
     
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
-     * @Groups({"category", "board"})
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @Groups({"category", "board", "user"})
      */
     private $last_active_user;
 

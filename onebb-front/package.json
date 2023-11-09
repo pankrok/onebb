@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
-    "jodit": "^4.0.0-beta.50",
+    "jodit": "^4.0.0-beta.105",
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "vue": "^3.2.47",

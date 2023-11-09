@@ -19,13 +19,14 @@ const auth = async () => {
   const { signIn } = useAuth()
   try {
     await signIn(creditionals.value)
-    props.loginToggle()
+    props.loginToggle();
     setAlert({
       name: 'Auth',
       text: 'You are successful logged in!',
       type: 'success'
     })
   } catch (e) {
+    console.error({e})
     setAlert({
       name: 'Auth',
       text: 'Invalid creditionals !',

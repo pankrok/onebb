@@ -1,13 +1,13 @@
-import type { ITokenResponse } from '@/interfaces'
+//import type { ITokenResponse } from '@/interfaces'
 import axios from 'axios'
 import useLoadingStore from '@/stores/useLoadingStore';
-import type { AxiosError, AxiosResponse } from 'axios'
+import type { AxiosError } from 'axios'
 
 let numberOfAjaxCAllPending = 0;
-
+console.log({axiosEnv: import.meta.env.MODE})
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL_API,
-  timeout: 3000
+  timeout: import.meta.env.MODE === 'development' ? 30000 : 3000
 })
 
 export default function useAxios() {
@@ -51,24 +51,26 @@ export default function useAxios() {
   )
 
   function setToken(token: string) {
-    instance.defaults.headers.common['Authorization'] = token
+    console.log('setting token');
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    console.log({axiosHeaders: instance.defaults.headers})
   }
 
   function removeToken() {
     instance.defaults.headers.common['Authorization'] = null
   }
 
-  async function refreshToken() {
-    const { data, status, statusText } = await instance.post<{}, AxiosResponse<ITokenResponse>>(
-      'refresh',
-      {}
-    )
-  }
+  // async function refreshToken() {
+  //   const { data, status, statusText } = await instance.post<{}, AxiosResponse<ITokenResponse>>(
+  //     'refresh',
+  //     {}
+  //   )
+  // }
 
   return {
     setToken,
     removeToken,
-    refreshToken,
+  //  refreshToken,
     axios: instance
   }
 }

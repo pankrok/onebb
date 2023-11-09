@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Box from '@/components/box/BoxComponent.vue'
-import type { IPost, IPlot, IHydraView } from '@/interfaces'
+import type { IPost } from '@/interfaces'
 import PostComponent from '@/components/ui/PostComponent.vue'
 import PaginatorComponent from '@/components/PaginatorComponent.vue'
 import ReplyComponent from '@/components/ui/ReplyComponent.vue'
@@ -13,6 +13,7 @@ const authStore = useAuthStore();
 const plotStore = usePlotStore();
 const { logged } = storeToRefs(authStore)
 const {plot, posts, hydraView} = storeToRefs(plotStore);
+plotStore.getPlotData();
 
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {
