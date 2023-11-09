@@ -156,13 +156,6 @@ $elpositions:(relative, absolute, fixed);
 
 /* RWD */
 
-$displays: (flex, grid, block, inline, none);
-@each $name in $displays {
-    .display-mobile-#{$name} {
-        display: $name;
-    }
-}
-
 .row,
 .column {
     display: flex;
@@ -198,7 +191,28 @@ $boxSizes: ("1": 8.33%, "2": 16.66%, "3": 25%, "4": 33.33%, "5": 41.66%, "6": 50
     flex: 1;
 }
 
+$displays: (flex, grid, block, inline, none);
+@each $name in $displays {
+    .display-mobile-#{$name} {
+        display: $name;
+    }
+}
+
 @media only screen and (min-width: 768px) {
+
+    .desktop-row,
+    .desktop-column {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .desktop-row {
+        flex-direction: row;
+    } 
+
+    .desktop-column {
+        flex-direction: column;
+    }
 
     @each $name in $displays {
         .display-desktop-#{$name} {

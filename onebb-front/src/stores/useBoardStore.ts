@@ -1,7 +1,7 @@
 import useBoard from '@/hooks/useBoard';
 import type { IBoard, IPlot } from '@/interfaces';
 import {defineStore} from 'pinia';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 const useBoardStore = defineStore('boardStore', ()=>{
     const board = ref<IBoard|null>(null);

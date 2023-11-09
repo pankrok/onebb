@@ -6,6 +6,7 @@ import useSkin from './hooks/useSkin'
 import CustomBoxComponent from './components/custom_boxes/CustomBoxComponent.vue'
 import PluginBoxComponent from './components/custom_boxes/PluginBoxComponent.vue'
 import { storeToRefs } from 'pinia'
+import useConfigStore from './stores/useConfigStore'
 
 const Nav = defineAsyncComponent(() => import('./components/NavComponent.vue'))
 const LoginModalComponent = defineAsyncComponent(
@@ -21,8 +22,10 @@ const { loading } = storeToRefs(loadingStore)
 const route = useRoute()
 const login = ref(false)
 const register = ref(false)
-const boxes = ref(null)
-const boxComponents = {
+const configStore = useConfigStore() 
+configStore.init();
+const {pageBoxes} = storeToRefs(configStore)
+const boxComponents: {[index: string]: any} = {
   PluginBox: PluginBoxComponent,
   CustomBox: CustomBoxComponent
 }
@@ -35,13 +38,7 @@ const registerToggle = () => {
   register.value = !register.value
 }
 
-onMounted(async () => {
-  const handler = await useSkin()
-  console.log({ handler })
-  // @ts-ignore
-  boxes.value = handler?.Home
-  console.log({ handler: boxes.value })
-})
+
 </script>
 
 <template>
@@ -73,17 +70,16 @@ onMounted(async () => {
     </section>
     <!-- /breadcrumbs section -->
     <!-- top modules section -->
-    <aside v-if="boxes?.top" class="col-12">
-      <div v-for="box in boxes.top" :key="box.name">
+    <aside v-if="pageBoxes?.top" class="col-12">
+      <div v-for="box in pageBoxes.top" :key="box.name">
         <component :is="boxComponents[box.engine]" :inner-html="box.html" />
       </div>
     </aside>
     <!-- /top modules section -->
     <div class="row col-12">
-      <aside v-if="boxes?.left" class="col-3">
-        <div v-for="box in boxes.left" :key="box.name">
-          {{ box }}
-          <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+      <aside v-if="pageBoxes?.left" class="col-3">
+        <div v-for="box in pageBoxes.left" :key="box.name">
+          <component :is="boxComponents[box.engine]" :inner-html="box.html" />
         </div>
       </aside>
       <section class="col-auto column">
@@ -93,17 +89,15 @@ onMounted(async () => {
           </Transition>
         </router-view>
       </section>
-      <aside v-if="boxes?.left" class="col-3">
-        <div v-for="box in boxes.left" :key="box.name">
-          {{ box }}
-          <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+      <aside v-if="pageBoxes?.right" class="col-3">
+        <div v-for="box in pageBoxes.right" :key="box.name">
+          <component :is="boxComponents[box.engine]" :inner-html="box.html" />
         </div>
       </aside>
     </div>
-    <aside v-if="boxes?.bottom" class="col-12">
-      <div v-for="box in boxes.bottom" :key="box.name">
-        {{ box }}
-        <!-- <component :is="box.engine" :name="box.name" :content="box.html" /> -->
+    <aside v-if="pageBoxes?.bottom" class="col-12">
+      <div v-for="box in pageBoxes.bottom" :key="box.name">
+        <component :is="boxComponents[box.engine]" :inner-html="box.html" />
       </div>
     </aside>
     <aside style="position: fixed; right: 5%; bottom: 15%; z-index: 25">

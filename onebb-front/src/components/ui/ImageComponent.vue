@@ -7,11 +7,14 @@ defineProps<{
     alt: string,
     rounded?: boolean,
 }>();
+
+const base = import.meta.env.VITE_OBB_DOMAIN;
+
 </script>
 
 <template>
     <img 
-        :src="'https://bdev.s89.eu/' + src" 
+        :src="base  + src" 
         :alt="alt" 
         :width="size[0]"
         :height="size[1]"

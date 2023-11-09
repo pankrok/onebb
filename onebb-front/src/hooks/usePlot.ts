@@ -1,4 +1,4 @@
-import type { IPlot, IPost, IHydra, ICreatePlot } from '@/interfaces'
+import type { IPlot, IPost, IHydra } from '@/interfaces'
 import useAxios from './useAxios'
 import { useRoute, useRouter } from 'vue-router'
 import { PLOT_URL, POST_URL } from '@/helpers/api'
@@ -46,12 +46,12 @@ export default function usePlot() {
      const router = useRouter();
      const {name, content} = payload;
      const {data} = await axios.post<unknown>(PLOT_URL, {
-        name: payload.topic,
+        name,
         board: `/api/boards/${route.params.id}`,
      })
 
      if(instanceOf<IPlot>(data)) {
-        const post = await addPostToPlot(payload.content, data['@id']);
+        const post = await addPostToPlot(content, data['@id']);
         if(instanceOf<IPost>(post)) {
           router.push({ name: 'Plot', params: { id: data.id, slug: data.slug } });
         }

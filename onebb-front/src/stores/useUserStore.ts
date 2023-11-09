@@ -1,5 +1,5 @@
 import type { ITokenResponse } from '@/interfaces';
-import {defineStore, storeToRefs} from 'pinia';
+import {defineStore} from 'pinia';
 import { computed, ref } from 'vue';
 import useAuthStore from './useAuthStore';
 

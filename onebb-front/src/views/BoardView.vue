@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import useBoard from '@/hooks/useBoard'
 import Box from '@/components/box/BoxComponent.vue'
 import PlotComponent from '@/components/ui/PlotComponent.vue'
 import { onUnmounted } from 'vue';
