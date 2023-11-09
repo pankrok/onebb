@@ -13,6 +13,7 @@ const authStore = useAuthStore();
 const plotStore = usePlotStore();
 const { logged } = storeToRefs(authStore)
 const {plot, posts, hydraView} = storeToRefs(plotStore);
+plotStore.getPlotData();
 
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {

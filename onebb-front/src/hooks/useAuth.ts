@@ -18,8 +18,10 @@ export default function useAuth() {
     const { data } = await axios.post<ILoginCreditionals, AxiosResponse<unknown>>(AUTH_URL, payload)
     if (instanceOf<ITokenResponse>(data)) {
       const userStore = useUserStore()
-      userStore.setUserDate(data)
+      console.log({userStore})
+      userStore.setUserData(data);
       if (data.token) setToken(data.token)
+
       return true
     }
 

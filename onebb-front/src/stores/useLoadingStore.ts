@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import { ref } from 'vue';
 
-const useLoadingStore = defineStore('authStore', ()=>{
+const useLoadingStore = defineStore('loadingStore', ()=>{
     const loading = ref(false);
     
     function isLoading() {

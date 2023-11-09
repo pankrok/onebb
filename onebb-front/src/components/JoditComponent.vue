@@ -6,17 +6,16 @@
   
   <script setup lang="ts">
  //import { objectExpression } from "@babel/types";
-  
+ import 'jodit/es2021/jodit.min.css';
   import {
     ref,
-    computed,
-    watch,
     onMounted,
     onBeforeUnmount,
     onUnmounted,
     defineProps,
     defineEmits,
   } from "vue";
+  import { Jodit } from 'jodit';
   
   const props = defineProps({
     value: { type: String, required: true },
@@ -25,14 +24,14 @@
   });
   
   const emit = defineEmits(["updateEvent"]);
-  const isActive = ref(false);
+  const isActive = ref(true);
   const editor = ref();
   const $el = ref(null);
   
   const loadJodit = async function () {
-    const { Jodit } = await import("jodit");
+  
     // @ts-ignore
-    editor.value = new Jodit($el.value, props.config);
+    editor.value = new Jodit($el.value, {theme: 'onebb', ...props.config});
     editor.value.value = props.value;
     editor.value.events.on("change", (newValue: string) => {
       emit("updateEvent", newValue);
@@ -41,7 +40,6 @@
   };
   
   onMounted(() => {
-    import ('jodit/es2021/jodit.min.css');
     loadJodit();
   });
   
@@ -54,7 +52,7 @@
   });
   </script>
   
-  <style scoped>
+  <style>
   .editor {
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
@@ -63,5 +61,14 @@
   .active {
     opacity: 1;
   }
-  </style>
-  
+
+.jodit_theme_onebb {
+    --jd-color-background-default: #171721;
+    --jd-color-border: #4e4e4e;
+    --jd-color-panel: #252533;
+    --jd-color-icon: #f3f3f3;
+    --jd-color-text-icons: #f3f3f3;
+    .jodit-ui-button__text, .jodit-toolbar-button__text { color: #f3f3f3; }
+    .jodit-toolbar-button__trigger > svg {fill: #f3f3f3;}
+}
+</style>
