@@ -1,11 +1,16 @@
 //import type { ITokenResponse } from '@/interfaces'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import useLoadingStore from '@/stores/useLoadingStore';
 import type { AxiosError } from 'axios'
+import type { ITokenResponse } from '@/interfaces';
+import { instanceOf } from './helpers';
+import useUserStore from '@/stores/useUserStore';
+import { REFRESH_URL } from '@/helpers/api';
 
 let numberOfAjaxCAllPending = 0;
 console.log({axiosEnv: import.meta.env.MODE})
 const instance = axios.create({
+  withCredentials: true,
   baseURL: import.meta.env.VITE_BASE_URL_API,
   timeout: import.meta.env.MODE === 'development' ? 30000 : 3000
 })
@@ -14,6 +19,7 @@ export default function useAxios() {
   const loadingStore = useLoadingStore();
   instance.interceptors.request.use(
     function (config) {
+      console.log('withCredentials ', instance.defaults.withCredentials)
       numberOfAjaxCAllPending++
       loadingStore.isLoading();
       return config
@@ -36,16 +42,21 @@ export default function useAxios() {
       if (numberOfAjaxCAllPending == 0) {
         loadingStore.isLoaded();
       }
-
-      console.log({ error })
-      // if (error.code === '401' && error.)
-      // if(instance.defaults.headers.common['Authorization']) {
-      //     const data = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {});
-      //     if (instanceOf<ITokenResponse>(data)) {
-      //         const userStore = useUserStore();
-      //         userStore.setUserDate(data);
-      //     }
-      // }
+      console.log('withCredentials ', instance.defaults.withCredentials)
+      const {response} = error;
+      // @ts-ignore
+       if (response && response.data && response.data && response.status === 401 && response.data.message === 'Expired JWT Token') {
+        if(instance.defaults.headers.common['Authorization']) {
+          const data = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {});
+              if (instanceOf<ITokenResponse>(data)) {
+                  const userStore = useUserStore();
+                  userStore.setUserData(data);
+                  const newResponse = instance.request(error.request);
+                  return Promise.resolve(newResponse)
+              }
+          }
+       }
+      
       return Promise.reject(error)
     }
   )
