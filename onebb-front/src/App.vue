@@ -2,7 +2,7 @@
 import { ref, defineAsyncComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import useLoadingStore from '@/stores/useLoadingStore'
-import useSkin from './hooks/useSkin'
+import useAuth from './hooks/useAuth'
 import CustomBoxComponent from './components/custom_boxes/CustomBoxComponent.vue'
 import PluginBoxComponent from './components/custom_boxes/PluginBoxComponent.vue'
 import { storeToRefs } from 'pinia'
@@ -15,6 +15,11 @@ const LoginModalComponent = defineAsyncComponent(
 const RegisterModalComponent = defineAsyncComponent(
   () => import('./components/ui/modals/RegisterModalComponent.vue')
 )
+
+const auth = useAuth();
+if (localStorage.getItem('logged') === 'true') {
+  auth.stayLogged();
+}
 
 const Alert = defineAsyncComponent(() => import('./components/ui/AlertComponent.vue'))
 const loadingStore = useLoadingStore()

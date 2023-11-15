@@ -7,7 +7,7 @@ import type {
   IViolations
 } from '@/interfaces'
 import useAxios from './useAxios'
-import { AUTH_URL, LOGOUT_URL, USER_URL } from '@/helpers/api'
+import { AUTH_URL, LOGOUT_URL, REFRESH_URL, USER_URL } from '@/helpers/api'
 import { instanceOf } from './helpers'
 import type { AxiosResponse } from 'axios'
 import useUserStore from '@/stores/useUserStore'
@@ -20,9 +20,12 @@ export default function useAuth() {
       const userStore = useUserStore()
       console.log({userStore})
       userStore.setUserData(data);
-      if (data.token) setToken(data.token)
-
-      return true
+      if (data.token) {
+        setToken(data.token)
+        localStorage.setItem('logged', 'true');
+        return true
+      }
+      
     }
 
     return false
@@ -45,10 +48,27 @@ export default function useAuth() {
     if (instanceOf<ILogoutResponse>(data)) {
       const userStore = useUserStore()
       userStore.$reset()
+      localStorage.removeItem('logged');
       return true
     }
     return false
   }
 
-  return { signIn, signOut, signUp }
+  async function stayLogged() {
+    const { data } = await axios.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
+    if (instanceOf<ITokenResponse>(data)) {
+      const userStore = useUserStore()
+      userStore.setUserData(data);
+      if (data.token) {
+        setToken(data.token)
+        localStorage.setItem('logged', 'true');
+        return true
+      }
+      
+    }
+
+    return false
+  }
+
+  return { signIn, signOut, signUp, stayLogged }
 }
