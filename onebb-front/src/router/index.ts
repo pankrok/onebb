@@ -35,11 +35,11 @@ const router = createRouter({
       name: 'Profile', // @ts-ignore
       component: () => import( '../views/UserView.vue')
     },
-    // {
-    //   path: '/i/:slug/:id',
-    //   name: 'Page',
-    //   component: () => import( '../views/Page.vue')
-    // },
+    {
+      path: '/i/:slug/:id',
+      name: 'Page',
+      component: () => import( '../views/PageView.vue')
+    },
     {
       path: '/user/configuration/:id',
       name: 'UserConfiguration', // @ts-ignore

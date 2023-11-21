@@ -5,3 +5,4 @@ export const CATEGORY_URL = 'categories';
 export const USER_URL = 'users';
 export const POST_URL = 'posts';
 export const PLOT_URL = 'plots';
+export const PAGE_URL = 'pages';

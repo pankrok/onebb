@@ -170,6 +170,18 @@ export interface ICategory {
   meta_desc: string
 }
 
+export interface IPage {
+  id: number
+  name: string
+  content?: string
+  slug?: string
+  created_at?: string
+  updated_at?: string
+  priority?: number
+  active: boolean
+  meta_desc?: string
+}
+
 export interface IHydraView {
   '@id': string
   '@type': string
