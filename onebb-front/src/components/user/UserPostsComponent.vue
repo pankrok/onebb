@@ -55,7 +55,7 @@ watch(queryParams, () => {
             'padding-m'
             ]" :key="post.id">
         
-        <PostComponent :post="{...post, user}" :key="post.id" no-quote />
+            {{ post }}
          
         </Box>
     </TransitionGroup>
