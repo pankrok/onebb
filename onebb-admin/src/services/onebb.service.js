@@ -51,7 +51,7 @@ class OneBB {
         let uri = API_URL;
         uri += this.api ?? 'api/'; 
         uri += this.resource + this.parseParams();
-        
+        try {
         const req = await fetch(uri, this.config);
         if (this.config.method === 'DELETE') {
             response =  req;
@@ -63,9 +63,12 @@ class OneBB {
                 response = null;
             }
         }
-        
+     
         this.setDefaults();
         return {status: req.status, response: response};
+      } catch(error) {
+        console.error({error})
+      }
     }
   }
     
