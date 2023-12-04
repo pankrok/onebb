@@ -5,17 +5,35 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const usePlotStore = defineStore('plotStore', () => {
+  const isLoading = ref(true);
   const posts = ref<IPost[]>([])
   const plot = ref<IPlot | null>(null)
   const hydraView = ref<IHydraView | null>(null)
   const { getPlot, addPostToPlot } = usePlot()
 
+  function addPostToArray(postsHandler: IPost[]) {
+    let i = 0;
+    const lenght = postsHandler.length;
+
+    const myInterval = setInterval(() => {
+      i++;
+      if (i < lenght) {
+        posts.value.push(postsHandler[i]);
+      } else {
+        clearInterval(myInterval);
+        isLoading.value = false;
+      }
+    }, 100);
+  } 
+
   async function getPlotData() {
+    isLoading.value = true;
+    posts.value = [];
     const response = await getPlot()
     plot.value = response.plot
     if (response.posts !== null) {
-      posts.value = response.posts['hydra:member']
       hydraView.value = response.posts['hydra:view'] ?? null
+      addPostToArray(response.posts['hydra:member'])
     }
   }
 
@@ -41,7 +59,7 @@ const usePlotStore = defineStore('plotStore', () => {
     posts.value = []
   }
 
-  return { plot, posts, hydraView, getPlotData, addPost, $reset }
+  return { plot, posts, hydraView, isLoading, getPlotData, addPost, $reset }
 })
 
 export default usePlotStore

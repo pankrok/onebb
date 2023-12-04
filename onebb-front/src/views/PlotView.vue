@@ -9,11 +9,11 @@ import useAuthStore from '@/stores/useAuthStore'
 import { storeToRefs } from 'pinia'
 import usePlotStore from '@/stores/usePlotStore'
 
-const authStore = useAuthStore();
-const plotStore = usePlotStore();
+const authStore = useAuthStore()
+const plotStore = usePlotStore()
 const { logged } = storeToRefs(authStore)
-const {plot, posts, hydraView} = storeToRefs(plotStore);
-plotStore.getPlotData();
+const { plot, posts, hydraView, isLoading } = storeToRefs(plotStore)
+plotStore.getPlotData()
 
 const cb = (addedPost: IPost | undefined) => {
   if (typeof addedPost === 'undefined') {
@@ -34,7 +34,7 @@ const plotClassBox = [
 ]
 
 const headerClassBox = [
-'color-white',
+  'color-white',
   'margin-m',
   'border-1',
   'border-color-primary',
@@ -42,8 +42,6 @@ const headerClassBox = [
   'padding-m',
   'font-size-14'
 ]
-
-
 </script>
 <template>
   <TransitionGroup
@@ -62,8 +60,8 @@ const headerClassBox = [
       <PostComponent :post="post" :quote="logged" />
     </Box>
     <div class="row justify-content-flex-end" v-if="logged">
-      
-      <button class="button button-color-white col-12 margin-m"                         
+      <button
+        class="button button-color-white col-12 margin-m"
         key="reply-btn"
         v-if="!reply"
         @click="reply = !reply"
@@ -76,6 +74,6 @@ const headerClassBox = [
       </Box>
     </div>
 
-    <PaginatorComponent :hydraView="hydraView" />
+    <PaginatorComponent v-if="!isLoading" :hydraView="hydraView" />
   </TransitionGroup>
 </template>
