@@ -1,3 +1,4 @@
+@use 'sass:map';
 
 $font-sizes: (8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32);
 $font-weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
@@ -6,250 +7,311 @@ $font-weights: (100, 200, 300, 400, 500, 600, 700, 800, 900);
     font-size: #{$size}px;
     line-height: #{$size + 2}px;
   }
+
+  .font-height-#{$size} {
+    line-height: #{$size}px;
+  }
 }
 
 @each $weight in $font-weights {
-    .font-weight-#{$weight} {
-      font-weight: #{$weight};
-    }
+  .font-weight-#{$weight} {
+    font-weight: #{$weight};
   }
+}
 
-$imageSizes: ("-s": 25px, "-m": 50px, "-l": 75px, "-xl": 100px);
+$imageSizes: (
+  '-s': 25px,
+  '-m': 50px,
+  '-l': 100px,
+  '-xl': 200px
+);
 @each $name, $size in $imageSizes {
-    .img-size-mobile#{$name} {
-      width: #{$size};
-      height: auto;
-    }
+  .img-size-mobile#{$name} {
+    width: #{$size};
+    height: auto;
   }
+}
 
-$sizes: ("-none": 0, "-s": .25rem, "-m": .5rem, "-l": 1rem, "-xl": 2rem);
-$positions:("-top", "-bottom", "-left", "-right", "-x", "-y", "");
+$sizes: (
+  '-none': 0,
+  '-s': 0.25rem,
+  '-m': 0.5rem,
+  '-l': 1rem,
+  '-xl': 2rem
+);
+$positions: ('-top', '-bottom', '-left', '-right', '-x', '-y', '');
 
 @each $position in $positions {
-    @each $name, $size in $sizes {
-        .padding#{$position}#{$name} {
-            @if $position == "-x" {
-                padding-left: $size;
-                padding-right: $size;
-            }
-            @else if $position == "-y" {
-                padding-top: $size;
-                padding-bottom: $size;
-            }
-            @else if $position == "" {
-                padding: $size;
-            }
-            @else {
-                padding#{$position}: $size;
-            }
-        }
-
-        .margin#{$position}#{$name} {
-            @if $position == "-x" {
-                margin-left: $size;
-                margin-right: $size;
-            }
-            @else if $position == "-y" {
-                margin-top: $size;
-                margin-bottom: $size;
-            }
-            @else if $position == "" {
-                margin: $size;
-            }
-            @else {
-                margin#{$position}: $size;
-            }
-        }
+  @each $name, $size in $sizes {
+    .padding-sm#{$position}#{$name} {
+      @if $position == '-x' {
+        padding-left: $size;
+        padding-right: $size;
+      } @else if $position == '-y' {
+        padding-top: $size;
+        padding-bottom: $size;
+      } @else if $position == '' {
+        padding: $size;
+      } @else {
+        padding#{$position}: $size;
+      }
     }
+
+    .margin-sm#{$position}#{$name} {
+      @if $position == '-x' {
+        margin-left: $size;
+        margin-right: $size;
+      } @else if $position == '-y' {
+        margin-top: $size;
+        margin-bottom: $size;
+      } @else if $position == '' {
+        margin: $size;
+      } @else {
+        margin#{$position}: $size;
+      }
+    }
+  }
 }
 
 $text-alignes: (left, center, right);
 
 @each $name in $text-alignes {
-    .text-align-#{$name} {
-        text-align: $name;
-    }
+  .text-align-#{$name} {
+    text-align: $name;
+  }
 }
 
-$flexes: (flex-start, center, flex-end, space-between, space-around);
+$flexes: (flex-start, center, flex-end, space-between, space-around, start, end);
 
 @each $flex in $flexes {
-    .justify-content-mobile-#{$flex} {
-        justify-content: $flex;
-    }
+  .justify-sm-content-#{$flex} {
+    justify-content: $flex;
+  }
 
-    .align-items-mobile-#{$flex} {
-        align-items: $flex;
-    }
+  .align-sm-items-#{$flex} {
+    align-items: $flex;
+  }
 }
 
-$borders: ("1", "2", "3", "4", "5");
+$borders: ('1', '2', '3', '4', '5');
 @each $position in $positions {
-    @each $size in $borders {
-        .border#{$position}-#{$size} {
-            @if $position == "-x" {
-                border-left: #{$size}px solid;
-                border-right: #{$size}px solid;
-            }
-            @else if $position == "-y" {
-                border-top: #{$size}px solid;
-                border-bottom:#{$size}px solid;
-            }
-            @else if $position == "" {
-                border: #{$size}px solid;
-            }
-            @else {
-                border#{$position}: #{$size}px solid;
-            }
-        }
+  @each $size in $borders {
+    .border#{$position}-#{$size} {
+      @if $position == '-x' {
+        border-left: #{$size}px solid;
+        border-right: #{$size}px solid;
+      } @else if $position == '-y' {
+        border-top: #{$size}px solid;
+        border-bottom: #{$size}px solid;
+      } @else if $position == '' {
+        border: #{$size}px solid;
+      } @else {
+        border#{$position}: #{$size}px solid;
+      }
     }
+  }
 }
 $rads: (5, 10, 15, 20, 25);
 
 @each $rad in $rads {
-    .border-radius-#{$rad} {
-        border-radius: #{$rad}px;
-    }
+  .border-radius-#{$rad} {
+    border-radius: #{$rad}px;
+  }
 }
 
 .border-radius-circel {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 @each $name, $color in $colors {
-    .color-#{$name} {
-        color: $color;
-    }
+  .color-#{$name} {
+    color: $color;
+  }
 
-    .text-shadow-#{$name} {
-        text-shadow: 0 0 2px $color;
-    }
+  .fill-#{$name} {
+    fill: $color;
+  }
 
-    .background-#{$name} {
-        background-color: $color;
-    }
+  .text-shadow-#{$name} {
+    text-shadow: 0 0 2px $color;
+  }
 
-    .border-color-#{$name} {
-        border-color: $color;
-    }
+  .background-#{$name} {
+    background-color: $color;
+  }
 
-    .box-shadow-#{$name} {
-        box-shadow: 0px 0px 5px $color;
-    }
+  .border-color-#{$name} {
+    border-color: $color;
+  }
+
+  .box-shadow-#{$name} {
+    box-shadow: 0px 0px 5px $color;
+  }
+}
+
+.background-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    map.get($colors, 'primary'),
+    map.get($colors, 'primary') 10px,
+    map.get($colors, 'secondary') 10px,
+    map.get($colors, 'secondary') 20px
+  );
 }
 
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-$elpositions:(relative, absolute, fixed);
+$elpositions: (relative, absolute, fixed);
 
 @each $name in $elpositions {
-    .position-#{$name} {
-        position: $name;
-    }
+  .position-#{$name} {
+    position: $name;
+  }
 }
 
 .minWidth-50wv {
-    min-width: 50vw;
+  min-width: 50vw;
 }
 
 /* RWD */
-
 .row,
-.column {
-    display: flex;
-    flex-wrap: wrap;
+.row-sm,
+.column,
+.column-sm {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.row {
-    flex-direction: row;
-} 
-
-.column {
-    flex-direction: column;
+.row-sm {
+  flex-direction: row;
 }
 
-[class*="col-"] {
-    width: 100%;
+.column-sm {
+  flex-direction: column;
 }
 
-$boxSizes: ("1": 8.33%, "2": 16.66%, "3": 25%, "4": 33.33%, "5": 41.66%, "6": 50%, "7": 58.33%, "8": 66.66%, "9": 75%, "10": 83.33%, "11": 91.66%, "12": 100%);
+[class*='col-'] {
+  width: 100%;
+}
+
+$boxSizes: (
+  '1': 8.33%,
+  '2': 16.66%,
+  '3': 25%,
+  '4': 33.33%,
+  '5': 41.66%,
+  '6': 50%,
+  '7': 58.33%,
+  '8': 66.66%,
+  '9': 75%,
+  '10': 83.33%,
+  '11': 91.66%,
+  '12': 100%
+);
 
 @each $name, $size in $boxSizes {
-    .col-sm-#{$name} {
-        width: $size;
-    }
+  .col-sm-#{$name} {
+    width: $size;
+  }
 
-    .height-sm-#{$name} {
-        height: $size;
-    }
+  .height-sm-#{$name} {
+    height: $size;
+  }
 }
 
 .col-sm-auto {
-    width: auto;
-    flex: 1;
+  width: auto;
+  flex: 1;
 }
 
-$displays: (flex, grid, block, inline, none);
+$displays: (flex, none, block);
+
 @each $name in $displays {
-    .display-mobile-#{$name} {
-        display: $name;
-    }
+  .display-sm-#{$name} {
+    display: $name;
+  }
 }
 
 @media only screen and (min-width: 768px) {
+  /* For desktop: */
 
-    .desktop-row,
-    .desktop-column {
-        display: flex;
-        flex-wrap: wrap;
+  .row {
+    flex-direction: row;
+  }
+
+  .column {
+    flex-direction: column;
+  }
+
+  @each $flex in $flexes {
+    .justify-content-#{$flex} {
+      justify-content: $flex;
     }
 
-    .desktop-row {
-        flex-direction: row;
-    } 
+    .align-items-#{$flex} {
+      align-items: $flex;
+    }
+  }
 
-    .desktop-column {
-        flex-direction: column;
+  @each $name, $size in $boxSizes {
+    .col-#{$name} {
+      width: $size;
     }
 
-    @each $name in $displays {
-        .display-desktop-#{$name} {
-            display: $name;
-        }
+    .height-#{$name} {
+      height: $size;
     }
+  }
 
-    @each $flex in $flexes {
-        .justify-content-#{$flex} {
-            justify-content: $flex;
-        }
-    
-        .align-items-#{$flex} {
-            align-items: $flex;
-        }
-    }
+  .col-auto {
+    width: auto;
+    flex: 1;
+  }
 
-    /* For desktop: */
-    @each $name, $size in $boxSizes {
-        .col-#{$name} {
-            width: $size;
-        }
-
-        .height-#{$name} {
-            height: $size;
-        }
-    }
-
-    .col-auto {
-        width: auto;
-        flex: 1;
-    }
-
-    @each $name, $size in $imageSizes {
-        .img-size#{$name} {
-          width: #{$size};
-          height: auto;
+  @each $position in $positions {
+    @each $name, $size in $sizes {
+      .padding#{$position}#{$name} {
+        @if $position == '-x' {
+          padding-left: $size;
+          padding-right: $size;
+        } @else if $position == '-y' {
+          padding-top: $size;
+          padding-bottom: $size;
+        } @else if $position == '' {
+          padding: $size;
+        } @else {
+          padding#{$position}: $size;
         }
       }
+  
+      .margin#{$position}#{$name} {
+        @if $position == '-x' {
+          margin-left: $size;
+          margin-right: $size;
+        } @else if $position == '-y' {
+          margin-top: $size;
+          margin-bottom: $size;
+        } @else if $position == '' {
+          margin: $size;
+        } @else {
+          margin#{$position}: $size;
+        }
+      }
+    }
+  }
+
+  @each $name, $size in $imageSizes {
+    .img-size#{$name} {
+      width: #{$size};
+      height: auto;
+    }
+  }
+
+  @each $name in $displays {
+    .display-#{$name} {
+      display: $name;
+    }
+  }
 }

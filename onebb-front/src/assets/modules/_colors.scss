@@ -1,25 +1,18 @@
-:root {
-  --background: #171721;
-  --primary: #252533;
-  --light: #aaa;
-  --white: #f3f3f3;
-  --dark: #4e4e4e;
-  --black: #1c1c1c;
-  --blue: #59c1bd;
-  --green: #80ed99;
-  --red: #f05454;
-  --yellow: #ebe645;
-}
 
-$colors: (
-  'background': var(--background),
-  'light': var(--light),
-  'white': var(--white),
-  'dark': var(--dark),
-  'black': var(--black),
-  'blue': var(--blue),
-  'green': var(--green),
-  'red': var(--red),
-  'yellow': var(--yellow),
-  'primary': var(--primary)
+$colors :(
+    'background': #171721,
+    "light": #aaa,
+    'white': #f3f3f3,
+    "dark": #4e4e4e,
+    'black': #1c1c1c,
+    'blue': #59c1bd,
+    'green': #80ed99,
+    'dark-green': #182b1c,
+    'red': #f05454,
+    'dark-red': #702727,
+    'yellow': #ebe645,
+    'primary': #252533,
+    'secondary': #2f2f41,
+    'mask': #2f2f417a
 );
+

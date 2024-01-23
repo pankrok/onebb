@@ -1,44 +1,49 @@
-import type { ITokenResponse } from '@/interfaces';
-import {defineStore} from 'pinia';
-import { computed, ref } from 'vue';
-import useAuthStore from './useAuthStore';
+import type { ITokenResponse } from '@/interfaces'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 const defaultUser: ITokenResponse = {
-    token: null,
-    acp_enabled: false,
-    mcp_enabled: false,
-    avatar: null,
-    slug: null,
-    uid: null,
+  token: null,
+  acp_enabled: false,
+  mcp_enabled: false,
+  avatar: null,
+  slug: null,
+  uid: null
 }
 
-const useUserStore = defineStore('userStore', ()=>{
-    const user = ref<ITokenResponse>(defaultUser);
-    
-    const authStore = useAuthStore();
+const useUserStore = defineStore('userStore', () => {
+  const user = ref<ITokenResponse>(defaultUser)
+  const logged = ref(false)
 
-    const getUserId = computed((): number  =>{
-        return user.value.uid ?? 0;
-    })
+  const getUserId = computed((): number => {
+    return user.value.uid ?? 0
+  })
 
-    function setUserData(data: ITokenResponse|null) {
-        
-        if (data === null) {
-            user.value = {...defaultUser}
-            authStore.setLogged(false);
-            return;
-        }
+  const mod = computed((): boolean => {
+    return user.value.mcp_enabled ?? false
+  })
 
-        user.value = {...user.value, ...data};
-        authStore.setLogged(true)
+  function setLogged(isLogged: boolean) {
+    logged.value = isLogged
+  }
+
+  function setUserData(data: ITokenResponse | null) {
+    if (data === null) {
+      user.value = { ...defaultUser }
+      logged.value = false;
+      return
     }
 
-    function $reset() {
-        user.value = {...defaultUser};
-        authStore.setLogged(false);
-    }
+    user.value = { ...user.value, ...data }
+    logged.value = true;
+  }
 
-    return {user, setUserData, getUserId, $reset};
+  function $reset() {
+    user.value = { ...defaultUser }
+    logged.value = false;
+  }
+
+  return { user, getUserId, logged, mod, setUserData, setLogged, $reset }
 })
 
 export default useUserStore
