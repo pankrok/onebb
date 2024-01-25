@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export function useMoment() {
+export default function useMoment() {
 
     const config = {
         format: 'YYYY-MM-DD hh:mm:ss'

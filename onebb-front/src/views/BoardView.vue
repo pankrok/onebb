@@ -1,39 +1,28 @@
 <script setup lang="ts">
-import Box from '@/components/box/BoxComponent.vue'
-import PlotComponent from '@/components/ui/PlotComponent.vue'
-import { onUnmounted } from 'vue';
-import useBoardStore from '@/stores/useBoardStore';
-import { storeToRefs } from 'pinia';
+import BoardComponent from '@/components/ui/partials/BoardComponent.vue'
+import { useBoard } from '@/hooks/obbClient'
+import type { IBoard, IPlot } from '@/interfaces'
+import instanceOf from '@/utils/instanceOf'
+import { ref } from 'vue'
 
-const boxStyles = [
-  'background-background',
-  'border-radius-5',
-  'color-white',
-  'font-size-18',
-  'font-weight-500',
-  'padding-l',
-  'margin-x-l',
-  'margin-top-l'
-]
+const data = ref<{
+  board: IBoard
+  plots: IPlot[]
+} | null>(null)
 
-const boardStore = useBoardStore();
-const {board, plots} = storeToRefs(boardStore);
-
-boardStore.getBoard();
-
-onUnmounted(()=>{
-  boardStore.$reset();
+useBoard().then((response) => {
+  console.log({ response })
+  if (
+    instanceOf<{
+      board: IBoard
+      plots: IPlot[]
+    }>(response)
+  ) {
+    data.value = response
+  }
 })
-
 </script>
-<template>
-  <div class="column">
-    <Box v-if="board" :boxClass="boxStyles">
-      {{ board.name }}
-    </Box>
-    <Box v-for="plot in plots" :key="plot.id + plot.name">
-      <PlotComponent :plot="plot" />
-    </Box>
-  </div>
 
+<template>
+  <board-component v-bind="data" />
 </template>

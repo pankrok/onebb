@@ -2,18 +2,19 @@
 import axios, { type AxiosResponse } from 'axios'
 import useLoadingStore from '@/stores/useLoadingStore'
 import type { AxiosError } from 'axios'
-import type { ITokenResponse } from '@/interfaces'
-import { instanceOf } from './helpers'
+import type { ILoginCreditionals, ILogoutResponse, IRegisterCreditionals, ITokenResponse, IUser, IViolations } from '@/interfaces'
+import  instanceOf  from '@/utils/instanceOf'
+import { AUTH_URL, LOGOUT_URL, REFRESH_URL, USER_URL } from '@/utils/apiRoutes'
 import useUserStore from '@/stores/useUserStore'
-import { REFRESH_URL } from '@/helpers/api'
 
-let numberOfAjaxCAllPending = 0
+let numberOfAjaxCAllPending = 0;
+// @ts-ignore
+const baseURL = document.getElementById('app')?.getAttribute('data-url') + document.getElementById('app')?.getAttribute('data-obb') + 'api';
 
 const instance = axios.create({
-  withCredentials: true,
-  baseURL: import.meta.env.VITE_BASE_URL_API,
+  baseURL,
+  withCredentials: true, //@ts-ignore
   timeout: import.meta.env.MODE === 'development' ? 30000 : 3000,
-  
 })
 
 export default function useAxios() {
@@ -81,17 +82,67 @@ export default function useAxios() {
     instance.defaults.headers.common['Authorization'] = null
   }
 
-  // async function refreshToken() {
-  //   const { data, status, statusText } = await instance.post<{}, AxiosResponse<ITokenResponse>>(
-  //     'refresh',
-  //     {}
-  //   )
-  // }
+  async function refreshToken() {
+    const {data} = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
+          if (instanceOf<ITokenResponse>(data)) {
+            const userStore = useUserStore()
+            userStore.setUserData(data)
+            if (data.token)
+              setToken(data.token);
+          }
+  }
+
+  async function signIn(payload: ILoginCreditionals) {
+    const { data } = await instance.post<ILoginCreditionals, AxiosResponse<unknown>>(AUTH_URL, payload)
+    if (instanceOf<ITokenResponse>(data)) {
+      const userStore = useUserStore()
+      console.log({userStore})
+      userStore.setUserData(data);
+      if (data.token) {
+        setToken(data.token)
+        localStorage.setItem('logged', 'true');
+        return true
+      }
+      
+    }
+
+    return false
+  }
+
+  async function signUp(payload: IRegisterCreditionals) {
+    try {
+      const { data } = await instance.post<unknown>(USER_URL, payload)
+      if (instanceOf<IUser>(data)) return true;
+      if (instanceOf<IViolations>(data)) return data
+       
+      return false
+    } catch (e) {
+      return false
+    }
+  }
+
+  async function signOut() {
+    const { data } = await instance.get<{}, AxiosResponse<unknown>>(LOGOUT_URL)
+    if (instanceOf<ILogoutResponse>(data)) {
+      const userStore = useUserStore()
+      userStore.$reset()
+      localStorage.removeItem('logged');
+      return true
+    }
+    return false
+  }
+
+  if (localStorage.getItem('logged') && !instance.defaults.headers.common['Authorization']) {
+    refreshToken();
+  }
 
   return {
     setToken,
     removeToken,
-    //  refreshToken,
+    refreshToken,
+    signIn,
+    signUp,
+    signOut,
     axios: instance
   }
 }

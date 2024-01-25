@@ -1,40 +1,25 @@
 <script setup lang="ts">
-import usePageStore from '@/stores/usePageStore'
-import Box from '@/components/box/BoxComponent.vue';
-import { storeToRefs } from 'pinia'
+import { usePage } from '@/hooks/obbClient';
+import type { IPage } from '@/interfaces';
+import { ref } from 'vue';
 
-const plotClassBox = [
-  'row',
-  'margin-m',
-  'border-1',
-  'color-white',
-  'border-color-primary',
-  'border-radius-5',
-  'padding-m'
-]
+const page = ref<IPage|null>(null);
 
-const headerClassBox = [
-  'color-white',
-  'margin-m',
-  'border-1',
-  'border-color-primary',
-  'border-radius-5',
-  'padding-m',
-  'font-size-14'
-]
+usePage().getPage().then(response => {
+    page.value = response;
+})
 
-const pageStore = usePageStore()
-pageStore.fetchPage()
-const { page } = storeToRefs(pageStore)
 </script>
 
 <template>
-  <div v-if="page">
-    <Box :boxClass="headerClassBox" key="plot-header">
-      <h2 class="font-size-16 font-weight-600 padding-bottom-m margin-none padding-x-xl padding-y-none">{{ page.name }}</h2>
-    </Box>
-    <Box :box-class="plotClassBox">
-      <div v-html="page.content"></div>
-    </Box>
-  </div>
+    <div class="col-12 border-1 background-primary border-color-dark margin-y-l" v-if="page">
+    <section class="row">
+        <div
+              class="col-12 padding-sm-m border-bottom-1 background-stripes border-color-dark"
+            >
+      <h1 class="col-12-auto margin-sm-y-none">{{ page.name }}</h1>
+      </div>
+     <div class="col-12 padding-sm-s" v-html="page.content"></div>
+    </section>
+    </div>
 </template>

@@ -5,18 +5,17 @@ body {
     padding: 0;
     margin: 0;
     font-family: Verdana, sans-serif;
-    height: 100dvh;
-}
-
-svg {
-    fill: map.get($colors, "white");
+  //  height: 100dvh;
 }
 
 #app, .container {
-    width: 100%;
+    min-width: 96%;
+    width: auto;
     display: flex;
     flex-direction: column;
-    
+}
+.container {
+    min-height: 100dvh;
 }
 header, main, footer {
     width: 100%;
@@ -24,32 +23,36 @@ header, main, footer {
 
 #app{
     align-items: center;
-    height: 100dvh;
+ //   height: 100dvh;
 }
 .container {
     max-width: 1440px;
 }
 
 a {
-    color:  map.get($colors, "white");
+    color:  map.get($colors, "green");
     text-decoration: none;
     transition: all .2s ease-in-out;
 }
 
-li > a:after {
+p {
+    margin: 0;
+}
+
+.navigation a:after {
     content: '';
     display: block;
     height: 1px;
     width: 0%;
     transition: all .2s ease-in-out;
-    background-color: map.get($colors, "white");
+    background-color: map.get($colors, "green");
 }
 
 a.active {
     color:  map.get($colors, "green");
 }
 
-li > a.active:after {
+a.active:after {
     width: 100%;
     background-color: map.get($colors, "green");
 }
@@ -60,11 +63,6 @@ a:hover {
 
 a:hover::after {
     width: 100%;
-}
-
-.sidemenu {
-    top: 45px;
-    right: 0;
 }
 
 .messenger {
@@ -124,5 +122,12 @@ a:hover::after {
     to {
         scale: 1;
         opacity: 0
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    #app, .container {
+        width: 100%;
     }
 }

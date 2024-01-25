@@ -1,8 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
-
-import { defineConfig, loadEnv  } from 'vite'
+import VitePluginHtmlEnv from 'vite-plugin-html-env'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { VitePWA } from 'vite-plugin-pwa'
 
 export default ({ mode }: {mode: any}) => {
   // Load app-level env vars to node-level env vars.
@@ -11,31 +10,11 @@ export default ({ mode }: {mode: any}) => {
   return  defineConfig({
   plugins: [
     vue(),
-    // VitePWA({
-    //   registerType: 'autoUpdate',
-    //   injectRegister: 'auto',
-    //   manifest: {
-    //     name: 'My Awesome App',
-    //     short_name: 'MyApp',
-    //     description: 'My Awesome App description',
-    //     theme_color: '#ffffff',
-    //     icons: [
-    //       {
-    //         src: 'pwa-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png'
-    //       },
-    //       {
-    //         src: 'pwa-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png'
-    //       }
-    //     ]
-    //   },
-    //   devOptions: {
-    //     enabled: true
-    //   }
-    // }),
+    VitePluginHtmlEnv({
+      prefix: '{{',
+      suffix: '}}',
+      envPrefixes: ['VITE_']
+    }),
   ],
   build: {
     rollupOptions: {
@@ -51,6 +30,4 @@ export default ({ mode }: {mode: any}) => {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
-})
-}
-
+})};

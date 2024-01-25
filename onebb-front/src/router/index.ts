@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
- // @ts-ignore
+// @ts-ignore
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -11,24 +11,19 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/category/:slug/:id',
-      name: 'Category',
-      component: HomeView
+      path: '/category/:slug/:id/:page?',
+      name: 'Category', // @ts-ignore
+      component: () => import('../views/CategoryView.vue') 
     },
     {
       path: '/board/:slug/:id/:page?',
       name: 'Board', // @ts-ignore
-      component: () => import('../views/BoardView.vue')
-    },
-    {
-      path: '/create/plot/:id/',
-      name: 'CreatePlot', // @ts-ignore
-      component: () => import('../views/CreatePlotView.vue')
+      component: () => import('../views/BoardView.vue') 
     },
     {
       path: '/plot/:slug/:id/:page?',
       name: 'Plot', // @ts-ignore
-      component: () => import('../views/PlotView.vue')
+      component: () => import('../views/PlotView.vue') 
     },
     {
       path: '/user/:slug/:id',
@@ -37,30 +32,24 @@ const router = createRouter({
     },
     {
       path: '/i/:slug/:id',
-      name: 'Page',
+      name: 'Page', // @ts-ignore
       component: () => import( '../views/PageView.vue')
     },
     {
-      path: '/user/configuration/:id',
-      name: 'UserConfiguration', // @ts-ignore
-      component: () => import( '../views/UserConfigView.vue')
+      path: '/create/plot/:id/',
+      name: 'CreatePlot', // @ts-ignore
+      component: () => import('../views/NewPlotView.vue')
     },
-    // {
-    //   path: '/validation/:hash',
-    //   name: 'Validation',
-    //   component: () => import( '../views/EmailValidation.vue')
-    // },
-    //   {
-    //   path: '/reset-password',
-    //   name: 'ResetPassword',
-    //   component: () => import( '../views/ResetPassword.vue')
-    // }
-    // ,
-    //   {
-    //   path: '/reset-password/validation/:hash',
-    //   name: 'ResetPasswordValidation',
-    //   component: () => import( '../views/ResetPasswordValidation.vue')
-    // }
+    {
+      path: '/forget-password',
+      name: 'ForgetPassword', // @ts-ignore
+      component: () => import('../views/ForgetPassView.vue')
+    },
+    {
+      path: '/reset-password/validation/:hash',
+      name: 'ResetPasswordValidation', // @ts-ignore
+      component: () => import( '../views/ResetPasswordValidationView.vue')
+    }
   ]
 })
 

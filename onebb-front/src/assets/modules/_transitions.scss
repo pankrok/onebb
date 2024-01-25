@@ -12,25 +12,17 @@
 .list-leave-active {
   position: absolute;
 }
-.slide-fade-right-enter-active, .slide-fade-enter-active {
+.slide-fade-enter-active {
     transition: all 0.3s ease-out !important;
 }
-.slide-fade-right-leave-active, .slide-fade-leave-active {
+.slide-fade-leave-active {
     transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1) !important;
 }
 .slide-fade-enter-from,
 .slide-fade-leave-to {
     opacity: 0;
-    transform: translateY(30px);    
+    transform: translateY(30px);
 }
-
-.slide-fade-right-enter-from,
-.slide-fade-right-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-}
-
-
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.3s ease;
