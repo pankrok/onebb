@@ -48,17 +48,20 @@ export function usePlot() {
   }
 
   async function createPlot(payload: any) {
-     const router = useRouter();
+     
      const {name, content} = payload;
      const {data} = await axios.post<unknown>(PLOT_URL, {
         name,
         board: `/api/boards/${route.params.id}`,
      })
-
+     console.log({data})
      if(instanceOf<IPlot>(data)) {
         const post = await addPostToPlot(content, data['@id']);
         if(instanceOf<IPost>(post)) {
-          router.push({ name: 'Plot', params: { id: data.id, slug: data.slug } });
+          const router = useRouter();
+          console.log({data, post, params: { id: data.id, slug: data.slug, page: 1 }, router})
+          
+          router.push({ name: 'Plot', params: { id: data.id, slug: data.slug, page: 1 } });
         }
      }
     

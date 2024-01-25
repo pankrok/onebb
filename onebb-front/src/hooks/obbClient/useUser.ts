@@ -1,7 +1,7 @@
 import type { IHydra, IPost, IUser } from '@/interfaces'
 import { useRoute } from 'vue-router'
 import useAxios from '../useAxios'
-import { POST_URL, USER_URL } from '@/utils/apiRoutes'
+import { FORGET_PASSWORD, POST_URL, RESET_PASSWORD, USER_URL } from '@/utils/apiRoutes'
 import instanceOf from '@/utils/instanceOf'
 import { ref } from 'vue'
 
@@ -41,9 +41,28 @@ export function useUser() {
     }
   }
 
+  async function forgetPassword(email: string) {
+    const {data} = await axios.post(FORGET_PASSWORD, {
+      email
+    })
+
+    console.log('forgetPassword',{data})
+  }
+
+  async function resetPassword(password: string, hash: string) {
+    const {data} = await axios.post(RESET_PASSWORD, {
+      password,
+      hash
+    })
+
+    console.log('forgetPassword',{data})
+  }
+
   return {
     getUser,
     getUserPosts,
-    userPosts
+    userPosts,
+    forgetPassword,
+    resetPassword
   }
 }

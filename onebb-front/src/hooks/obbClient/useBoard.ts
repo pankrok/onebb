@@ -13,6 +13,7 @@ export async function useBoard() {
 
   return {
     board: bresponse.data,
-    plots: presponse.data ? presponse.data['hydra:member'] : []
+    plots: presponse.data ? presponse.data['hydra:member'] : [],
+    paginator: presponse.data['hydra:view']
   }
 }

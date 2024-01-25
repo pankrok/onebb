@@ -45,6 +45,20 @@ export interface ISkinResponse {
   skinBoxes: IBoxes
 }
 
+export interface IOneMessenger {
+  id: number,
+  updated_at: string,
+  users: IUser[]
+}
+
+export interface IMessage {
+  id: number,
+  message: string,
+  created_at: string,
+  om: string,
+  sender: IUser
+}
+
 export interface ILoginCreditionals {
   username: string
   password: string

@@ -98,38 +98,36 @@ const { parse } = useMoment()
             {{ board.posts_no ?? 0 }}
           </div>
         </div>
-        <div
+
+        <RouterLink
           v-if="board.last_active_user"
           class="col-2 col-sm-4 row align-sm-items-center text-align-right"
+          :to="{
+            name: 'Profile',
+            params: {
+              slug: board.last_active_user.slug,
+              id: board.last_active_user.id
+            }
+          }"
         >
-          <RouterLink
-            :to="{
-              name: 'Profile',
-              params: {
-                slug: board.last_active_user.slug,
-                id: board.last_active_user.id
-              }
-            }"
-          >
-            <div class="column col-7">
-              <div
-                class="col-12 row align-sm-items-center justify-sm-content-flex-end color-light margin-bottom-m"
-              >
-                <div class="font-size-16" v-html="parseUsername(board.last_active_user)"></div>
-              </div>
-              <div class="col-12 color-white font-size-14 font-weight-800">
-                {{ parse(board.updated_at) }}
-              </div>
+          <div class="column col-7">
+            <div
+              class="col-12 row align-sm-items-center justify-sm-content-flex-end color-light margin-bottom-m"
+            >
+              <div class="font-size-16" v-html="parseUsername(board.last_active_user)"></div>
             </div>
-            <div class="col-5 display-flex display-sm-none">
-              <AvatarComponent
-                :url="board.last_active_user.avatar"
-                size="img-size-m"
-                mobile-size="img-size-mobile-s"
-              />
+            <div class="col-12 color-white font-size-14 font-weight-800">
+              {{ parse(board.updated_at) }}
             </div>
-          </RouterLink>
-        </div>
+          </div>
+          <div class="col-5 display-flex display-sm-none">
+            <AvatarComponent
+              :url="board.last_active_user.avatar"
+              size="img-size-m"
+              mobile-size="img-size-mobile-s"
+            />
+          </div>
+        </RouterLink>
       </div>
     </div>
   </panel-component>

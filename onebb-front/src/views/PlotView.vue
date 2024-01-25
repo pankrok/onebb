@@ -15,8 +15,8 @@ getPlot().then((response) => {
 })
 
 
-async function modUpdate(id: number, content: string) {
-  const x = await updatePost(id, content);
+async function modUpdate(id: number, val: { content?: string | undefined; hidden?: boolean | undefined; }) {
+  const x = await updatePost(id, val);
   console.log(x);
 }
 

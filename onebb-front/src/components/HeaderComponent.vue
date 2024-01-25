@@ -8,8 +8,15 @@ import useUserStore from '@/stores/useUserStore'
 import AvatarComponent from './ui/elements/AvatarComponent.vue'
 import useLoadingStore from '@/stores/useLoadingStore'
 import { storeToRefs } from 'pinia'
+import { usePage } from '@/hooks/obbClient'
+import type { IPage } from '@/interfaces'
+import { useRouter } from 'vue-router'
+import useMessengerStore from '@/stores/useMessengerStore'
 
 const userStore = useUserStore()
+const messengerStore = useMessengerStore()
+const router = useRouter()
+const pages = ref<IPage[]>([])
 const { loading } = storeToRefs(useLoadingStore())
 const { signIn, signOut, signUp } = useAxios()
 const loginModal = ref(false)
@@ -63,16 +70,25 @@ async function registerWrapper() {
 }
 
 async function signInWrapper() {
-  
   try {
     const loginResponse = await signIn(creditionals.value)
     if (loginResponse) loginModal.value = false
-  } catch(e: any) {
+  } catch (e: any) {
     signInError.value = $t(e.response.data.message)
-    console.log({e})
+    console.log({ e })
   }
- 
 }
+
+function forgetMyPass() {
+  loginModal.value = false
+  router.push({ name: 'ForgetPassword' })
+}
+
+usePage()
+  .getPages()
+  .then((pagesResponse: IPage[]) => {
+    pages.value = pagesResponse
+  })
 </script>
 
 <template>
@@ -82,21 +98,34 @@ async function signInWrapper() {
     >
       <ul>
         <li>
-          <img
-            class="img-size-m img-size-mobile-s"
-            src="data:image/png;base64,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"
-            alt="OneBB"
-          />
+          <RouterLink
+            :to="{
+              name: 'Home'
+            }"
+          >
+            <img
+              class="img-size-m img-size-mobile-s"
+              src="data:image/png;base64,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"
+              alt="OneBB"
+            />
+          </RouterLink>
         </li>
-        <li>
-          <router-link to="/">Link 1</router-link>
-        </li>
-        <li>
-          <a href="#">Link 2</a>
+        <li v-for="page in pages">
+          <RouterLink
+            :to="{
+              name: 'Page',
+              params: {
+                slug: page.slug,
+                id: page.id
+              }
+            }"
+          >
+            {{ page.name }}
+          </RouterLink>
         </li>
       </ul>
       <ul v-if="userStore.logged">
-        <li>
+        <!-- <li>
           <button class="button button-color-primary position-relative">
             <span class="badge circle pulse background-red box-shadow-red"></span>
             <svg
@@ -106,15 +135,15 @@ async function signInWrapper() {
               viewBox="0 0 448 512"
             >
               <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-              <title>Hello world!</title>
+             <!-- <title>Hello world!</title>
               <path
                 d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"
               />
             </svg>
           </button>
-        </li>
+        </li> -->
         <li>
-          <button class="button button-color-primary position-relative">
+          <button class="button button-color-primary position-relative" @click="messengerStore.toggleMessenger">
             <span class="circle pulse background-green box-shadow-green"></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -218,7 +247,7 @@ async function signInWrapper() {
         "
         key="login-modal"
       >
-         <Transition mod="in-out" name="fade">
+        <Transition mod="in-out" name="fade">
           <div
             v-if="signInError"
             class="border-1 border-color-dark-red box-shadow-red background-red color-white font-size-14 font-weight-600 padding-sm-m margin-sm-y-m"
@@ -250,6 +279,16 @@ async function signInWrapper() {
         >
           {{ $t('sign in') }}
         </button>
+
+        <div class="col-12 borde-top-1 border-color-light row justify-content-center">
+          <button
+            type="button"
+            @click="forgetMyPass"
+            class="button button-color-yellow color-white margin-sm-top-m"
+          >
+            {{ $t('forget password') }}
+          </button>
+        </div>
       </ModalComponent>
     </Transition>
     <Transition name="fade" mode="in-out">

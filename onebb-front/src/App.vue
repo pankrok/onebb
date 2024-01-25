@@ -4,8 +4,10 @@ import { useRoute, RouterView } from 'vue-router'
 import { useSkin } from './hooks/obbClient'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
-import ModalComponent from './components/ui/elements/ModalComponent.vue'
+import MessengerComponent from '@/components/ui/partials/MessengerComponent.vue'
+import useMessengerStore from '@/stores/useMessengerStore'
 
+const messengerStore = useMessengerStore();
 useSkin()
 const route = useRoute()
 </script>
@@ -14,12 +16,12 @@ const route = useRoute()
   <HeaderComponent />
   <main class="container margin-top-l padding-sm-x-m">
     <!-- <span class="position-fixed box-loader col-1"></span> -->
-    <section class="col-12">
+    <!-- <section class="col-12">
       <div class="navigation row align-items-center border-none bfont-size-12">
         <a href="#" class="padding-right-m">Home</a> >
         <a href="#" class="padding-m active">Home</a>
       </div>
-    </section>
+    </section> -->
     <div class="row">
       <!-- <aside class="col-3">
             <div class="margin-m padding-m border-color-red border-radius-5 box-shadow-red background-red color-white font-weight-600">
@@ -38,5 +40,9 @@ const route = useRoute()
         </aside> -->
     </div>
   </main>
+  <Transition mode="in-out" name="fade">
+    <MessengerComponent v-if="messengerStore.showMessenger" key="messenger-component" />
+  </Transition>
+  
   <FooterComponent />
 </template>

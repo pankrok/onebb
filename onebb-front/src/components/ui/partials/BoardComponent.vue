@@ -6,25 +6,40 @@ import useMoment from '@/hooks/useMoment'
 import parseUsername from '@/utils/parseUsername'
 import useUserStore from '@/stores/useUserStore'
 import { $t } from '@/utils/i18n'
+import PaginatorComponent from './PaginatorComponent.vue'
+import type { HydraView } from '@/interfaces/config'
 
 defineProps<{
   board?: IBoard
   plots?: IPlot[]
+  paginator?: HydraView
 }>()
 
 const userStore = useUserStore()
-
+console.log()
 const { parse } = useMoment()
 </script>
 <template>
-  <section class="row col-auto" v-if="board && plots">
-    <h1 class="margin-y-s">
+  <section class="row col-auto align-items-center" v-if="board && plots">
+    <h1 class="col-12 margin-y-s">
       {{ board.name }}
     </h1>
-    <div v-if="!userStore.logged" class="col-sm-12">
-      <button class="button button-color-green margin-right-m">
-        {{ $t('Start new plot') }}
-      </button>
+
+    <div v-if="userStore.logged" class="row margin-sm-y-m">
+      <RouterLink
+        class="button button-color-green margin-right-m"
+        :to="{
+          name: 'CreatePlot',
+          params: {
+            id: board.id
+          }
+        }"
+        >{{ $t('Start new plot') }}
+      </RouterLink>
+      
+    </div>
+    <div class="col-sm-auto row justify-content-end">
+      <paginator-component :hydra-view="paginator" />
     </div>
     <panel-component :header="true">
       <template #header>
@@ -127,9 +142,12 @@ const { parse } = useMoment()
                 mobile-size="img-size-mobile-s"
               />
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </panel-component>
+    <div class="col-sm-auto row justify-content-end">
+      <paginator-component :hydra-view="paginator" />
+    </div>
   </section>
 </template>
