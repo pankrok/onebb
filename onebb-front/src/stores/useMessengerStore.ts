@@ -1,16 +1,26 @@
 import type { IMessage, IOneMessenger, IUser } from '@/interfaces'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import moment from 'moment'
 
 const useMessengerStore = defineStore('messengerStore', () => {
   const showMessenger = ref(false)
-  const lastReadMessageTime = ref(null)
+  const lastReadMessageTime = ref('')
   const chats = ref<IOneMessenger[]>([])
   const currentChat = ref<IOneMessenger | null>(null)
   const messages = ref<IMessage[]>([])
   const userList = ref<IUser[]>([])
   const chatUsers = ref<IUser[]>([])
   const component = ref(0)
+  const lastReadChat = ref(localStorage.getItem('lastReadChat') ?? '');
+  const newMessages = ref(false);
+
+  function setLastMessageTime(time: string) {
+    lastReadMessageTime.value = time
+    lastReadChat.value = time;
+    localStorage.setItem('lastReadChat', time);
+    newMessages.value = false;
+  }
 
   function toggleMessenger() {
     showMessenger.value = !showMessenger.value
@@ -18,6 +28,10 @@ const useMessengerStore = defineStore('messengerStore', () => {
 
   function setChats(payload: IOneMessenger[]) {
     chats.value = payload
+    const firstItem = payload[0]
+    if (moment(firstItem.updated_at) > moment(lastReadChat.value)) {
+      newMessages.value = true;
+    }
   }
 
   function updateUserList(payload: IUser[]) {
@@ -36,19 +50,36 @@ const useMessengerStore = defineStore('messengerStore', () => {
     component.value = id
   }
 
+  function setMessages(msgs: IMessage[]) {
+    messages.value = msgs
+    const [lastItem] = msgs.slice(-1)
+    setLastMessageTime(lastItem.created_at)
+  }
+
+  function pushMessage(msg: IMessage) {
+    messages.value.push(msg)
+    setLastMessageTime(msg.created_at)
+  }
+
   return {
     showMessenger,
     userList,
     chatUsers,
     component,
     messages,
+    chats,
     currentChat,
+    lastReadMessageTime,
+    newMessages,
+    lastReadChat,
     toggleMessenger,
     setChats,
     updateUserList,
     setChatUsers,
     setComponent,
-    setCurrentChat
+    setCurrentChat,
+    setMessages,
+    pushMessage,
   }
 })
 

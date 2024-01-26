@@ -46,6 +46,7 @@ export interface ISkinResponse {
 }
 
 export interface IOneMessenger {
+  '@id': string
   id: number,
   updated_at: string,
   users: IUser[]
@@ -78,6 +79,7 @@ export interface ITokenResponse {
 }
 
 export interface IUser {
+  '@id': string
   id: number
   username: string
   banned: boolean
