@@ -97,6 +97,8 @@ $flexes: (flex-start, center, flex-end, space-between, space-around, start, end)
   flex-grow: 1;
 }
 
+
+
 $borders: ('1', '2', '3', '4', '5');
 @each $position in $positions {
   @each $size in $borders {
@@ -236,6 +238,10 @@ $displays: (flex, none, block);
   .display-sm-#{$name} {
     display: $name;
   }
+}
+
+.flex-no-wrap {
+  flex-wrap: nowrap;
 }
 
 @media only screen and (min-width: 768px) {

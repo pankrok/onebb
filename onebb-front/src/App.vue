@@ -1,15 +1,28 @@
 <script setup lang="ts">
-
 import { useRoute, RouterView } from 'vue-router'
-import { useSkin } from './hooks/obbClient'
+import { useMessenger, useSkin } from './hooks/obbClient'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import MessengerComponent from '@/components/ui/partials/MessengerComponent.vue'
 import useMessengerStore from '@/stores/useMessengerStore'
+import { onMounted, onUnmounted, ref } from 'vue'
 
-const messengerStore = useMessengerStore();
+const messengerStore = useMessengerStore()
+const messenger = useMessenger()
 useSkin()
 const route = useRoute()
+
+const interval = ref()
+
+onMounted(() => {
+  interval.value = setInterval(() => {
+    messenger.getNewChats()
+  }, 5000)
+})
+
+onUnmounted(() => {
+  clearInterval(interval.value)
+})
 </script>
 
 <template>
@@ -28,11 +41,11 @@ const route = useRoute()
                 This is alert
             </div>
         </aside> -->
-        <router-view v-slot="{ Component }">
-          <Transition name="fade" mode="out-in">
-            <component :is="Component" :key="route.fullPath" />
-          </Transition>
-        </router-view>
+      <router-view v-slot="{ Component }">
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" :key="route.fullPath" />
+        </Transition>
+      </router-view>
       <!-- <aside class="col-3">
             <div class="margin-m padding-m border-color-primary border-radius-5 box-shadow-green background-green color-white font-weight-600">
                 This is success
@@ -43,6 +56,6 @@ const route = useRoute()
   <Transition mode="in-out" name="fade">
     <MessengerComponent v-if="messengerStore.showMessenger" key="messenger-component" />
   </Transition>
-  
+
   <FooterComponent />
 </template>

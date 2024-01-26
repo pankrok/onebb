@@ -144,7 +144,7 @@ usePage()
         </li> -->
         <li>
           <button class="button button-color-primary position-relative" @click="messengerStore.toggleMessenger">
-            <span class="circle pulse background-green box-shadow-green"></span>
+            <span v-if="messengerStore.newMessages" class="circle pulse background-green box-shadow-green"></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="1.5em"
