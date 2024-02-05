@@ -3,17 +3,17 @@ import PlotComponent from '@/components/ui/partials/PlotComponent.vue'
 import { usePlot } from '@/hooks/obbClient'
 import type { IPost } from '@/interfaces'
 import instanceOf from '@/utils/instanceOf'
+import { watch } from 'vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
-const  data = ref();
+const data = ref();
 const {getPlot, addPostToPlot, updatePost} = usePlot()
 getPlot().then((response) => {
     console.log('getPlot', {response})
-  data.value = response;
+    data.value = response;
 })
-
 
 async function modUpdate(id: number, val: { content?: string | undefined; hidden?: boolean | undefined; }) {
   const x = await updatePost(id, val);

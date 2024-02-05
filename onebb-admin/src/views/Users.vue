@@ -97,6 +97,9 @@ export default {
   },
   mounted() {
     this.$store.dispatch('onebb/get', { resource: 'group' }).then(response => {
+        if (!response) {
+            return;
+        }
         let options = [];
         let userRoles = [];
         response['hydra:member'].forEach(function(el) {

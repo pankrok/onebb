@@ -51,21 +51,28 @@ class OneBB {
         let uri = API_URL;
         uri += this.api ?? 'api/'; 
         uri += this.resource + this.parseParams();
-        
-        const req = await fetch(uri, this.config);
-        if (this.config.method === 'DELETE') {
-            response =  req;
-        } else {
-            try {
-                response =  req.json();
-            } catch(e) {
-                console.log({OnebbError: e});
-                response = null;
-            }
+        try {
+          const req = await fetch(uri, this.config);
+          if (this.config.method === 'DELETE') {
+              response =  req;
+          } else {
+              if (req.status == 500) {
+                throw new Error(req);
+              }
+              try {
+                  response =  req.json();
+              } catch(e) {
+                  console.log({OnebbError: e});
+                  response =  req
+              }
+          }
+          
+          this.setDefaults();
+          return {status: req.status, response: response};
+        } catch (e) {
+          return {status: e.status, response: response};
         }
-        
-        this.setDefaults();
-        return {status: req.status, response: response};
+       
     }
   }
     

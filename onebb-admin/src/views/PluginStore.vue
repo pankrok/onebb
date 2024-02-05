@@ -49,12 +49,17 @@ export default {
     }
   },
   mounted() {
+    try {
     fetch(this.storeUrl + '/api/plugins')
       .then((response) => response.json())
       .then((data) => { 
         this.$store.dispatch('loaded');
         this.plugins = data['hydra:member']; 
       });
+    } catch(e) {
+      console.error('/api/plugins', {e})
+      this.$store.dispatch('loaded');
+    }
   },
   beforeUnmount() {
     this.$store.dispatch('loading');

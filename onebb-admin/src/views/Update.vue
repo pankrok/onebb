@@ -46,7 +46,11 @@ export default {
         return null;
     },
     count() {
+      try {
         return this.$store.state.obbBell.updates.length ?? 0;
+      } catch (e) {
+        return 0;
+      }
     }
   },
   mounted() {

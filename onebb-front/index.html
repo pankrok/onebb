@@ -5,11 +5,35 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="{{ VITE_APP_META }}">
+    <meta name="description" content="{{ VITE_APP_META }}" />
     <title>{{ VITE_APP_TITLE }}</title>
   </head>
   <body class="color-white padding-s">
     <div id="app" data-obb="{{ VITE_APP_BASE_URL }}" data-url="{{ VITE_APP_BASE_SHEME }}"></div>
     <script type="module" src="/src/main.ts"></script>
+    {% for snippet in snippets %}{{ snippet|raw }}{% endfor %}
+    <script>
+      document.addEventListener('readystatechange', function () {
+        if (document.readyState === 'complete') {
+          window.$obbPlugins.subscribe('Home', function () {
+            window.$obbPlugins.dispatch('ServersList', 'getList').then((response) => {
+              document.getElementById('serverListPlugin').innerHTML = response.data
+            })
+          })
+        }
+      })
+
+      document.addEventListener('readystatechange', function() {
+        if (document.readyState === 'complete') {
+            window.$obbPlugins.subscribe('Home', function(){
+            window.$obbPlugins
+                .dispatch('ExamplePlugin', 'myEvent')
+                .then(response => {
+                    document.querySelector('#examplePluginContent').innerHTML = (response.data)
+                });
+            })   
+        }
+    }); 
+    </script>
   </body>
 </html>

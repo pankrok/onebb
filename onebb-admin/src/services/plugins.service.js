@@ -26,12 +26,15 @@ class Plugin {
         this.#request = async function() {
             
             let response = null;
-            
+            try {
             const req = await fetch(API_URL + 'plugin/dispatch', this.config);
             response =  req.json();
           
             this.config.body = null;
             return {status: req.status, response: response};
+        } catch(e) {
+            console.error('Plugin class ERR: ', {e})
+        }
         };
         
        

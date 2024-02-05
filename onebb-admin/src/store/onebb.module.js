@@ -27,7 +27,6 @@ export const onebb = {
             let page = api.page ? parseInt(api.page) : null;
             let limit = api.limit ? parseInt(api.limit) : null;
             let params = api.params ?? null;
-            
             OneBB[res]()
             .setPage(page)
             .setLimit(limit)
