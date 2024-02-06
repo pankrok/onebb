@@ -6,7 +6,7 @@
       <ul class="second_menu">
 
         <div class="row">
-        <Bell />
+        <!-- <Bell /> -->
         <li class="list-complete-item">
             <button @click="localeMenu = !localeMenu" id="theme-toggle" class="btn xs rounded">
                 <i class="fas fa-flag"></i>
@@ -20,7 +20,6 @@
                 </div>
             </Transition>
         </li>
-        <!-- <li class="list-complete-item"><button @click="darkMode" id="theme-toggle" class="btn btn-secondary xs rounded"><i class="fa-moon fas"></i></button></li> -->
         <li class="list-complete-item d-flex j-c-center a-i-center"><img :src="uri + $store.state.onebb.status.avatar" alt="Avatar" class="avatar xs mx-1"><!--<i class="fa-solid fa-caret-down"></i>--></li>
         <li @click="toggleMenu" id="menuToggle" :class="{ active: $store.state.mobileMenu }" class="d-sm-block">
             <span></span>
@@ -36,12 +35,12 @@
 
 <script>
 
-import Bell from './Bell'; 
+// import Bell from './Bell'; 
 
 export default {
   name: 'Header',
   components: {
-    Bell
+    // Bell
   },
   data(){
     return {
