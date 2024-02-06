@@ -32,18 +32,18 @@ OneBB are an open source discussion software that is simple to use and extended 
 
 Ready features:
 * RWD designe,
-* plugins system (not refactored yet),
-* plugin store (not refactored yet),
+* plugins system,
 * easy to use module system,
-* email templates with editor (not refactored yet),
-* messenger (not refactored yet),
+* email templates with editor,
+* messenger,
+* translation,
 * updater (not refactored yet),
+* plugin store (not refactored yet),
 
 In progress:
 * chat,
 * skin store,
 * ban reasons,
-* translation,
 * simple search engine
 * two factor authentication,
 

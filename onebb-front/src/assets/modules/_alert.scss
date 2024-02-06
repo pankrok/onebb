@@ -1,0 +1,116 @@
+@use 'sass:map';
+$alerts: (
+  'success': 'green',
+  'info': 'blue',
+  'danger': 'red',
+  'warning': 'yellow'
+);
+
+$anime-time: 10s;
+
+$box-width: 200px;
+$box-height: 100px;
+$clip-distance: 0.05;
+$clip-size-width: $box-width * (1 + $clip-distance * 2);
+$clip-size-height: $box-height * (1 + $clip-distance * 4);
+$path-size: 2px;
+
+%full-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.alert-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.alert-timeout {
+  width: 0%;
+  height: 3px;
+  display: flex;
+}
+
+@each $name, $color in $alerts {
+  .alert-#{$name},
+  .alert-#{$name}-glow {
+    min-height: 50px;
+    padding: 0.75rem 1rem;
+    height: 100%;
+    width: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 0;
+    font-weight: 600;
+  }
+
+  .alert-#{$name}-glow {
+    position: absolute;
+  }
+
+  .alert-#{$name} {
+    z-index: 1;
+    position: relative;
+  }
+
+  .alert-#{$name} > div > .alert-timeout {
+    background-color: map.get($colors, 'dark-#{$color}');
+  }
+  
+
+  .alert-#{$name}-glow {
+    overflow: hidden;
+    filter: blur(20px);
+  }
+
+  .alert-#{$name}:before,
+  .alert-#{$name}-glow:before {
+    content: '';
+    z-index: -2;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    position: absolute;
+    width: 99999px;
+    height: 99999px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-image: conic-gradient(
+      transparent,
+      map.get($colors, 'light-#{$color}'),
+      transparent 25%
+    );
+    animation: rotate 4s linear infinite;
+  }
+
+  .alert-#{$name}:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 5px;
+    top: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    background: map.get($colors, '#{$color}');
+    // border-radius: 7px;
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: translate(-50%, -50%) rotate(1turn);
+    }
+  }
+
+  @keyframes alert-timeout-animation {
+    100% {
+      width: 100%;
+    }
+  }
+}

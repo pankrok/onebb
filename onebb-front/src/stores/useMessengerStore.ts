@@ -1,6 +1,7 @@
 import type { IMessage, IOneMessenger, IUser } from '@/interfaces'
+import useAlertStore from './useAlertStore'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import moment from 'moment'
 
 const useMessengerStore = defineStore('messengerStore', () => {
@@ -12,14 +13,24 @@ const useMessengerStore = defineStore('messengerStore', () => {
   const userList = ref<IUser[]>([])
   const chatUsers = ref<IUser[]>([])
   const component = ref(0)
-  const lastReadChat = ref(localStorage.getItem('lastReadChat') ?? '');
-  const newMessages = ref(false);
+  const lastReadChat = ref(localStorage.getItem('lastReadChat') ?? '')
+  const newMessages = ref(false)
+  const alertStore = useAlertStore()
+  watch(newMessages, (msg) => {
+    if (msg === true) {
+      alertStore.setAlert({
+        type: 'alert-info',
+        message: 'you have new message',
+        timeout: 5
+      })
+    }
+  })
 
   function setLastMessageTime(time: string) {
     lastReadMessageTime.value = time
-    lastReadChat.value = time;
-    localStorage.setItem('lastReadChat', time);
-    newMessages.value = false;
+    lastReadChat.value = time
+    localStorage.setItem('lastReadChat', time)
+    newMessages.value = false
   }
 
   function toggleMessenger() {
@@ -30,7 +41,7 @@ const useMessengerStore = defineStore('messengerStore', () => {
     chats.value = payload
     const firstItem = payload[0]
     if (moment(firstItem.updated_at) > moment(lastReadChat.value)) {
-      newMessages.value = true;
+      newMessages.value = true
     }
   }
 
@@ -79,7 +90,7 @@ const useMessengerStore = defineStore('messengerStore', () => {
     setComponent,
     setCurrentChat,
     setMessages,
-    pushMessage,
+    pushMessage
   }
 })
 

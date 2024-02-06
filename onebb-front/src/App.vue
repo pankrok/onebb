@@ -10,6 +10,7 @@ import useConfigStore from './stores/useConfigStore'
 import { storeToRefs } from 'pinia'
 import CustomBoxComponent from '@/components/ui/skinBoxes/CustomBoxComponent.vue'
 import PluginBoxComponent from '@/components/ui/skinBoxes/PluginBoxComponent.vue'
+import AlertWrapper from '@/components/ui/elements/AlertWrapperComponent.vue'
 import usePlugins, { initPlugins } from './utils/usePlugins'
 import { watch } from 'vue'
 
@@ -104,6 +105,10 @@ onUnmounted(() => {
   <Transition mode="in-out" name="fade">
     <MessengerComponent v-if="messengerStore.showMessenger" key="messenger-component" />
   </Transition>
+  <AlertWrapper />
 
   <FooterComponent />
 </template>
+<style>
+@import '/public/main.css';
+</style>
