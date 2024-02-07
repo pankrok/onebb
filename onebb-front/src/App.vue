@@ -1,23 +1,52 @@
 <script setup lang="ts">
 import { useRoute, RouterView } from 'vue-router'
-import { useMessenger, useSkin } from './hooks/obbClient'
+import { useMessenger } from './hooks/obbClient'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
-import MessengerComponent from '@/components/ui/partials/MessengerComponent.vue'
 import useMessengerStore from '@/stores/useMessengerStore'
 import { onMounted, onUnmounted, ref } from 'vue'
+import useConfigStore from './stores/useConfigStore'
+import { storeToRefs } from 'pinia'
+import { defineAsyncComponent } from 'vue'
+import usePlugins, { initPlugins } from './utils/usePlugins'
+import { watch } from 'vue'
+
+const MessengerComponent = defineAsyncComponent(
+  () => import('@/components/ui/partials/MessengerComponent.vue')
+)
+
+const AlertWrapper = defineAsyncComponent(
+  () => import('@/components/ui/elements/AlertWrapperComponent.vue')
+)
+
+const plugins = usePlugins()
+//@ts-ignore
+window.$obbPlugins = plugins
 
 const messengerStore = useMessengerStore()
 const messenger = useMessenger()
-useSkin()
 const route = useRoute()
-
 const interval = ref()
+
+const configStore = useConfigStore()
+configStore.init()
+const { pageBoxes } = storeToRefs(configStore)
+console.log({ pageBoxes })
+const boxComponents: { [index: string]: any } = {
+  PluginBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/PluginBoxComponent.vue')),
+  CustomBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/CustomBoxComponent.vue')),
+  UserStatistics: defineAsyncComponent(() => import('@/components/ui/skinBoxes/UserStatisticBoxComponent.vue')),
+}
+console.log({AppRoute:   route.fullPath.toString()})
+watch(route, () => {
+  initPlugins(route.name?.toString())
+})
 
 onMounted(() => {
   interval.value = setInterval(() => {
     messenger.getNewChats()
   }, 5000)
+  initPlugins(route.name?.toString())
 })
 
 onUnmounted(() => {
@@ -36,26 +65,56 @@ onUnmounted(() => {
       </div>
     </section> -->
     <div class="row">
-      <!-- <aside class="col-3">
-            <div class="margin-m padding-m border-color-red border-radius-5 box-shadow-red background-red color-white font-weight-600">
-                This is alert
-            </div>
-        </aside> -->
+      <aside v-if="pageBoxes?.top" class="col-12">
+        <component
+          v-for="box in pageBoxes.top"
+          :is="boxComponents[box.engine]"
+          :key="`plugin_box_${box.id}`"
+          v-bind="box"
+        />
+      </aside>
+      <aside v-if="pageBoxes?.left" class="col-3">
+        <div class="margin-right-l">
+          <component
+            v-for="box in pageBoxes.left"
+            :is="boxComponents[box.engine]"
+            :key="`plugin_box_${box.id}`"
+            v-bind="box"
+          />
+        </div>
+      </aside>
       <router-view v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
-          <component :is="Component" :key="route.fullPath" />
+          <component :is="Component" :key="route.fullPath.toString()" />
         </Transition>
       </router-view>
-      <!-- <aside class="col-3">
-            <div class="margin-m padding-m border-color-primary border-radius-5 box-shadow-green background-green color-white font-weight-600">
-                This is success
-            </div>
-        </aside> -->
+      <aside v-if="pageBoxes?.right" class="col-3">
+        <div class="margin-left-l">
+          <component
+            v-for="box in pageBoxes.right"
+            :is="boxComponents[box.engine]"
+            :key="`plugin_box_${box.id}`"
+            v-bind="box"
+          />
+        </div>
+      </aside>
+      <aside v-if="pageBoxes?.bottom" class="col-12">
+        <component
+          v-for="box in pageBoxes.bottom"
+          :is="boxComponents[box.engine]"
+          :key="`plugin_box_${box.id}`"
+          v-bind="box"
+        />
+      </aside>
     </div>
   </main>
   <Transition mode="in-out" name="fade">
     <MessengerComponent v-if="messengerStore.showMessenger" key="messenger-component" />
   </Transition>
+  <AlertWrapper />
 
   <FooterComponent />
 </template>
+<style>
+@import '/public/main.css';
+</style>

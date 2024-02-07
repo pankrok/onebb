@@ -4,7 +4,7 @@ import { useBoard } from '@/hooks/obbClient'
 import type { IBoard, IPlot } from '@/interfaces'
 import instanceOf from '@/utils/instanceOf'
 import { ref } from 'vue'
-
+console.log('BOARD')
 const data = ref<{
   board: IBoard
   plots: IPlot[]

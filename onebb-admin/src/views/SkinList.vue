@@ -66,6 +66,7 @@ export default {
   methods: {
     loadSkins() {
         this.$store.dispatch('onebb/get', { resource: 'adminSkin' }).then(response => {
+            console.log({response})
             this.resources = response;           
             this.$store.dispatch('loaded');
         });  

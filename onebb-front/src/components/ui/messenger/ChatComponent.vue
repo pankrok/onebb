@@ -62,11 +62,11 @@ onUnmounted(() => {
       <MsgComponent v-else v-bind="message" />
     </div>
   </div>
-  <div class="row">
-    <div class="col-8 column">
+  <div class="row-sm">
+    <div class="col-sm-8 column-sm">
       <input type="text" class="form-control color-white font-weight-400" v-model="msg" />
     </div>
-    <div class="col-4 column">
+    <div class="col-sm-4 column-sm">
       <button class="button color-white" @click="sendMessage">Send</button>
     </div>
   </div>

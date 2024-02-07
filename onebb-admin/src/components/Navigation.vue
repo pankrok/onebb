@@ -61,9 +61,9 @@
             
                 <Transition name="slide-left-fade">  
                 <ul v-if="showPlugins" name="list"  @click="hideMenu"  class="second-list">
-                     <li class="list-item">
+                     <!-- <li class="list-item">
                         <router-link :to="{ name: 'PluginStore' }"><i class="fa-solid fa-plug-circle-bolt"></i> {{ $t('add plugin') }}</router-link>
-                    </li>
+                    </li> -->
                     <li class="list-item">
                         <router-link :to="{ name: 'Plugins' }"><i class="fa-solid fa-plug-circle-check"></i> {{ $t('installed plugins') }}</router-link>
                     </li>
@@ -98,12 +98,12 @@
                     <li class="list-item">
                         <router-link :to="{ name: 'Configuration' }"><i class="fa-solid fa-gears"></i> {{ $t('configuration') }}</router-link>
                     </li>
-                    <li class="list-item">
+                    <!-- <li class="list-item">
                         <router-link :to="{ name: 'Update' }">
                             <i class="fa-solid fa-code-compare"></i> 
                             {{ $t('update') }}
                         </router-link>
-                    </li>
+                    </li> -->
                 </ul>  
                 </Transition>
         </li>

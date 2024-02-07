@@ -1,3 +1,5 @@
+@use "sass:map";
+
 nav {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -29,3 +31,23 @@ nav > img {
     width: auto;
     max-height: 50px;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: map.get($colors, "dark"); 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: map.get($colors, "light");; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: map.get($colors, "light"); 
+  }

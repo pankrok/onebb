@@ -1,7 +1,7 @@
 <template>
 <div class="row" :key="$route.name">
   <div class="col-12 mx-1">
-      <div class="box">
+      <div v-if="templates"  class="box">
         <div class="box-header row j-c-space-between a-i-center">
             <h1>Email templates list</h1>
         </div>

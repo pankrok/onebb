@@ -119,6 +119,9 @@ export interface IPost {
   hidden: boolean
   edit_by: IUser
   created_at: string
+  plot: {
+    name: string
+  }
 }
 
 // fixme: add interface props

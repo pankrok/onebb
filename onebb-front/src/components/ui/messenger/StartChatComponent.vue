@@ -45,7 +45,7 @@ function startChat() {
       <span v-html="parseUsername(user)" class="margin-sm-x-s"></span>
     </div>
   </div>
-  <div class="column flex-grow-1 margin-sm-y-m" style="overflow-y: scroll">
+  <div class="column-sm flex-grow-1 margin-sm-y-m" style="overflow-y: scroll">
     <div
       v-if="messengerStore.userList"
       v-for="user in messengerStore.userList"
@@ -53,19 +53,19 @@ function startChat() {
       :key="`search_${user.id}`"
       class="cursor-pointer row-sm align-items-center"
     >
-      <AvatarComponent :url="user.avatar" size="img-size-m" mobile-size="img-size-mobile-m" />
+      <AvatarComponent :url="user.avatar" size="img-size-m" mobile-size="img-size-mobile-s" />
       <span v-html="parseUsername(user)"></span>
     </div>
   </div>
-  <div class="row">
-    <div class="col-8 column">
+  <div class="row-sm">
+    <div class="col-sm-8 column-sm">
       <input
         type="text"
         class="form-control color-white font-weight-400"
         v-model="searchUserString"
       />
     </div>
-    <div class="col-4 column">
+    <div class="col-sm-4 column-sm">
       <button class="button button-color-green" @click="startChat">
         {{ $t('start chat') }}
       </button>

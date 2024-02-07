@@ -57,7 +57,8 @@ export default {
   methods: {
     loadBells() {
         this.$store.dispatch('onebb/get', { resource: 'updateCheck' }).then(response => {
-            this.$store.dispatch('obbBell/setUpdates', response);
+            console.log('updateCheck', {response})
+          //  this.$store.dispatch('obbBell/setUpdates', response);
     });
     }
   },

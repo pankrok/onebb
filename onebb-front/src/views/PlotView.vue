@@ -7,13 +7,12 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
-const  data = ref();
+const data = ref();
 const {getPlot, addPostToPlot, updatePost} = usePlot()
 getPlot().then((response) => {
     console.log('getPlot', {response})
-  data.value = response;
+    data.value = response;
 })
-
 
 async function modUpdate(id: number, val: { content?: string | undefined; hidden?: boolean | undefined; }) {
   const x = await updatePost(id, val);
@@ -30,5 +29,8 @@ async function submitPost(payload: string) {
 </script>
 
 <template>
-  <plot-component v-bind="data" @submit="submitPost" @mod="modUpdate" />
+  <div class="col-12 row-sm">
+    <plot-component v-if="data" v-bind="data" @submit="submitPost" @mod="modUpdate" />
+  </div>
+  
 </template>

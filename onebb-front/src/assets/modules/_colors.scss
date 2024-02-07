@@ -1,18 +1,24 @@
 
 $colors :(
-    'background': #171721,
-    "light": #aaa,
-    'white': #f3f3f3,
-    "dark": #4e4e4e,
-    'black': #1c1c1c,
-    'blue': #59c1bd,
-    'green': #80ed99,
-    'dark-green': #182b1c,
-    'red': #f05454,
-    'dark-red': #702727,
-    'yellow': #ebe645,
-    'primary': #252533,
-    'secondary': #2f2f41,
-    'mask': #2f2f417a
+    'background': var(--background),
+    "light": var(--light),
+    'white': var(--white),
+    "dark": var(--dark),
+    'black': var(--black),
+    'blue': var(--blue),
+    'dark-blue': var(--dark-blue),
+    'light-blue': var(--light-blue),
+    'green': var(--green),
+    'dark-green': var(--dark-green),
+    'light-green': var(--light-green),
+    'red': var(--red),
+    'dark-red': var(--dark-red),
+    'light-red': var(--light-red),
+    'yellow': var(--yellow),
+    'dark-yellow': var(--dark-yellow),
+    'light-yellow': var(--light-yellow),
+    'primary': var(--primary),
+    'secondary': var(--secondary),
+    'mask': var(--mask)
 );
 

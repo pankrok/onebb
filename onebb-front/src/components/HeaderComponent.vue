@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ModalComponent from './ui/elements/ModalComponent.vue'
-import SmallMenuComponent from './ui/elements/SmallMenuComponent.vue'
+import { defineAsyncComponent, ref } from 'vue'
 import { $t } from '@/utils/i18n'
 import useAxios from '@/hooks/useAxios'
 import useUserStore from '@/stores/useUserStore'
-import AvatarComponent from './ui/elements/AvatarComponent.vue'
 import useLoadingStore from '@/stores/useLoadingStore'
 import { storeToRefs } from 'pinia'
 import { usePage } from '@/hooks/obbClient'
 import type { IPage } from '@/interfaces'
 import { useRouter } from 'vue-router'
 import useMessengerStore from '@/stores/useMessengerStore'
+import useAlertStore from '@/stores/useAlertStore'
+
+const AvatarComponent = defineAsyncComponent(() => import('./ui/elements/AvatarComponent.vue'));
+const ModalComponent = defineAsyncComponent(() => import('./ui/elements/ModalComponent.vue'));
+const SmallMenuComponent = defineAsyncComponent(() => import('./ui/elements/SmallMenuComponent.vue'));
+const SearchComponent = defineAsyncComponent(() => import('./ui/elements/SearchComponent.vue'));
 
 const userStore = useUserStore()
+const alertStore = useAlertStore()
 const messengerStore = useMessengerStore()
 const router = useRouter()
 const pages = ref<IPage[]>([])
@@ -21,7 +25,6 @@ const { loading } = storeToRefs(useLoadingStore())
 const { signIn, signOut, signUp } = useAxios()
 const loginModal = ref(false)
 const registerModal = ref(false)
-const registerSuccess = ref(false)
 const toggleUserMenu = ref(false)
 const creditionals = ref({
   username: '',
@@ -42,28 +45,53 @@ async function registerWrapper() {
   console.log({ registerWrapper: registerData.value })
   if (registerData.value.password !== registerData.value.vpassword) {
     registerError.value = $t('passwords not match')
+    alertStore.setAlert({
+      type: 'alert-danger',
+      message: registerError.value,
+      timeout: 5
+    })
     return
   }
 
   if (registerData.value.password.length < 4 || registerData.value.password.length > 32) {
     registerError.value = $t('Password must be bettwen 4 and and 32 characters')
+    alertStore.setAlert({
+      type: 'alert-danger',
+      message: registerError.value,
+      timeout: 5
+    })
     return
   }
 
   if (registerData.value.username.length < 4 || registerData.value.username.length > 32) {
     registerError.value = $t('Username must be bettwen 4 and and 32 characters')
+    alertStore.setAlert({
+      type: 'alert-danger',
+      message: registerError.value,
+      timeout: 5
+    })
     return
   }
 
   if (registerData.value.email.length < 1) {
     registerError.value = $t('Email cannot be empty')
+    alertStore.setAlert({
+      type: 'alert-danger',
+      message: registerError.value,
+      timeout: 5
+    })
     return
   }
 
   registerError.value = ''
   const regResponse = await signUp(registerData.value)
   console.log({ regResponse })
-  registerSuccess.value = true
+  alertStore.setAlert({
+    type: 'alert-success',
+    message: $t('Congratulations, your account has been successfully created'),
+    timeout: 5
+  })
+  //registerSuccess.value = true
   setTimeout(() => {
     registerModal.value = false
   }, 3000)
@@ -72,11 +100,39 @@ async function registerWrapper() {
 async function signInWrapper() {
   try {
     const loginResponse = await signIn(creditionals.value)
-    if (loginResponse) loginModal.value = false
+    if (loginResponse) {
+      loginModal.value = false
+      alertStore.setAlert({
+        type: 'alert-success',
+        message: $t('you are logged sucessful'),
+        timeout: 5
+      })
+    }
   } catch (e: any) {
-    signInError.value = $t(e.response.data.message)
+    alertStore.setAlert({
+      type: 'alert-danger',
+      message: $t(e.response.data.message),
+      timeout: 5
+    })
     console.log({ e })
   }
+}
+
+async function signOutWrapper() {
+  if (await signOut()) {
+    userStore.$reset()
+    alertStore.setAlert({
+      type: 'alert-success',
+      message: $t('you are signed out'),
+      timeout: 5
+    })
+    return
+  }
+  alertStore.setAlert({
+    type: 'alert-danger',
+    message: $t('there was a problem with sign out!'),
+    timeout: 5
+  })
 }
 
 function forgetMyPass() {
@@ -119,6 +175,7 @@ usePage()
                 id: page.id
               }
             }"
+            class="font-size-16"
           >
             {{ page.name }}
           </RouterLink>
@@ -134,8 +191,8 @@ usePage()
               fill="white"
               viewBox="0 0 448 512"
             >
-              <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-             <!-- <title>Hello world!</title>
+              ! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+        <!-- <title>Hello world!</title>
               <path
                 d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"
               />
@@ -143,8 +200,17 @@ usePage()
           </button>
         </li> -->
         <li>
-          <button class="button button-color-primary position-relative" @click="messengerStore.toggleMessenger">
-            <span v-if="messengerStore.newMessages" class="circle pulse background-green box-shadow-green"></span>
+          <SearchComponent />
+        </li>
+        <li>
+          <button
+            class="button button-color-primary position-relative"
+            @click="messengerStore.toggleMessenger"
+          >
+            <span
+              v-if="messengerStore.newMessages"
+              class="circle pulse background-green box-shadow-green"
+            ></span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="1.5em"
@@ -175,11 +241,12 @@ usePage()
                     id: userStore.user.uid
                   }
                 }"
+                class="font-size-16"
               >
-                {{ userStore.user.slug }}
+                {{ $t('settings') }}
               </RouterLink>
 
-              <p @click="signOut">{{ $t('logout') }}</p>
+              <button type="button" class="link font-size-16" @click="signOutWrapper">{{ $t('logout') }}</button>
             </div>
           </SmallMenuComponent>
           <AvatarComponent
@@ -302,22 +369,6 @@ usePage()
         key="register-modal"
       >
         <h3 class="text-align-center margin-sm-top-s">{{ $t('sign up') }}</h3>
-        <Transition mod="in-out" name="fade">
-          <div
-            v-if="registerError"
-            class="border-1 border-color-dark-red box-shadow-red background-red color-white font-size-14 font-weight-600 padding-sm-m margin-sm-y-m"
-          >
-            {{ registerError }}
-          </div>
-        </Transition>
-        <Transition mod="in-out" name="fade">
-          <div
-            v-if="registerSuccess"
-            class="border-1 border-color-dark-green box-shadow-green background-green color-white font-size-14 font-weight-600 padding-sm-m margin-sm-y-m"
-          >
-            {{ $t('Congratulations, your account has been successfully created') }}
-          </div>
-        </Transition>
 
         <label for="username" class="font-size-14">{{ $t('username') }}</label>
         <input
