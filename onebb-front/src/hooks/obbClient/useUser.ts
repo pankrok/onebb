@@ -11,8 +11,8 @@ export function useUser() {
   const userPosts = ref<IPost[]>([])
   const lastPage = ref(false)
 
-  async function getUser() {
-    const { data } = await axios.get<unknown>(`${USER_URL}/${route.params.id}`)
+  async function getUser(id?: number) {
+    const { data } = await axios.get<unknown>(`${USER_URL}/${id ?? route.params.id}`)
     console.log(data)
 
     if (instanceOf<IUser>(data)) return data

@@ -10,10 +10,12 @@ useCategory().then((response) => {
   if (instanceOf<ICategory[]>(response))
     categories.value = response
 })
+
+console.log('HOME', {categories: categories.value})
 </script>
 
 <template>
-  <section class="row col-auto">
+  <section class="row col-auto" key="homepage">
     <CategoryComponent v-for="(category, index) in categories" :key="category.id" :category="category" :index-no="index+1" />
   </section>
 </template>

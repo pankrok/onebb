@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ModalComponent from './ui/elements/ModalComponent.vue'
-import SmallMenuComponent from './ui/elements/SmallMenuComponent.vue'
+import { defineAsyncComponent, ref } from 'vue'
 import { $t } from '@/utils/i18n'
 import useAxios from '@/hooks/useAxios'
 import useUserStore from '@/stores/useUserStore'
-import AvatarComponent from './ui/elements/AvatarComponent.vue'
 import useLoadingStore from '@/stores/useLoadingStore'
 import { storeToRefs } from 'pinia'
 import { usePage } from '@/hooks/obbClient'
@@ -13,6 +10,11 @@ import type { IPage } from '@/interfaces'
 import { useRouter } from 'vue-router'
 import useMessengerStore from '@/stores/useMessengerStore'
 import useAlertStore from '@/stores/useAlertStore'
+
+const AvatarComponent = defineAsyncComponent(() => import('./ui/elements/AvatarComponent.vue'));
+const ModalComponent = defineAsyncComponent(() => import('./ui/elements/ModalComponent.vue'));
+const SmallMenuComponent = defineAsyncComponent(() => import('./ui/elements/SmallMenuComponent.vue'));
+const SearchComponent = defineAsyncComponent(() => import('./ui/elements/SearchComponent.vue'));
 
 const userStore = useUserStore()
 const alertStore = useAlertStore()
@@ -23,7 +25,6 @@ const { loading } = storeToRefs(useLoadingStore())
 const { signIn, signOut, signUp } = useAxios()
 const loginModal = ref(false)
 const registerModal = ref(false)
-const registerSuccess = ref(false)
 const toggleUserMenu = ref(false)
 const creditionals = ref({
   username: '',
@@ -119,6 +120,7 @@ async function signInWrapper() {
 
 async function signOutWrapper() {
   if (await signOut()) {
+    userStore.$reset()
     alertStore.setAlert({
       type: 'alert-success',
       message: $t('you are signed out'),
@@ -173,6 +175,7 @@ usePage()
                 id: page.id
               }
             }"
+            class="font-size-16"
           >
             {{ page.name }}
           </RouterLink>
@@ -196,6 +199,9 @@ usePage()
             </svg>
           </button>
         </li> -->
+        <li>
+          <SearchComponent />
+        </li>
         <li>
           <button
             class="button button-color-primary position-relative"
@@ -235,11 +241,12 @@ usePage()
                     id: userStore.user.uid
                   }
                 }"
+                class="font-size-16"
               >
-                {{ userStore.user.slug }}
+                {{ $t('settings') }}
               </RouterLink>
 
-              <p @click="signOutWrapper">{{ $t('logout') }}</p>
+              <button type="button" class="link font-size-16" @click="signOutWrapper">{{ $t('logout') }}</button>
             </div>
           </SmallMenuComponent>
           <AvatarComponent

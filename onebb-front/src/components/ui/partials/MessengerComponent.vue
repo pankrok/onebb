@@ -13,11 +13,11 @@ const messengerStore = useMessengerStore()
   <Teleport to="#app">
     <aside class="messenger column padding-m">
       <div
-        class="column flex-no-wrap justify-content-space-between border-1 border-color-primary border-radius-5 background-background box-shadow-light"
+        class="column-sm flex-no-wrap justify-sm-content-space-between border-1 border-color-primary border-radius-5 background-background box-shadow-light"
         style="height: 450px; width: 400px"
       >
         <div
-          class="row justify-content-flex-end border-bottom-1 border-color-primary background-stripes"
+          class="row-sm justify-sm-content-flex-end border-bottom-1 border-color-primary background-stripes"
         >
           <button
             class="button button-color-white margin-sm-x-s"

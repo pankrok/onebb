@@ -29,7 +29,7 @@ header, main, footer {
     max-width: 1440px;
 }
 
-a {
+a,.link {
     color:  map.get($colors, "green");
     text-decoration: none;
     transition: all .2s ease-in-out;
@@ -39,7 +39,11 @@ p {
     margin: 0;
 }
 
-.navigation a:after {
+.navigation a, .navigation .link {
+    padding: .25rem;
+} 
+
+.navigation a:after, .navigation .link:after {
     content: '';
     display: block;
     height: 1px;
@@ -48,22 +52,39 @@ p {
     background-color: map.get($colors, "green");
 }
 
-a.active {
+button.link {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+button.link:hover {
+    border-color: transparent !important; 
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+a.active, .link.active {
     color:  map.get($colors, "green");
 }
 
-a.active:after {
+a.active::after, .link::after {
     width: 100%;
     background-color: map.get($colors, "green");
 }
 
-a:hover {
+a:hover, .link:hover {
     opacity: .7;
 }
 
-a:hover::after {
+a:hover::after, .link:hover::after {
     width: 100%;
 }
+
+
 
 .messenger {
     position: fixed;

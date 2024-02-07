@@ -3,16 +3,21 @@ import { useRoute, RouterView } from 'vue-router'
 import { useMessenger } from './hooks/obbClient'
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
-import MessengerComponent from '@/components/ui/partials/MessengerComponent.vue'
 import useMessengerStore from '@/stores/useMessengerStore'
 import { onMounted, onUnmounted, ref } from 'vue'
 import useConfigStore from './stores/useConfigStore'
 import { storeToRefs } from 'pinia'
-import CustomBoxComponent from '@/components/ui/skinBoxes/CustomBoxComponent.vue'
-import PluginBoxComponent from '@/components/ui/skinBoxes/PluginBoxComponent.vue'
-import AlertWrapper from '@/components/ui/elements/AlertWrapperComponent.vue'
+import { defineAsyncComponent } from 'vue'
 import usePlugins, { initPlugins } from './utils/usePlugins'
 import { watch } from 'vue'
+
+const MessengerComponent = defineAsyncComponent(
+  () => import('@/components/ui/partials/MessengerComponent.vue')
+)
+
+const AlertWrapper = defineAsyncComponent(
+  () => import('@/components/ui/elements/AlertWrapperComponent.vue')
+)
 
 const plugins = usePlugins()
 //@ts-ignore
@@ -28,10 +33,11 @@ configStore.init()
 const { pageBoxes } = storeToRefs(configStore)
 console.log({ pageBoxes })
 const boxComponents: { [index: string]: any } = {
-  PluginBox: PluginBoxComponent,
-  CustomBox: CustomBoxComponent
+  PluginBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/PluginBoxComponent.vue')),
+  CustomBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/CustomBoxComponent.vue')),
+  UserStatistics: defineAsyncComponent(() => import('@/components/ui/skinBoxes/UserStatisticBoxComponent.vue')),
 }
-
+console.log({AppRoute:   route.fullPath.toString()})
 watch(route, () => {
   initPlugins(route.name?.toString())
 })
@@ -79,7 +85,7 @@ onUnmounted(() => {
       </aside>
       <router-view v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
-          <component :is="Component" :key="route.fullPath" />
+          <component :is="Component" :key="route.fullPath.toString()" />
         </Transition>
       </router-view>
       <aside v-if="pageBoxes?.right" class="col-3">

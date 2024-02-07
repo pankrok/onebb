@@ -3,7 +3,6 @@ import PlotComponent from '@/components/ui/partials/PlotComponent.vue'
 import { usePlot } from '@/hooks/obbClient'
 import type { IPost } from '@/interfaces'
 import instanceOf from '@/utils/instanceOf'
-import { watch } from 'vue'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -30,5 +29,8 @@ async function submitPost(payload: string) {
 </script>
 
 <template>
-  <plot-component v-bind="data" @submit="submitPost" @mod="modUpdate" />
+  <div class="col-12 row-sm">
+    <plot-component v-if="data" v-bind="data" @submit="submitPost" @mod="modUpdate" />
+  </div>
+  
 </template>

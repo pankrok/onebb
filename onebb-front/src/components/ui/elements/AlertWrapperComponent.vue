@@ -3,14 +3,6 @@ import Alert from './AlertComponent.vue'
 import useAlertStore from '@/stores/useAlertStore'
 
 const alertStore = useAlertStore()
-
-
-alertStore.setAlert({
-    type: 'alert-info',
-    message: 'INFO',
-    timeout: 10,
-})
-
 </script>
 
 <template>

@@ -24,11 +24,11 @@ function compare(date: string) {
 </script>
 
 <template>
-  <div class="flex-grow-1 column padding-sm-m">
+  <div class="flex-grow-1 column-sm padding-sm-m">
     <div
       v-if="messengerStore.chats.length > 0"
       v-for="chat in messengerStore.chats"
-      class="row align-items-center justify-content-space-between cursor-pointer"
+      class="row-sm align-sm-items-center justify-sm-content-space-between cursor-pointer"
       @click="setChat(chat)"
     >
     <div class="row align-items-center">
@@ -36,7 +36,7 @@ function compare(date: string) {
         <AvatarComponent
           :url="user.avatar"
           size="img-size-s"
-          mobile-size="mg-size-mobile-s"
+          mobile-size="img-size-mobile-s"
           class="padding-none"
         />
       </div>
