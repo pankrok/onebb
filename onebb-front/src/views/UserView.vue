@@ -8,11 +8,12 @@ import { $t } from '@/utils/i18n'
 import useUserStore from '@/stores/useUserStore'
 import Cropper from '@/components/ui/partials/Cropper.vue'
 import ModalComponent from '@/components/ui/elements/ModalComponent.vue'
+import useState from '@/utils/useState'
 
 const data = ref()
 const page = ref(1)
 const canLoad = ref(true)
-const isOpen = ref(false)
+const [isOpen, setIsOpen] = useState(false)
 const userStore = useUserStore()
 const { getUser, getUserPosts, userPosts } = useUser()
 getUser().then((response: IUser | undefined) => {
@@ -31,24 +32,22 @@ async function getPostWrapper() {
 }
 
 function avatarUpdateHandler(avatar: string) {
-  isOpen.value = false
+  setIsOpen(false)
   data.value.avatar = avatar
 }
 </script>
 <template>
   <div class="col-12 row" v-if="data">
-    <Transition name="fade">
-      <ModalComponent
-        v-if="isOpen"
-        :on-close="
-          () => {
-            isOpen = false
-          }
-        "
-      >
-        <Cropper @update="avatarUpdateHandler" />
-      </ModalComponent>
-    </Transition>
+    <ModalComponent
+      :is-active="isOpen"
+      :on-close="
+        () => {
+          setIsOpen(false)
+        }
+      "
+    >
+      <Cropper @update="avatarUpdateHandler" />
+    </ModalComponent>
     <section class="col-sm-3 column-sm margin-sm-bottom-m margin-bottom-l">
       <div
         class="column mobile-row align-sm-items-center padding-sm-s padding-m font-size-14 font-weight-600"
@@ -63,7 +62,7 @@ function avatarUpdateHandler(avatar: string) {
               xmlns="http://www.w3.org/2000/svg"
               height="1.5em"
               class="cursor-pointer"
-              @click="isOpen = true"
+              @click="setIsOpen(true)"
               fill="white"
               viewBox="0 0 512 512"
             >
@@ -100,7 +99,14 @@ function avatarUpdateHandler(avatar: string) {
         class="column-sm col-12 margin-sm-y-s border-1 background-primary border-color-dark padding-sm-m"
         :key="post.id"
       >
-        <h3>{{ $t('Plot') }}: {{ post.plot.name }}</h3>
+        <router-link
+          :to="{
+            name: 'Plot',
+            params: { slug: post.plot.slug, id: post.plot.id, page: 1 }
+          }"
+          class="font-size-20 font-weigt-600 margin-sm-y-m"
+          >{{ post.plot.name }}</router-link
+        >
         <div v-html="post.content"></div>
       </div>
 

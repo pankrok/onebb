@@ -24,7 +24,6 @@ export function useUser() {
     }
 
     const { data } = await axios.get<unknown>(
-      //`${USER_URL}/${route.params.id}/posts?limit=20&page=${page ?? 1}`
       `${POST_URL}?limit=20&page=${page ?? 1}&user.id=${route.params.id}`
     )
     if (instanceOf<IHydra<IPost>>(data)) {

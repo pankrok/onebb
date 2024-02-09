@@ -2,16 +2,21 @@
 import PlotComponent from '@/components/ui/partials/PlotComponent.vue'
 import { usePlot } from '@/hooks/obbClient'
 import type { IPost } from '@/interfaces'
+import useTimelineStore from '@/stores/useTimelineStore'
 import instanceOf from '@/utils/instanceOf'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute();
 const data = ref();
+const {setPlotTimeline} = useTimelineStore()
 const {getPlot, addPostToPlot, updatePost} = usePlot()
 getPlot().then((response) => {
     console.log('getPlot', {response})
     data.value = response;
+    
+    if (response.plot)
+      setPlotTimeline(response.plot.id)
 })
 
 async function modUpdate(id: number, val: { content?: string | undefined; hidden?: boolean | undefined; }) {

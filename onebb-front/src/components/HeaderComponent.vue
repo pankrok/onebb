@@ -3,120 +3,27 @@ import { defineAsyncComponent, ref } from 'vue'
 import { $t } from '@/utils/i18n'
 import useAxios from '@/hooks/useAxios'
 import useUserStore from '@/stores/useUserStore'
-import useLoadingStore from '@/stores/useLoadingStore'
-import { storeToRefs } from 'pinia'
 import { usePage } from '@/hooks/obbClient'
 import type { IPage } from '@/interfaces'
-import { useRouter } from 'vue-router'
 import useMessengerStore from '@/stores/useMessengerStore'
 import useAlertStore from '@/stores/useAlertStore'
+import useState from '@/utils/useState'
 
 const AvatarComponent = defineAsyncComponent(() => import('./ui/elements/AvatarComponent.vue'));
-const ModalComponent = defineAsyncComponent(() => import('./ui/elements/ModalComponent.vue'));
+const SignInModalComponent = defineAsyncComponent(() => import('./ui/partials/header/SignInModalComponent.vue'));
+const SignUpModalComponent = defineAsyncComponent(() => import('./ui/partials/header/SignUpModalComponent.vue'));
 const SmallMenuComponent = defineAsyncComponent(() => import('./ui/elements/SmallMenuComponent.vue'));
 const SearchComponent = defineAsyncComponent(() => import('./ui/elements/SearchComponent.vue'));
 
 const userStore = useUserStore()
 const alertStore = useAlertStore()
 const messengerStore = useMessengerStore()
-const router = useRouter()
 const pages = ref<IPage[]>([])
-const { loading } = storeToRefs(useLoadingStore())
-const { signIn, signOut, signUp } = useAxios()
-const loginModal = ref(false)
-const registerModal = ref(false)
+const { signOut } = useAxios()
+
 const toggleUserMenu = ref(false)
-const creditionals = ref({
-  username: '',
-  password: ''
-})
-
-const registerData = ref({
-  username: '',
-  password: '',
-  vpassword: '',
-  email: ''
-})
-
-const registerError = ref<string | null>(null)
-const signInError = ref<string | null>(null)
-
-async function registerWrapper() {
-  console.log({ registerWrapper: registerData.value })
-  if (registerData.value.password !== registerData.value.vpassword) {
-    registerError.value = $t('passwords not match')
-    alertStore.setAlert({
-      type: 'alert-danger',
-      message: registerError.value,
-      timeout: 5
-    })
-    return
-  }
-
-  if (registerData.value.password.length < 4 || registerData.value.password.length > 32) {
-    registerError.value = $t('Password must be bettwen 4 and and 32 characters')
-    alertStore.setAlert({
-      type: 'alert-danger',
-      message: registerError.value,
-      timeout: 5
-    })
-    return
-  }
-
-  if (registerData.value.username.length < 4 || registerData.value.username.length > 32) {
-    registerError.value = $t('Username must be bettwen 4 and and 32 characters')
-    alertStore.setAlert({
-      type: 'alert-danger',
-      message: registerError.value,
-      timeout: 5
-    })
-    return
-  }
-
-  if (registerData.value.email.length < 1) {
-    registerError.value = $t('Email cannot be empty')
-    alertStore.setAlert({
-      type: 'alert-danger',
-      message: registerError.value,
-      timeout: 5
-    })
-    return
-  }
-
-  registerError.value = ''
-  const regResponse = await signUp(registerData.value)
-  console.log({ regResponse })
-  alertStore.setAlert({
-    type: 'alert-success',
-    message: $t('Congratulations, your account has been successfully created'),
-    timeout: 5
-  })
-  //registerSuccess.value = true
-  setTimeout(() => {
-    registerModal.value = false
-  }, 3000)
-}
-
-async function signInWrapper() {
-  try {
-    const loginResponse = await signIn(creditionals.value)
-    if (loginResponse) {
-      loginModal.value = false
-      alertStore.setAlert({
-        type: 'alert-success',
-        message: $t('you are logged sucessful'),
-        timeout: 5
-      })
-    }
-  } catch (e: any) {
-    alertStore.setAlert({
-      type: 'alert-danger',
-      message: $t(e.response.data.message),
-      timeout: 5
-    })
-    console.log({ e })
-  }
-}
+const [loginModal, setLoginModal] = useState(false);
+const [registerModal, setRegisterModal] = useState(false);
 
 async function signOutWrapper() {
   if (await signOut()) {
@@ -133,11 +40,6 @@ async function signOutWrapper() {
     message: $t('there was a problem with sign out!'),
     timeout: 5
   })
-}
-
-function forgetMyPass() {
-  loginModal.value = false
-  router.push({ name: 'ForgetPassword' })
 }
 
 usePage()
@@ -229,7 +131,7 @@ usePage()
           class="cursor-pointer position-relative"
           @click="toggleUserMenu = !toggleUserMenu"
         >
-          <SmallMenuComponent v-if="toggleUserMenu" teleport="#user-nav" top="40px">
+          <SmallMenuComponent :is-active="toggleUserMenu" transition-name="slide-fade" transition-mode="in-out" teleport="#user-nav" top="40px" >
             <div
               class="column border-1 background-primary border-color-dark box-shadow-light padding-sm-l"
             >
@@ -249,6 +151,7 @@ usePage()
               <button type="button" class="link font-size-16" @click="signOutWrapper">{{ $t('logout') }}</button>
             </div>
           </SmallMenuComponent>
+
           <AvatarComponent
             :url="userStore.user.avatar"
             size="img-size-s"
@@ -270,7 +173,7 @@ usePage()
         <li>
           <button
             class="button button-color-primary position-relative"
-            @click="registerModal = true"
+            @click="setRegisterModal(true)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +190,7 @@ usePage()
           </button>
         </li>
         <li>
-          <button class="button button-color-primary" @click="loginModal = true">
+          <button class="button button-color-primary" @click="setLoginModal(true)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="1.5em"
@@ -304,113 +207,8 @@ usePage()
         </li>
       </ul>
     </nav>
-    <Transition name="fade" mode="in-out">
-      <ModalComponent
-        v-if="loginModal"
-        :on-close="
-          () => {
-            loginModal = false
-          }
-        "
-        key="login-modal"
-      >
-        <Transition mod="in-out" name="fade">
-          <div
-            v-if="signInError"
-            class="border-1 border-color-dark-red box-shadow-red background-red color-white font-size-14 font-weight-600 padding-sm-m margin-sm-y-m"
-          >
-            {{ signInError }}
-          </div>
-        </Transition>
-        <label for="username" class="font-size-14">{{ $t('username') }}</label>
-        <input
-          id="username"
-          v-model="creditionals.username"
-          type="text"
-          class="form-control color-white"
-        />
-        <label for="password" class="font-size-14 margin-sm-top-m">{{ $t('Password') }}</label>
-        <input
-          id="password"
-          v-model="creditionals.password"
-          type="password"
-          class="form-control color-white"
-        />
-
-        <button
-          type="button"
-          @click="signInWrapper"
-          class="button color-white margin-sm-top-m"
-          :class="{ 'button-disabled': loading }"
-          :disabled="loading"
-        >
-          {{ $t('sign in') }}
-        </button>
-
-        <div class="col-12 borde-top-1 border-color-light row justify-content-center">
-          <button
-            type="button"
-            @click="forgetMyPass"
-            class="button button-color-yellow color-white margin-sm-top-m"
-          >
-            {{ $t('forget password') }}
-          </button>
-        </div>
-      </ModalComponent>
-    </Transition>
-    <Transition name="fade" mode="in-out">
-      <ModalComponent
-        v-if="registerModal"
-        :on-close="
-          () => {
-            registerModal = false
-          }
-        "
-        key="register-modal"
-      >
-        <h3 class="text-align-center margin-sm-top-s">{{ $t('sign up') }}</h3>
-
-        <label for="username" class="font-size-14">{{ $t('username') }}</label>
-        <input
-          id="username"
-          v-model="registerData.username"
-          type="text"
-          class="form-control color-white"
-        />
-        <label for="email" class="font-size-14 margin-sm-top-m">{{ $t('Email') }}</label>
-        <input
-          id="email"
-          v-model="registerData.email"
-          type="mail"
-          class="form-control color-white"
-        />
-        <label for="password" class="font-size-14 margin-sm-top-m">{{ $t('Password') }}</label>
-        <input
-          id="password"
-          v-model="registerData.password"
-          type="password"
-          class="form-control color-white"
-        />
-        <label for="vpassword" class="font-size-14 margin-sm-top-m">{{
-          $t('Confirm Password')
-        }}</label>
-        <input
-          id="vpassword"
-          v-model="registerData.vpassword"
-          type="password"
-          class="form-control color-white"
-        />
-
-        <button
-          type="button"
-          @click="registerWrapper"
-          class="button color-white margin-sm-top-m"
-          :class="{ 'button-disabled': loading }"
-          :disabled="loading"
-        >
-          {{ $t('sign up') }}
-        </button>
-      </ModalComponent>
-    </Transition>
+   <SignInModalComponent :login-modal="loginModal" :set-login-modal="setLoginModal"  />
+   <SignUpModalComponent :register-modal="registerModal" :set-register-modal="setRegisterModal" />
+    
   </header>
 </template>

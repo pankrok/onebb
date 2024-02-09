@@ -8,12 +8,15 @@ import useUserStore from '@/stores/useUserStore'
 import { $t } from '@/utils/i18n'
 import PaginatorComponent from './PaginatorComponent.vue'
 import type { HydraView } from '@/interfaces/config'
+import useTimelineStore from '@/stores/useTimelineStore'
 
 defineProps<{
   board?: IBoard
   plots?: IPlot[]
   paginator?: HydraView
 }>()
+
+const { getPlotTimeline } = useTimelineStore()
 
 const userStore = useUserStore()
 console.log()
@@ -36,7 +39,6 @@ const { parse } = useMoment()
         }"
         >{{ $t('Start new plot') }}
       </RouterLink>
-      
     </div>
     <div class="col-sm-auto row justify-content-end">
       <paginator-component :hydra-view="paginator" />
@@ -72,7 +74,9 @@ const { parse } = useMoment()
             height="32"
             width="32"
             :class="
-              true ? ['fill-green', 'box-shadow-green', 'border-radius-circel'] : ['fill-light']
+              getPlotTimeline(plot.id, plot.updated_at)
+                ? ['fill-light', 'box-shadow-light', 'border-radius-circel']
+                : ['fill-green', 'box-shadow-green', 'border-radius-circel']
             "
             viewBox="0 0 512 512"
           >
@@ -119,7 +123,14 @@ const { parse } = useMoment()
               {{ plot.views ?? 0 }}
             </div>
           </div>
-          <div
+          <router-link
+            :to="{
+              name: 'Profile',
+              params: {
+                slug: plot.last_active_user.slug,
+                id: plot.last_active_user.id
+              }
+            }"
             v-if="plot.last_active_user"
             class="col-sm-4 col-2 row align-sm-items-center text-align-right"
           >
@@ -142,7 +153,7 @@ const { parse } = useMoment()
                 mobile-size="img-size-mobile-s"
               />
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
     </panel-component>

@@ -48,26 +48,37 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex-grow-1 column-sm padding-sm-m flex-no-wrap" style="overflow: auto" ref="obbChat">
-    <div
-      v-for="message in messengerStore.messages"
-      class="row-sm justify-content-flex-start align-items-center padding-m"
-      :class="[
-        message.sender.id == userStore.getUserId
-          ? 'justify-content-flex-start'
-          : 'justify-content-flex-end'
-      ]"
-    >
-      <UserMsgComponent v-if="message.sender.id == userStore.getUserId" v-bind="message" />
-      <MsgComponent v-else v-bind="message" />
-    </div>
-  </div>
   <div class="row-sm">
-    <div class="col-sm-8 column-sm">
-      <input type="text" class="form-control color-white font-weight-400" v-model="msg" />
+    <div
+      class="col-12 column-sm padding-sm-m flex-no-wrap"
+      style="height: 380px; overflow: auto"
+      ref="obbChat"
+    >
+      <div
+        v-for="message in messengerStore.messages"
+        class="row-sm justify-content-flex-start align-items-center padding-m"
+        :class="[
+          message.sender.id == userStore.getUserId
+            ? 'justify-content-flex-start'
+            : 'justify-content-flex-end'
+        ]"
+      >
+        <UserMsgComponent v-if="message.sender.id == userStore.getUserId" v-bind="message" />
+        <MsgComponent v-else v-bind="message" />
+      </div>
     </div>
-    <div class="col-sm-4 column-sm">
-      <button class="button color-white" @click="sendMessage">Send</button>
+    <div class="col-12 row-sm">
+      <div class="col-sm-8 column-sm">
+        <input
+          type="text"
+          class="form-control color-white font-weight-400"
+          v-model="msg"
+          @keyup.enter="sendMessage"
+        />
+      </div>
+      <div class="col-sm-4 column-sm">
+        <button class="button color-white" @click="sendMessage">Send</button>
+      </div>
     </div>
   </div>
 </template>
