@@ -1,3 +1,4 @@
+import randomString from '@/utils/randomString'
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 
@@ -21,7 +22,7 @@ const useAlertStore = defineStore('alertStore', () => {
     message: string
     timeout?: number
   }) {
-    const id = (Math.random() + 1).toString(36).substring(3)
+    const id = randomString()
     alerts.push({
       id,
       type,

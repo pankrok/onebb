@@ -5,12 +5,14 @@ import type { ICategory } from '@/interfaces'
 import useMoment from '@/hooks/useMoment'
 import parseUsername from '@/utils/parseUsername'
 import { $t } from '@/utils/i18n'
+import useTimelineStore from '@/stores/useTimelineStore'
 
 defineProps<{
   category?: ICategory
+  isRead?: boolean
   indexNo?: number
 }>()
-
+const { getBoardTimeline } = useTimelineStore()
 const { parse } = useMoment()
 </script>
 <template>
@@ -18,7 +20,8 @@ const { parse } = useMoment()
     <template #header>
       <div
         v-if="indexNo"
-        class="col-sm-1 color-green row align-sm-items-center justify-sm-content-center font-size-18 font-weight-600"
+        class="col-sm-1 row align-sm-items-center justify-sm-content-center font-size-18 font-weight-600"
+        :class="isRead ? 'color-white' : 'color-green'"
       >
         {{ indexNo }}
       </div>
@@ -57,7 +60,9 @@ const { parse } = useMoment()
           height="32"
           width="32"
           :class="
-            true ? ['fill-green', 'box-shadow-green', 'border-radius-circel'] : ['fill-light']
+            getBoardTimeline(board.id, board.updated_at)
+              ? ['fill-light', 'box-shadow-light', 'border-radius-circel']
+              : ['fill-green', 'box-shadow-green', 'border-radius-circel']
           "
           viewBox="0 0 512 512"
         >

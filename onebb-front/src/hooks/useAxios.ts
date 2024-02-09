@@ -2,25 +2,40 @@
 import axios, { type AxiosResponse } from 'axios'
 import useLoadingStore from '@/stores/useLoadingStore'
 import type { AxiosError } from 'axios'
-import type { ILoginCreditionals, ILogoutResponse, IRegisterCreditionals, ITokenResponse, IUser, IViolations } from '@/interfaces'
-import  instanceOf  from '@/utils/instanceOf'
+import type {
+  ILoginCreditionals,
+  ILogoutResponse,
+  IRegisterCreditionals,
+  ITokenResponse,
+  IUser,
+  IViolations
+} from '@/interfaces'
+import instanceOf from '@/utils/instanceOf'
 import { AUTH_URL, LOGOUT_URL, REFRESH_URL, USER_URL } from '@/utils/apiRoutes'
 import useUserStore from '@/stores/useUserStore'
 
-let numberOfAjaxCAllPending = 0;
-// @ts-ignore
-const baseURL = document.getElementById('app')?.getAttribute('data-url') + document.getElementById('app')?.getAttribute('data-obb') + 'api';
+let numberOfAjaxCAllPending = 0
+
+const baseURL = // @ts-ignore
+  document.getElementById('app')?.getAttribute('data-url') +
+  // @ts-ignore
+  document.getElementById('app')?.getAttribute('data-obb') +
+  'api'
 
 const instance = axios.create({
   baseURL,
   withCredentials: true, //@ts-ignore
-  timeout: import.meta.env.MODE === 'development' ? 30000 : 3000,
+  timeout: import.meta.env.MODE === 'development' ? 30000 : 3000
 })
 
 export default function useAxios() {
   const loadingStore = useLoadingStore()
   instance.interceptors.request.use(
     function (config) {
+      if (config.url?.includes('one_messengers')) {
+        return config
+      }
+
       console.log('withCredentials ', instance.defaults.withCredentials)
       numberOfAjaxCAllPending++
       loadingStore.isLoading()
@@ -33,14 +48,22 @@ export default function useAxios() {
 
   instance.interceptors.response.use(
     (response) => {
-      numberOfAjaxCAllPending--
-      if (numberOfAjaxCAllPending == 0) {
+      console.log({ response })
+      if (numberOfAjaxCAllPending > 0) {
+        numberOfAjaxCAllPending--
+      }
+
+      if (numberOfAjaxCAllPending <= 0) {
+        numberOfAjaxCAllPending = 0;
         loadingStore.isLoaded()
       }
       return response
     },
     async (error: AxiosError) => {
-      numberOfAjaxCAllPending--
+      console.log({ numberOfAjaxCAllPending })
+      if (numberOfAjaxCAllPending > 0) {
+        numberOfAjaxCAllPending--
+      }
       if (numberOfAjaxCAllPending == 0) {
         loadingStore.isLoaded()
       }
@@ -50,18 +73,17 @@ export default function useAxios() {
       if (
         response &&
         response.data &&
-        response.data &&
         response.status === 401 && // @ts-ignore
         response.data.message === 'Expired JWT Token'
       ) {
         if (instance.defaults.headers.common['Authorization']) {
-          const {data} = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
+          const { data } = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
           if (instanceOf<ITokenResponse>(data)) {
             const userStore = useUserStore()
             userStore.setUserData(data)
-            
+
             if (error.config) {
-              error.config.headers.Authorization = `Bearer ${data.token}`;
+              error.config.headers.Authorization = `Bearer ${data.token}`
               return instance.request(error.config)
             }
           }
@@ -83,27 +105,28 @@ export default function useAxios() {
   }
 
   async function refreshToken() {
-    const {data} = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
-          if (instanceOf<ITokenResponse>(data)) {
-            const userStore = useUserStore()
-            userStore.setUserData(data)
-            if (data.token)
-              setToken(data.token);
-          }
+    const { data } = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
+    if (instanceOf<ITokenResponse>(data)) {
+      const userStore = useUserStore()
+      userStore.setUserData(data)
+      if (data.token) setToken(data.token)
+    }
   }
 
   async function signIn(payload: ILoginCreditionals) {
-    const { data } = await instance.post<ILoginCreditionals, AxiosResponse<unknown>>(AUTH_URL, payload)
+    const { data } = await instance.post<ILoginCreditionals, AxiosResponse<unknown>>(
+      AUTH_URL,
+      payload
+    )
     if (instanceOf<ITokenResponse>(data)) {
       const userStore = useUserStore()
-      console.log({userStore})
-      userStore.setUserData(data);
+      console.log({ userStore })
+      userStore.setUserData(data)
       if (data.token) {
         setToken(data.token)
-        localStorage.setItem('logged', 'true');
+        localStorage.setItem('logged', 'true')
         return true
       }
-      
     }
 
     return false
@@ -112,9 +135,9 @@ export default function useAxios() {
   async function signUp(payload: IRegisterCreditionals) {
     try {
       const { data } = await instance.post<unknown>(USER_URL, payload)
-      if (instanceOf<IUser>(data)) return true;
+      if (instanceOf<IUser>(data)) return true
       if (instanceOf<IViolations>(data)) return data
-       
+
       return false
     } catch (e) {
       return false
@@ -126,14 +149,14 @@ export default function useAxios() {
     if (instanceOf<ILogoutResponse>(data)) {
       const userStore = useUserStore()
       userStore.$reset()
-      localStorage.removeItem('logged');
+      localStorage.removeItem('logged')
       return true
     }
     return false
   }
 
   if (localStorage.getItem('logged') && !instance.defaults.headers.common['Authorization']) {
-    refreshToken();
+    refreshToken()
   }
 
   return {

@@ -7,9 +7,9 @@
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateY(-30px);
 }
-.list-leave-active {
+.list-enter-active {
   position: absolute;
 }
 .slide-fade-enter-active {
@@ -21,7 +21,7 @@
 .slide-fade-enter-from,
 .slide-fade-leave-to {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateX(30px);
 }
 .fade-enter-active,
 .fade-leave-active {

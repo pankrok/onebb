@@ -57,7 +57,17 @@ function replay() {
     <section class="col-sm-auto column-sm margin-sm-bottom-m margin-bottom-l">
       <h1 class="margin-sm-y-s">{{ plot.name }}</h1>
       <span class="font-size-12"
-        ><span v-html="parseUsername(plot.user)"></span> {{ parse(plot.updated_at) }}</span
+        ><router-link
+          :to="{
+            name: 'Profile',
+            params: {
+              slug: plot.user.slug,
+              id: plot.user.id
+            }
+          }"
+          v-html="parseUsername(plot.user)"
+        ></router-link>
+        {{ parse(plot.updated_at) }}</span
       >
     </section>
     <section class="row col-12 justify-sm-content-space-between align-sm-items-center">
@@ -80,7 +90,16 @@ function replay() {
         :key="post.id"
         class="row col-12 margin-sm-y-m margin-y-l back border-1 background-primary border-color-dark"
       >
-        <div class="col-2 col-sm-auto">
+        <router-link
+          :to="{
+            name: 'Profile',
+            params: {
+              slug: post.user.slug,
+              id: post.user.id
+            }
+          }"
+          class="col-2 col-sm-auto"
+        >
           <div
             class="column mobile-row align-sm-items-center padding-sm-s padding-m font-size-14 font-weight-600"
           >
@@ -103,7 +122,7 @@ function replay() {
               <span class="color-blue margin-left-s"> {{ post.user.plots_no ?? 0 }}</span>
             </div>
           </div>
-        </div>
+        </router-link>
         <div class="col-10 col-sm-12 column justify-content-space-between">
           <div
             class="row justify-content-space-between align-items-center font-size-12 margin-bottom-l display-flex display-sm-none"

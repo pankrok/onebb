@@ -1,16 +1,23 @@
 <script setup lang="ts">
-    defineProps<{
-        teleport: string
-        top?: string
-        right?: string
-    }>();
+defineProps<{
+  transitionMode: 'default' | 'in-out' | 'out-in' | undefined
+  transitionName: string
+  isActive: boolean
+  teleport: string
+  top?: string
+  right?: string
+}>()
 </script>
 <template>
-
-    <Teleport :to="teleport">
-        <div class="position-absolute" :style="{top: top ?? '0px', right: right ?? 0}">
-            <slot></slot>
-        </div>
-    </Teleport>
-
+  <Teleport :to="teleport">
+    <Transition :name="transitionName" :mode="transitionMode">
+      <div
+        v-if="isActive"
+        class="position-absolute"
+        :style="{ top: top ?? '0px', right: right ?? 0, zIndex: 1 }"
+      >
+        <slot></slot>
+      </div>
+    </Transition>
+  </Teleport>
 </template>

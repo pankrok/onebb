@@ -120,7 +120,9 @@ export interface IPost {
   edit_by: IUser
   created_at: string
   plot: {
-    name: string
+    name: string,
+    id: number,
+    slug: string,
   }
 }
 
@@ -146,20 +148,7 @@ export interface IPlot {
   updated_at: string
   slug: string
   post_no: number
-  last_active_user: {
-    id: number
-    username: string
-    banned: boolean
-    user_group: {
-      html_code: string
-      group_name: string
-    }
-    avatar: string
-    slug: string
-    posts_no: number
-    plots_no: number
-    warn_lvl: number
-  }
+  last_active_user: IUser
 }
 
 export interface IBoard {
@@ -187,6 +176,7 @@ export interface ICategory {
   slug: string
   prioity: number
   meta_desc: string
+  updated_at: string
 }
 
 export interface IPage {

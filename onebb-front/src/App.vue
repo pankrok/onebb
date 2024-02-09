@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia'
 import { defineAsyncComponent } from 'vue'
 import usePlugins, { initPlugins } from './utils/usePlugins'
 import { watch } from 'vue'
+import useUserStore from './stores/useUserStore'
 
 const MessengerComponent = defineAsyncComponent(
   () => import('@/components/ui/partials/MessengerComponent.vue')
@@ -26,26 +27,43 @@ window.$obbPlugins = plugins
 const messengerStore = useMessengerStore()
 const messenger = useMessenger()
 const route = useRoute()
-const interval = ref()
+const interval = ref<number|undefined>(undefined)
 
 const configStore = useConfigStore()
+const { logged } = storeToRefs(useUserStore())
 configStore.init()
 const { pageBoxes } = storeToRefs(configStore)
 console.log({ pageBoxes })
 const boxComponents: { [index: string]: any } = {
   PluginBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/PluginBoxComponent.vue')),
   CustomBox: defineAsyncComponent(() => import('@/components/ui/skinBoxes/CustomBoxComponent.vue')),
-  UserStatistics: defineAsyncComponent(() => import('@/components/ui/skinBoxes/UserStatisticBoxComponent.vue')),
+  UserStatistics: defineAsyncComponent(
+    () => import('@/components/ui/skinBoxes/UserStatisticBoxComponent.vue')
+  )
 }
-console.log({AppRoute:   route.fullPath.toString()})
+console.log({ AppRoute: route.fullPath.toString() })
 watch(route, () => {
   initPlugins(route.name?.toString())
 })
 
+watch(logged, () => {
+  if (!interval.value && logged.value) {
+    interval.value = setInterval(() => {
+      messenger.getNewChats()
+    }, 5000)
+  }
+
+  if (interval.value && !logged.value) {
+    clearInterval(interval.value)
+  }
+})
+
 onMounted(() => {
-  interval.value = setInterval(() => {
-    messenger.getNewChats()
-  }, 5000)
+  if (!interval.value && logged.value) {
+    interval.value = setInterval(() => {
+      messenger.getNewChats()
+    }, 5000)
+  }
   initPlugins(route.name?.toString())
 })
 
@@ -64,8 +82,8 @@ onUnmounted(() => {
         <a href="#" class="padding-m active">Home</a>
       </div>
     </section> -->
-    <div class="row">
-      <aside v-if="pageBoxes?.top" class="col-12">
+    <TransitionGroup class="row position-relative" name="list" tag="div">
+      <aside v-if="pageBoxes?.top" class="col-12" key="top-modules">
         <component
           v-for="box in pageBoxes.top"
           :is="boxComponents[box.engine]"
@@ -73,7 +91,7 @@ onUnmounted(() => {
           v-bind="box"
         />
       </aside>
-      <aside v-if="pageBoxes?.left" class="col-3">
+      <aside v-if="pageBoxes?.left" class="col-3" key="left-modules">
         <div class="margin-right-l">
           <component
             v-for="box in pageBoxes.left"
@@ -88,7 +106,7 @@ onUnmounted(() => {
           <component :is="Component" :key="route.fullPath.toString()" />
         </Transition>
       </router-view>
-      <aside v-if="pageBoxes?.right" class="col-3">
+      <aside v-if="pageBoxes?.right" class="col-3" key="right-modules">
         <div class="margin-left-l">
           <component
             v-for="box in pageBoxes.right"
@@ -98,7 +116,7 @@ onUnmounted(() => {
           />
         </div>
       </aside>
-      <aside v-if="pageBoxes?.bottom" class="col-12">
+      <aside v-if="pageBoxes?.bottom" class="col-12" key="bottom-modules">
         <component
           v-for="box in pageBoxes.bottom"
           :is="boxComponents[box.engine]"
@@ -106,11 +124,11 @@ onUnmounted(() => {
           v-bind="box"
         />
       </aside>
-    </div>
+    </TransitionGroup>
   </main>
-  <Transition mode="in-out" name="fade">
-    <MessengerComponent v-if="messengerStore.showMessenger" key="messenger-component" />
-  </Transition>
+ 
+    <MessengerComponent :is-active="messengerStore.showMessenger" key="messenger-component" />
+
   <AlertWrapper />
 
   <FooterComponent />

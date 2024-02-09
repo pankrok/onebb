@@ -2,13 +2,16 @@
 import BoardComponent from '@/components/ui/partials/BoardComponent.vue'
 import { useBoard } from '@/hooks/obbClient'
 import type { IBoard, IPlot } from '@/interfaces'
+import useTimelineStore from '@/stores/useTimelineStore'
 import instanceOf from '@/utils/instanceOf'
 import { ref } from 'vue'
-console.log('BOARD')
+
 const data = ref<{
   board: IBoard
   plots: IPlot[]
 } | null>(null)
+
+const {setBoardTimeline} = useTimelineStore()
 
 useBoard().then((response) => {
   console.log({ response })
@@ -19,6 +22,7 @@ useBoard().then((response) => {
     }>(response)
   ) {
     data.value = response
+    setBoardTimeline(response.board.id)
   }
 })
 </script>
