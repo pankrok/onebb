@@ -20,60 +20,68 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 
-/** 
-*  @ORM\Entity(repositoryClass=UserRepository::class)
-*  @ORM\Table(name="`user`")
-*  @UniqueEntity("username")
-*  @UniqueEntity("email")
-*  @ApiFilter(PropertyFilter::class)
-*  @ApiFilter(OrderFilter::class, properties={"id", "username", "email"})
-*  @ApiResource( 
-*    collectionOperations={
-*            "post"={
-*                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
-*                "normalization_context"={"groups": {"board"}}
-*            },
-*            "get"={
-*                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
-*                "normalization_context"={"groups": {"board"}}
-*            }
-*        },
-*    itemOperations={
-*            "put_admin"={
-*               "security"="is_granted('ROLE_USER_EDIT')",
-*               "path"="/users/admin/{id}",
-*               "method"="PUT",
-*            },
-*            "put"={
-*                "security"="is_granted('ROLE_USER_EDIT') or (object == user)",
-*                "normalization_context"={"groups": {"user_put"}} ,         
-*                "denormalization_context"={"groups": {"user_put"}}  
-*            },
-*           "put_img"={
-*                "method"="PUT",
-*                "groups": {"avatar"},
-*                "path"="/users/{id}/img",
-*                "controller"="App\Controller\UserAvatarController",
-*                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object == user",
-*                "normalization_context"={"groups": {"avatar"}} ,  
-*                "denormalization_context"={"groups": {"avatar"}}  
-*            },
-*            "get"={
-*                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
-*                "normalization_context"={"groups": {"user"}}
-*           },
-*           "get_admin"={
-*               "security"="is_granted('ROLE_USER_EDIT')",
-*               "path"="/users/admin/{id}",
-*               "method"="GET",
-*               "normalization_context"={"groups": {"user", "user_admin", "user_admin_acp"}}
-*           },
-*           
-*           "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
-*
-*      }
-* )
-**/
+/**
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="`user`")
+ * @UniqueEntity("username")
+ * @UniqueEntity("email")
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(OrderFilter::class, properties={"id", "username", "email"})
+ * @ApiResource( 
+    collectionOperations={
+            "post"={
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
+                "normalization_context"={"groups": {"board"}}
+            },
+            "get"={
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')", 
+                "normalization_context"={"groups": {"board"}}
+            }
+        },
+    itemOperations={
+            "put_moderator"={
+               "security"="is_granted('ROLE_USER_EDIT')",
+               "path"="/users/moderator/{id}",
+               "method"="PUT",
+               "denormalization_context"={"groups"={"moderator.put"}},
+               "normalization_context"={"groups"={"moderator.put"}}
+              
+            },
+            "put_admin"={
+               "security"="is_granted('ROLE_USER_EDIT')",
+               "path"="/users/admin/{id}",
+               "method"="PUT",
+            },
+            "put"={
+                "security"="is_granted('ROLE_USER_EDIT') or (object == user)",
+                "normalization_context"={"groups": {"user_put"}},         
+                "denormalization_context"={"groups": {"user_put"}}  
+            },
+           "put_img"={
+                "method"="PUT",
+                "groups": {"avatar"},
+                "path"="/users/{id}/img",
+                "controller"="App\Controller\UserAvatarController",
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY') or object == user",
+                "normalization_context"={"groups": {"avatar"}} ,  
+                "denormalization_context"={"groups": {"avatar"}}  
+            },
+            "get"={
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
+                "normalization_context"={"groups": {"user"}}
+           },
+           "get_admin"={
+               "security"="is_granted('ROLE_USER_EDIT')",
+               "path"="/users/admin/{id}",
+               "method"="GET",
+               "normalization_context"={"groups": {"user", "user_admin", "user_admin_acp"}}
+           },
+           
+           "delete"={"security"="is_granted('ROLE_USER_DELETE')"}, 
+
+ *     }
+ )
+ */
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -204,7 +212,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"board", "plot", "plot_subresource", "user", "admin_user_put"})
+    * @Groups({"moderator.put", "category", "board", "plot", "user", "admin_user_put"}) 
      */
     private $warn_lvl;
 

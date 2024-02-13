@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 
 /**
@@ -51,6 +51,7 @@ class OneMessenger
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
      * @Groups({"board", "msg"})
+     * @ApiFilter(SearchFilter::class, properties={"users.id"}, strategy="iexact") 
      */
     private $users;
 

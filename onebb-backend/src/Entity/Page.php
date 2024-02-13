@@ -15,13 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=PageRepository::class)
  * @ApiResource(
- *       order={"priority": "DESC", "updated_at": "DESC"},
+ *      order={"priority": "DESC", "updated_at": "DESC"},
  *      collectionOperations={
- *           "get"={"groups": {"pageList"}},
+ *           "get"={"normalization_context"={"groups"="pageList"}},
  *           "post"={"security"="is_granted('ROLE_PAGE_CREATE')"}
  *       },
  *      itemOperations={
- *           "get"={"groups": {"page"}}, 
+ *           "get"={"normalization_context"={"groups"="page"}},
  *           "delete"={"security"="is_granted('ROLE_PAGE_DELETE')"},
  *           "put"={"security"="is_granted('ROLE_PAGE_EDIT')"}
  *       }
@@ -58,6 +58,7 @@ class Page
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups({"pageList" , "page"})
      */
     private $created_at;
 
@@ -69,7 +70,7 @@ class Page
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"pageList", "page"})
+     * @Groups({"pageList"})
      */
     private $priority;
 
@@ -82,6 +83,7 @@ class Page
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"page"})
      */
     private $meta_desc;
     

@@ -11,8 +11,8 @@
   <body class="color-white padding-s">
     <div id="app" data-obb="{{ VITE_APP_BASE_URL }}" data-url="{{ VITE_APP_BASE_SHEME }}"></div>
     <script type="module" src="/src/main.ts"></script>
-    {% for snippet in snippets %}{{ snippet|raw }}{% endfor %}
-    <script>
+    {{ VITE_APP_SNIPPET }}
+    <!-- <script>
       document.addEventListener('readystatechange', function () {
         if (document.readyState === 'complete') {
           window.$obbPlugins.subscribe('Home', function () {
@@ -22,6 +22,6 @@
           })
         }
       })
-    </script>
+    </script> -->
   </body>
 </html>

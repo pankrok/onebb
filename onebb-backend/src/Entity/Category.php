@@ -61,6 +61,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
          
              /**
               * @ORM\Column(type="datetime_immutable")
+              * @Groups({"category"})
               */
              private $updated_at;
          

@@ -53,7 +53,7 @@ function startChat() {
       :key="`search_${user.id}`"
       class="cursor-pointer row-sm align-items-center"
     >
-      <AvatarComponent :url="user.avatar" size="img-size-m" mobile-size="img-size-mobile-s" />
+      <AvatarComponent :url="user.avatar" :alt="user.username" size="img-size-m" mobile-size="img-size-mobile-s" />
       <span v-html="parseUsername(user)"></span>
     </div>
   </div>

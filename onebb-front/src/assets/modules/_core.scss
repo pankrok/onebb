@@ -2,10 +2,10 @@
 
 body {
     background-color: map.get($colors, "background");
+    color: map.get($colors, "white");
     padding: 0;
     margin: 0;
     font-family: Verdana, sans-serif;
-  //  height: 100dvh;
 }
 
 #app, .container {

@@ -14,7 +14,7 @@ function loadLocaleMessages() {
   for (const path in locales) {
        const matched = path.match(/([A-Za-z0-9-_]+)\./i)
        if (matched && matched.length > 1) {
-            const locale = matched[1]
+            const locale = matched[1] // @ts-ignore
             messages[locale] = locales[path];
         }
   }

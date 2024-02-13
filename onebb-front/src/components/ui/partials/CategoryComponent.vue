@@ -128,6 +128,7 @@ const { parse } = useMoment()
           <div class="col-5 display-flex display-sm-none">
             <AvatarComponent
               :url="board.last_active_user.avatar"
+              :alt="board.last_active_user.username"
               size="img-size-m"
               mobile-size="img-size-mobile-s"
             />

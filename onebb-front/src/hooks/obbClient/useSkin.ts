@@ -75,7 +75,11 @@ export async function useSkin() {
   const { axios } = useAxios()
   const { data } = await axios.get<unknown>('skins?active=1')
   if (instanceOf<ISkinHydra>(data)) {
-    const handler = data['hydra:member'][0].skinBoxes
+    if (data['hydra:member'].length === 0) {
+      return null;
+    }
+
+    const handler = data['hydra:member'][0].skinBoxes ?? []
     return await parseBoxes(handler)
   }
 

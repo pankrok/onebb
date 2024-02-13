@@ -11,6 +11,7 @@ import { defineAsyncComponent } from 'vue'
 import usePlugins, { initPlugins } from './utils/usePlugins'
 import { watch } from 'vue'
 import useUserStore from './stores/useUserStore'
+import useLoadingStore from './stores/useLoadingStore'
 
 const MessengerComponent = defineAsyncComponent(
   () => import('@/components/ui/partials/MessengerComponent.vue')
@@ -24,6 +25,7 @@ const plugins = usePlugins()
 //@ts-ignore
 window.$obbPlugins = plugins
 
+const {loading} = storeToRefs(useLoadingStore())
 const messengerStore = useMessengerStore()
 const messenger = useMessenger()
 const route = useRoute()
@@ -47,10 +49,12 @@ watch(route, () => {
 })
 
 watch(logged, () => {
+  console.log({interval: interval.value})
+  
   if (!interval.value && logged.value) {
     interval.value = setInterval(() => {
       messenger.getNewChats()
-    }, 5000)
+    }, 1000 * Number(import.meta.env.VITE_APP_MESSENGER_DIFF))
   }
 
   if (interval.value && !logged.value) {
@@ -62,7 +66,7 @@ onMounted(() => {
   if (!interval.value && logged.value) {
     interval.value = setInterval(() => {
       messenger.getNewChats()
-    }, 5000)
+    }, 1000 * Number(import.meta.env.VITE_APP_MESSENGER_DIFF))
   }
   initPlugins(route.name?.toString())
 })
@@ -75,7 +79,10 @@ onUnmounted(() => {
 <template>
   <HeaderComponent />
   <main class="container margin-top-l padding-sm-x-m">
-    <!-- <span class="position-fixed box-loader col-1"></span> -->
+    <Transition name="fade" mode="in-out">
+      <span v-if="loading" class="position-fixed box-loader col-12" key="main-loader"></span>
+    </Transition>
+    
     <!-- <section class="col-12">
       <div class="navigation row align-items-center border-none bfont-size-12">
         <a href="#" class="padding-right-m">Home</a> >

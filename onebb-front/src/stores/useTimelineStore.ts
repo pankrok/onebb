@@ -2,10 +2,29 @@ import { defineStore } from 'pinia'
 import { reactive } from 'vue'
 import moment from 'moment'
 
+let onInit = true
+
 const useTimelineStore = defineStore('timelineStore', () => {
-  const categoryTimeline: { [index: number]: string } = reactive({})
-  const boardTimeline: { [index: number]: string } = reactive({})
-  const plotTimeline: { [index: number]: string } = reactive({})
+  let initData = {
+    categoryTimeline: null,
+    boardTimeline: null,
+    plotTimeline: null,
+  };
+  if (localStorage.getItem('timeline')) { // @ts-ignore
+    initData = JSON.parse(localStorage.getItem('timeline'))
+  }
+
+  const categoryTimeline: { [index: number]: string } = reactive(initData.categoryTimeline ?? {})
+  const boardTimeline: { [index: number]: string } = reactive(initData.boardTimeline ?? {})
+  const plotTimeline: { [index: number]: string } = reactive(initData.plotTimeline ?? {})
+
+  function setLocalTimeline() {
+    localStorage.setItem('timeline', JSON.stringify({
+      categoryTimeline,
+      boardTimeline,
+      plotTimeline
+    }))
+  }
 
   function getCategoryTimeline(id: number, time: string) {
     if (categoryTimeline[id]) {
@@ -32,14 +51,17 @@ const useTimelineStore = defineStore('timelineStore', () => {
 
   function setCategoryTimeline(id: number) {
     categoryTimeline[id] = moment().format()
+    setLocalTimeline();
   }
 
   function setBoardTimeline(id: number) {
     boardTimeline[id] = moment().format()
+    setLocalTimeline();
   }
 
   function setPlotTimeline(id: number) {
     plotTimeline[id] = moment().format()
+    setLocalTimeline();
   }
 
   return {

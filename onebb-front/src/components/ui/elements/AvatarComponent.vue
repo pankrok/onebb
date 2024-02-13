@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps<{
     url: string,
+    alt: string,
     size: 'img-size-s' | 'img-size-m' | 'img-size-l',
     mobileSize: 'img-size-mobile-s' | 'img-size-mobile-m' | 'img-size-mobile-l'
 }>();
@@ -13,5 +14,6 @@ const baseURL = document.getElementById('app')?.getAttribute('data-url') + docum
         :src="baseURL + url ?? 'assets/avatar.png'"
         class="border-radius-circel padding-x-l"
         :class="[size, mobileSize]"
+        :alt="alt"
     />
 </template>

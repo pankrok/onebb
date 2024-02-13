@@ -92,6 +92,7 @@ async function search() {
               >
                 <AvatarComponent
                   :url="post.user.avatar"
+                  :alt="post.user.username"
                   size="img-size-m"
                   mobile-size="img-size-mobile-m"
                   class="padding-sm-y-l"

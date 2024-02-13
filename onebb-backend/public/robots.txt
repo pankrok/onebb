@@ -1,0 +1,13 @@
+User-agent: *
+Crawl-delay: 1
+Request-rate: 1/1s
+
+User-agent: *
+Allow: /upload/img
+Disallow: /admin
+Disallow: /bundles
+Disallow: /libraries
+Disallow: /api
+Disallow: /install
+Disallow: /update
+Disallow: /acp

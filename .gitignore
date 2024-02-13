@@ -2,6 +2,7 @@
 /onebb-backend/.env.local
 /onebb-backend/.env.local.php
 /onebb-backend/.env.*.local
+/onebb-backend/.install
 /onebb-backend/config/secrets/prod/prod.decrypt.private.php
 /onebb-backend/public/bundles/
 /onebb-backend/var/

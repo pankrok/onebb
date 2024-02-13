@@ -3,8 +3,8 @@ import randomString from '@/utils/randomString'
 import { onMounted, ref } from 'vue'
 
 defineProps<{
-  isActive: boolean
   onClose: ((payload: MouseEvent) => void) | undefined
+  isActive?: boolean
   noBox?: boolean
   wrapperClass?: string[]
 }>()
