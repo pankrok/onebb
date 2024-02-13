@@ -14,6 +14,7 @@ official forum: [OneBB Forum](https://onebb.org)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
+* [Sponsors](#sponsors)
 
 ## General info
 OneBB are an open source discussion software that is simple to use and extended with a plugin system. The project uses the VUE as front and Symfony as backend, a modern responsive front with simple module system. OneBB is a forum script that is easy to modify, the plugin system allows you to create your own add-ons without interfering with the source code! Fully responsive design allows you to conveniently use the forum on both mobile and stationary devices.which creates a synergy of the ease of its modification.
@@ -37,14 +38,21 @@ Ready features:
 * email templates with editor,
 * messenger,
 * translation,
-* updater (not refactored yet),
-* plugin store (not refactored yet),
+* simple search engine,
+
 
 In progress:
+* user respect system,
+* achievements system,
+* user profile costumistion settings,
 * chat,
-* skin store,
 * ban reasons,
-* simple search engine
+
+
+Long term plans:
+* updater,
+* skin store,
+* plugin store,
 * two factor authentication,
 
 ## Status
@@ -52,3 +60,6 @@ Project is: _in progress_
 
 ## Inspiration
 OneBB was created because there was no alternative for the shallow solutions such as IPB at a level that would meet my expectations. After long development of OneBB precursor - Boards script I decided to close this project due to limitations of choosing SLIM framework. The experience I gained helped me to create better, faster and more modern CMS for discussion forums.
+
+## Sponsors
+* [Sfera Host](https://sferahost.pl)
