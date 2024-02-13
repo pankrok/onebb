@@ -21,7 +21,7 @@ defineProps<{
       
       <button
         @click="dismiss(id)"
-        class="button button-color-white border-radius-circel row align-items-center justify-content-center"
+        class="button button-color-white border-radius-circel row-sm align-sm-items-center justify-sm-content-center"
         style="width: 30px; height: 30px"
       >
         <svg xmlns="http://www.w3.org/2000/svg" height="1rem" fill="white" viewBox="0 0 384 512">

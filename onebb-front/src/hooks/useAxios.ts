@@ -15,7 +15,9 @@ import { AUTH_URL, LOGOUT_URL, REFRESH_URL, USER_URL } from '@/utils/apiRoutes'
 import useUserStore from '@/stores/useUserStore'
 
 let numberOfAjaxCAllPending = 0
-let initAxios = false;
+let initAxios = false
+let isRefreshing = false
+let token: string | null = null
 
 const baseURL = // @ts-ignore
   document.getElementById('app')?.getAttribute('data-url') +
@@ -29,9 +31,26 @@ const instance = axios.create({
   timeout: import.meta.env.MODE === 'development' ? 30000 : 3000
 })
 
+function setToken(token: string) {
+  instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+}
+
 export function init() {
   if (initAxios) {
-    return;
+    return
+  }
+
+  async function refreshToken() {
+    const { data } = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
+    if (instanceOf<ITokenResponse>(data)) {
+      const userStore = useUserStore()
+      userStore.setUserData(data)
+      if (data.token) setToken(data.token)
+    }
+  }
+
+  if (localStorage.getItem('logged') && !instance.defaults.headers.common['Authorization']) {
+    refreshToken()
   }
 
   const loadingStore = useLoadingStore()
@@ -59,7 +78,7 @@ export function init() {
       }
 
       if (numberOfAjaxCAllPending <= 0) {
-        numberOfAjaxCAllPending = 0;
+        numberOfAjaxCAllPending = 0
         loadingStore.isLoaded()
       }
       return response
@@ -82,13 +101,27 @@ export function init() {
         response.data.message === 'Expired JWT Token'
       ) {
         if (instance.defaults.headers.common['Authorization']) {
+          if (isRefreshing) {
+            setTimeout(() => {
+              if (error.config) {
+                console.log('token', {token})
+                error.config.headers.Authorization = `Bearer ${token}`
+                return instance.request(error.config)
+              }
+            }, 1000)
+          }
+
+          isRefreshing = true
           const { data } = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
           if (instanceOf<ITokenResponse>(data)) {
             const userStore = useUserStore()
             userStore.setUserData(data)
 
             if (error.config) {
+              token = data.token
+              console.log('token', {dataToken: token})
               error.config.headers.Authorization = `Bearer ${data.token}`
+              isRefreshing = false
               return instance.request(error.config)
             }
           }
@@ -99,27 +132,13 @@ export function init() {
     }
   )
 
-  initAxios = true;
+  initAxios = true
 }
 
 export default function useAxios() {
-  function setToken(token: string) {
-    console.log('setting token')
-    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    console.log({ axiosHeaders: instance.defaults.headers })
-  }
 
   function removeToken() {
     instance.defaults.headers.common['Authorization'] = null
-  }
-
-  async function refreshToken() {
-    const { data } = await instance.post<{}, AxiosResponse<unknown>>(REFRESH_URL, {})
-    if (instanceOf<ITokenResponse>(data)) {
-      const userStore = useUserStore()
-      userStore.setUserData(data)
-      if (data.token) setToken(data.token)
-    }
   }
 
   async function signIn(payload: ILoginCreditionals) {
@@ -164,14 +183,9 @@ export default function useAxios() {
     return false
   }
 
-  if (localStorage.getItem('logged') && !instance.defaults.headers.common['Authorization']) {
-    refreshToken()
-  }
-
   return {
     setToken,
     removeToken,
-    refreshToken,
     signIn,
     signUp,
     signOut,

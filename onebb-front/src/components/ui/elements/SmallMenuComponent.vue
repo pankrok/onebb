@@ -1,16 +1,12 @@
 <script setup lang="ts">
 defineProps<{
-  transitionMode: 'default' | 'in-out' | 'out-in' | undefined
-  transitionName: string
-  isActive: boolean
-  teleport: string
+  isActive?: boolean
   top?: string
   right?: string
 }>()
 </script>
 <template>
-  <Teleport :to="teleport">
-    <Transition :name="transitionName" :mode="transitionMode">
+    <Transition name="slide-fade" mode="in-out">
       <div
         v-if="isActive"
         class="position-absolute"
@@ -19,5 +15,4 @@ defineProps<{
         <slot></slot>
       </div>
     </Transition>
-  </Teleport>
 </template>

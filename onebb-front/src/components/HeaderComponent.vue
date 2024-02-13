@@ -16,26 +16,26 @@ const SmallMenuComponent = defineAsyncComponent(() => import('./ui/elements/Smal
 const SearchComponent = defineAsyncComponent(() => import('./ui/elements/SearchComponent.vue'));
 
 const userStore = useUserStore()
-const alertStore = useAlertStore()
+const {setAlert} = useAlertStore()
 const messengerStore = useMessengerStore()
 const pages = ref<IPage[]>([])
 const { signOut } = useAxios()
 
-const toggleUserMenu = ref(false)
+const [userMenu, setUserMenu] = useState(false)
 const [loginModal, setLoginModal] = useState(false);
 const [registerModal, setRegisterModal] = useState(false);
 
 async function signOutWrapper() {
   if (await signOut()) {
     userStore.$reset()
-    alertStore.setAlert({
+    setAlert({
       type: 'alert-success',
       message: $t('you are signed out'),
       timeout: 5
     })
     return
   }
-  alertStore.setAlert({
+  setAlert({
     type: 'alert-danger',
     message: $t('there was a problem with sign out!'),
     timeout: 5
@@ -82,7 +82,7 @@ onMounted(async ()=>{
           </RouterLink>
         </li>
       </ul>
-      <ul v-if="userStore.logged">
+      <ul v-if="userStore.logged" key="logged-menu">
         <!-- <li>
           <button class="button button-color-primary position-relative">
             <span class="badge circle pulse background-red box-shadow-red"></span>
@@ -128,9 +128,9 @@ onMounted(async ()=>{
         <li
           id="user-nav"
           class="cursor-pointer position-relative"
-          @click="toggleUserMenu = !toggleUserMenu"
+          @click="()=>{setUserMenu(!userMenu)}"
         >
-          <SmallMenuComponent :is-active="toggleUserMenu" transition-name="slide-fade" transition-mode="in-out" teleport="#user-nav" top="40px" >
+          <SmallMenuComponent :is-active="userMenu" top="40px" >
             <div
               class="column border-1 background-primary border-color-dark box-shadow-light padding-sm-l"
             >
@@ -169,7 +169,7 @@ onMounted(async ()=>{
           </svg>
         </li>
       </ul>
-      <ul v-else>
+      <ul v-else key="not-logged-menu">
         <li>
           <button
             class="button button-color-primary position-relative"
