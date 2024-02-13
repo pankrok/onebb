@@ -61,13 +61,13 @@ class Plot
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"board", "plot"}) 
+     * @Groups({"board", "plot", "plot_subresource"}) 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"board", "plot"})
+     * @Groups({"board", "plot", "plot_subresource"})
      
      */
     private $name;
@@ -81,7 +81,7 @@ class Plot
     /**
      * @ORM\ManyToOne(targetEntity=Board::class, inversedBy="plots")
      * @ORM\JoinColumn(nullable=false)
-     * @ApiFilter(SearchFilter::class, properties={"board.name": "partial"}) 
+     * @ApiFilter(SearchFilter::class, properties={"board.id": "exact"}) 
      */
     private $board;
 
@@ -123,7 +123,7 @@ class Plot
     private $hidden = false;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true) 
      * @Groups({"board", "plot"})
      */
     private $views;
@@ -150,12 +150,13 @@ class Plot
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="plot", orphanRemoval=true)
      * @ApiSubresource()
+     * @ApiFilter(SearchFilter::class, properties={"posts.content": "partial", "posts.user.username": "partial"}) 
      */
     private $posts;
     
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"board", "plot"}) 
+     * @Groups({"board", "plot", "plot_subresource"}) 
      */
     private $slug;
 

@@ -35,6 +35,7 @@ function compare(date: string) {
       <div v-for="user in chat.users" class="margin-sm-none">
         <AvatarComponent
           :url="user.avatar"
+          :alt="user.username"
           size="img-size-s"
           mobile-size="img-size-mobile-s"
           class="padding-none"

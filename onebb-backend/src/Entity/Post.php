@@ -29,7 +29,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      collectionOperations={
             "get"={
                 "normalization_context"={"groups": {"plot_subresource"}},
-                "security"="is_granted('ROLE_POST_READ')"
+                "security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"
                 }, 
             "post"={
                 "normalization_context"={"groups": {"plot_subresource", "plot:write"}},
@@ -63,13 +63,14 @@ class Post
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @Groups({"plot_subresource", "user"}) 
+     * @ApiFilter(SearchFilter::class, properties={"user.id": "partial"}) 
      * @ApiFilter(SearchFilter::class, properties={"user.username": "partial"}) 
      */
     private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Plot::class, inversedBy="posts")
-     * @Groups({"plot:write"}) 
+     * @Groups({"plot_subresource", "plot:write"}) 
      * @ORM\JoinColumn(nullable=false)
      * @ApiFilter(SearchFilter::class, properties={"plot.name": "partial"}) 
      */

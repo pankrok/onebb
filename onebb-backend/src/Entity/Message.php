@@ -10,17 +10,20 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * @ORM\Entity(repositoryClass=MessageRepository::class)
  * @ApiFilter(DateFilter::class, properties={"created_at"})
  * @ApiFilter(SearchFilter::class, properties={"om"}) 
+ * @ApiFilter(OrderFilter::class, properties={"created_at"})
  * @ApiResource( 
     order={"created_at": "DESC"},
     security="is_granted('ROLE_USER')",
     collectionOperations={
             "post"={
-                "denormalization_context"={"groups": {"post"}}
+                "denormalization_context"={"groups": {"post"}},
+                "normalization_context"={"groups": {"user"}}
             },
             "get"={
                 "normalization_context"={"groups": {"user"}}
@@ -49,7 +52,7 @@ class Message
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"user"})
+     * @Groups({"user", "post"})
      */
     private $created_at;
 
@@ -62,7 +65,7 @@ class Message
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @Groups({"user"})
+     * @Groups({"user", "post"})
      */
     private $sender;
 
