@@ -18,6 +18,7 @@ defineProps<IMessage>()
     >
     <AvatarComponent
       :url="sender.avatar"
+      :alt="sender.username"
       size="img-size-s"
       mobile-size="img-size-mobile-s"
       class="margin-left-s"

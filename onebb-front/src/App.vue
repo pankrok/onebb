@@ -47,10 +47,12 @@ watch(route, () => {
 })
 
 watch(logged, () => {
+  console.log({interval: interval.value})
+  
   if (!interval.value && logged.value) {
     interval.value = setInterval(() => {
       messenger.getNewChats()
-    }, 5000)
+    }, 1000 * Number(import.meta.env.VITE_APP_MESSENGER_DIFF))
   }
 
   if (interval.value && !logged.value) {
@@ -62,7 +64,7 @@ onMounted(() => {
   if (!interval.value && logged.value) {
     interval.value = setInterval(() => {
       messenger.getNewChats()
-    }, 5000)
+    }, 1000 * Number(import.meta.env.VITE_APP_MESSENGER_DIFF))
   }
   initPlugins(route.name?.toString())
 })

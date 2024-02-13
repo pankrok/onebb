@@ -15,6 +15,7 @@ import { AUTH_URL, LOGOUT_URL, REFRESH_URL, USER_URL } from '@/utils/apiRoutes'
 import useUserStore from '@/stores/useUserStore'
 
 let numberOfAjaxCAllPending = 0
+let initAxios = false;
 
 const baseURL = // @ts-ignore
   document.getElementById('app')?.getAttribute('data-url') +
@@ -28,7 +29,11 @@ const instance = axios.create({
   timeout: import.meta.env.MODE === 'development' ? 30000 : 3000
 })
 
-export default function useAxios() {
+export function init() {
+  if (initAxios) {
+    return;
+  }
+
   const loadingStore = useLoadingStore()
   instance.interceptors.request.use(
     function (config) {
@@ -94,6 +99,10 @@ export default function useAxios() {
     }
   )
 
+  initAxios = true;
+}
+
+export default function useAxios() {
   function setToken(token: string) {
     console.log('setting token')
     instance.defaults.headers.common['Authorization'] = `Bearer ${token}`

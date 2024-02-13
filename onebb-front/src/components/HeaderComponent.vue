@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from 'vue'
+import { defineAsyncComponent, ref, onMounted } from 'vue'
 import { $t } from '@/utils/i18n'
 import useAxios from '@/hooks/useAxios'
 import useUserStore from '@/stores/useUserStore'
@@ -42,10 +42,9 @@ async function signOutWrapper() {
   })
 }
 
-usePage()
-  .getPages()
-  .then((pagesResponse: IPage[]) => {
-    pages.value = pagesResponse
+onMounted(async ()=>{
+  const response = await usePage().getPages()
+  pages.value = response;
   })
 </script>
 
@@ -154,6 +153,7 @@ usePage()
 
           <AvatarComponent
             :url="userStore.user.avatar"
+            :alt="userStore.user.slug"
             size="img-size-s"
             mobile-size="img-size-mobile-s"
           />

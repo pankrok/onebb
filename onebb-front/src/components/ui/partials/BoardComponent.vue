@@ -149,6 +149,7 @@ const { parse } = useMoment()
             <div class="col-5 display-flex display-sm-none">
               <AvatarComponent
                 :url="plot.last_active_user.avatar"
+                :alt="plot.last_active_user.username"
                 size="img-size-m"
                 mobile-size="img-size-mobile-s"
               />

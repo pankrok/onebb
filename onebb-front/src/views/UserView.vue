@@ -74,6 +74,7 @@ function avatarUpdateHandler(avatar: string) {
           </span>
           <AvatarComponent
             :url="data.avatar"
+            :alt="data.username"
             size="img-size-l"
             mobile-size="img-size-mobile-m"
             class="padding-sm-y-l"

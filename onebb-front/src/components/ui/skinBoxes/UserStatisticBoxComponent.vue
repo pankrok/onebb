@@ -55,6 +55,7 @@ watch(user, () => {
         <div class="position-relative">
           <AvatarComponent
             :url="data.avatar"
+            :alt="data.slug"
             size="img-size-l"
             mobile-size="img-size-mobile-m"
             class="padding-sm-y-l"
