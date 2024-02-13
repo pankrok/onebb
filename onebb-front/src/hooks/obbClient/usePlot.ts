@@ -13,7 +13,7 @@ interface IResponse {
 export function usePlot() {
   const { axios } = useAxios()
   const route = useRoute()
-
+  const router = useRouter();
   async function getPlot() {
     
     const response: IResponse = {
@@ -54,14 +54,15 @@ export function usePlot() {
         name,
         board: `/api/boards/${route.params.id}`,
      })
-     console.log({data})
+     console.log({createPlot: data})
      if(instanceOf<IPlot>(data)) {
         const post = await addPostToPlot(content, data['@id']);
+        console.log({post})
         if(instanceOf<IPost>(post)) {
-          const router = useRouter();
           console.log({data, post, params: { id: data.id, slug: data.slug, page: 1 }, router})
-          
-          router.push({ name: 'Plot', params: { id: data.id, slug: data.slug, page: 1 } });
+          setTimeout(()=>{
+            router.push({ name: 'Plot', params: { id: data.id, slug: data.slug, page: 1 } });
+          },300)
         }
      }
     
