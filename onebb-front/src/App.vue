@@ -11,6 +11,7 @@ import { defineAsyncComponent } from 'vue'
 import usePlugins, { initPlugins } from './utils/usePlugins'
 import { watch } from 'vue'
 import useUserStore from './stores/useUserStore'
+import useLoadingStore from './stores/useLoadingStore'
 
 const MessengerComponent = defineAsyncComponent(
   () => import('@/components/ui/partials/MessengerComponent.vue')
@@ -24,6 +25,7 @@ const plugins = usePlugins()
 //@ts-ignore
 window.$obbPlugins = plugins
 
+const {loading} = storeToRefs(useLoadingStore())
 const messengerStore = useMessengerStore()
 const messenger = useMessenger()
 const route = useRoute()
@@ -77,7 +79,10 @@ onUnmounted(() => {
 <template>
   <HeaderComponent />
   <main class="container margin-top-l padding-sm-x-m">
-    <!-- <span class="position-fixed box-loader col-1"></span> -->
+    <Transition name="fade" mode="in-out">
+      <span v-if="loading" class="position-fixed box-loader col-12" key="main-loader"></span>
+    </Transition>
+    
     <!-- <section class="col-12">
       <div class="navigation row align-items-center border-none bfont-size-12">
         <a href="#" class="padding-right-m">Home</a> >

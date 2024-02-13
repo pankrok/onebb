@@ -11,22 +11,25 @@ import type { HydraView } from '@/interfaces/config'
 import AvatarComponent from '../elements/AvatarComponent.vue'
 import ModalComponent from '../elements/ModalComponent.vue'
 import instanceOf from '@/utils/instanceOf'
+import { useRouter } from 'vue-router'
+
+const { paginator } = defineProps<{
+  posts: IPost[]
+  plot: IPlot
+  paginator?: HydraView
+}>()
 
 const emit = defineEmits<{
   (e: 'submit', value: string): void
   (e: 'mod', id: number, value: { content?: string; hidden?: boolean }): void
 }>()
 
-defineProps<{
-  posts: IPost[]
-  plot: IPlot
-  paginator?: HydraView
-}>()
-
+const router = useRouter()
 const openEditor = ref(false)
 const modModal = ref(false)
 const modData = ref<IPost | null>(null)
 const textValue = ref('')
+const postEditor = ref()
 const userStore = useUserStore()
 const { parse } = useMoment()
 
@@ -44,12 +47,28 @@ function modSave() {
 
 function replay() {
   if (openEditor.value === false) {
+    if (paginator && paginator['hydra:last']) {
+      let [uri, page] = paginator['hydra:last'].split('=')
+      router.push({ params: { page } })
+    }
+
+    if (paginator && paginator['hydra:next']) {
+      let [uri, page] = paginator['hydra:next'].split('=')
+      router.push({ params: { page } })
+    }
     openEditor.value = true
+    setTimeout(() => {
+      postEditor.value.scrollIntoView({
+        behavior: 'smooth'
+      })
+    }, 300)
+
     return
   }
 
   emit('submit', textValue.value)
   textValue.value = ''
+  openEditor.value = false
 }
 </script>
 <template>
@@ -71,23 +90,20 @@ function replay() {
       >
     </section>
     <section class="row col-12 justify-sm-content-space-between align-sm-items-center">
-      <div class="justify-content-flex-end">
-        <button
-          v-if="userStore.logged"
-          class="button button-color-green margin-right-m"
-          @click="replay"
-        >
-          {{ $t('replay') }}
-        </button>
-      </div>
       <div>
         <paginator-component :hydra-view="paginator" />
       </div>
+      <div class="justify-content-flex-end">
+        <button v-if="userStore.logged" class="button button-color-green" @click="replay">
+          {{ $t('replay') }}
+        </button>
+      </div>
     </section>
-    <section class="">
+    <TransitionGroup name="list" tag="section">
       <div
         v-for="post in posts"
         :key="post.id"
+        :id="`post_${post.id}`"
         class="row col-12 margin-sm-y-m margin-y-l back border-1 background-primary border-color-dark"
       >
         <router-link
@@ -149,9 +165,9 @@ function replay() {
           </div> -->
         </div>
       </div>
-    </section>
+    </TransitionGroup>
     <Transition mode="in-out" name="fade">
-      <section v-if="openEditor" class="row col-12 margin-y-s" key="editor">
+      <div v-if="openEditor" class="row col-12 margin-y-s" key="editor">
         <jodit-component
           v-if="userStore.logged"
           :value="textValue"
@@ -161,16 +177,19 @@ function replay() {
             }
           "
         />
-      </section>
+      </div>
     </Transition>
-    <section class="row col-12 margin-top-l justify-content-space-between align-items-center">
+    <section
+      ref="postEditor"
+      class="row col-12 margin-y-l justify-content-space-between align-items-center"
+    >
+      <div>
+        <paginator-component :hydra-view="paginator" />
+      </div>
       <div class="justify-content-flex-end">
         <button v-if="userStore.logged" class="button button-color-green" @click="replay">
           Odpowiedz
         </button>
-      </div>
-      <div>
-        <paginator-component :hydra-view="paginator" />
       </div>
     </section>
   </div>

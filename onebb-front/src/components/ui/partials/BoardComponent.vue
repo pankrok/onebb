@@ -16,10 +16,16 @@ defineProps<{
   paginator?: HydraView
 }>()
 
+function toLast(plot: IPlot) {
+  if (getPlotTimeline(plot.id, plot.updated_at))
+    return plot.post_no ? Math.ceil(plot.post_no / 20) : 1;
+
+  return 1;
+}
+
 const { getPlotTimeline } = useTimelineStore()
 
 const userStore = useUserStore()
-console.log()
 const { parse } = useMoment()
 </script>
 <template>
@@ -92,7 +98,7 @@ const { parse } = useMoment()
               <router-link
                 :to="{
                   name: 'Plot',
-                  params: { slug: plot.slug, id: plot.id, page: 1 }
+                  params: { slug: plot.slug, id: plot.id, page: toLast(plot) }
                 }"
                 class="line-heigh-18 font-weight-800 margin-bottom-m"
               >
@@ -100,7 +106,7 @@ const { parse } = useMoment()
               </router-link>
             </div>
             <div v-if="plot.user" class="col-12 color-light display-flex display-sm-none">
-              {{ $t('by') }} <span v-html="parseUsername(plot.user)"></span>
+              {{ $t('by') }} <span class="margin-sm-left-m" v-html="parseUsername(plot.user)"></span>
             </div>
           </div>
           <div class="col-sm-4 col-1 column align-sm-items-center">

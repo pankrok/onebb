@@ -51,12 +51,13 @@ const paginator = computed(() => {
                 {{ Number(route.params.page) - 1 }}
             </router-link>
         </div>
+
         <div>
-            <router-link v-if="paginator.goFirst" :to="{ params: { page: Number(route.params.page) } }"
-                class="button button-color-dark background-primary color-white"
+            <span  class="button button-color-dark background-primary color-white"
                 :class="'button-disabled'">
                 {{ Number(route.params.page) }}
-            </router-link>
+
+            </span>
         </div>
         <div>
             <router-link v-if="paginator.goNext" :to="{ params: { page: `${Number(route.params.page) + 1}` } }" 
