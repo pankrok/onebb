@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import parseUsername from '@/utils/parseUsername'
 import useMoment from '@/hooks/useMoment'
 import PaginatorComponent from './PaginatorComponent.vue'
+import ManageRespectComponent from '../elements/ManageRespectComponent.vue'
 import { $t } from '@/utils/i18n'
 import type { HydraView } from '@/interfaces/config'
 import AvatarComponent from '../elements/AvatarComponent.vue'
@@ -138,6 +139,10 @@ function replay() {
               <span>{{ $t('Plots') }}:</span>
               <span class="color-blue margin-left-s"> {{ post.user.plots_no ?? 0 }}</span>
             </div>
+            <div class="row col-12 justify-content-center display-flex display-sm-none">
+              <span>{{ $t('Respect') }}:</span>
+              <span class="color-blue margin-left-s"> {{ post.user.respect ?? 0 }}</span>
+            </div>
           </div>
         </router-link>
         <div class="col-10 col-sm-12 column justify-content-space-between">
@@ -160,9 +165,9 @@ function replay() {
             class="col-auto color-white padding-top-s padding-x-none padding-sm-s font-size-14"
             v-html="post.content"
           ></div>
-          <!-- <div class="row border-top-1 border-color-dark margin-top-l padding-s">
-            This is my signature
-          </div> -->
+         <div class="row-sm col-auto border-top-1 border-color-dark margin-top-l padding-s justify-sm-content-end">
+            <ManageRespectComponent :post-id="post.id" :respect-to="post.user.id" :respect-no="post.respects.length " />
+          </div>
         </div>
       </div>
     </TransitionGroup>
