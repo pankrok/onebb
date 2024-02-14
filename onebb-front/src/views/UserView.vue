@@ -9,6 +9,7 @@ import useUserStore from '@/stores/useUserStore'
 import Cropper from '@/components/ui/partials/Cropper.vue'
 import ModalComponent from '@/components/ui/elements/ModalComponent.vue'
 import useState from '@/utils/useState'
+import ManageRespectComponent from '@/components/ui/elements/ManageRespectComponent.vue'
 
 const data = ref()
 const page = ref(1)
@@ -60,8 +61,7 @@ function avatarUpdateHandler(avatar: string) {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="1.5em"
-              class="cursor-pointer"
+              class="cursor-pointer reaction"
               @click="setIsOpen(true)"
               fill="white"
               viewBox="0 0 512 512"
@@ -92,6 +92,10 @@ function avatarUpdateHandler(avatar: string) {
           <span>{{ $t('Plots') }}:</span>
           <span class="color-blue margin-left-s"> {{ data.plots_no ?? 0 }}</span>
         </div>
+        <div class="row col-12 justify-content-center display-flex display-sm-none">
+          <span>{{ $t('Respect') }}:</span>
+          <span class="color-blue margin-left-s"> {{ data.respect ?? 0 }}</span>
+        </div>
       </div>
     </section>
     <section class="col-9 column">
@@ -109,6 +113,9 @@ function avatarUpdateHandler(avatar: string) {
           >{{ post.plot.name }}</router-link
         >
         <div v-html="post.content"></div>
+        <div class="row-sm col-auto border-top-1 border-color-dark margin-top-l padding-s justify-sm-content-end">
+            <ManageRespectComponent :post-id="post.id" :respect-to="post.user.id" :respect-no="post.respects.length" hide-add-respect />
+        </div>
       </div>
 
       <button

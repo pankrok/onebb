@@ -92,6 +92,7 @@ export interface IUser {
   posts_no: number
   plots_no: number
   warn_lvl: number
+  respect: number
 }
 
 export interface IRegisterCreditionals {
@@ -124,6 +125,7 @@ export interface IPost {
     id: number,
     slug: string,
   }
+  respects: string[],
 }
 
 // fixme: add interface props
@@ -189,6 +191,16 @@ export interface IPage {
   priority?: number
   active: boolean
   meta_desc?: string
+}
+
+export interface IRespect {
+  "@context": string,
+  "@id": string,
+  "@type": string,
+  id: number,
+  type: string
+  respectFrom: IUser
+  createAt: string,
 }
 
 export interface IHydraView {
