@@ -16,6 +16,7 @@ defineProps<{
   paginator?: HydraView
 }>()
 
+
 function toLast(plot: IPlot) {
   if (getPlotTimeline(plot.id, plot.updated_at))
     return plot.post_no ? Math.ceil(plot.post_no / 20) : 1;
@@ -54,20 +55,6 @@ const { parse } = useMoment()
         <span class="col-sm-auto font-size-18 font-weight-400 margin-y-s color-light">
           {{ $t('Plot') }}
         </span>
-        <div class="col-sm-1 row justify-sm-content-end align-sm-items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="16"
-            width="16"
-            class="pointer fill-white"
-            viewBox="0 0 512 512"
-          >
-            <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path
-              d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-            />
-          </svg>
-        </div>
       </template>
       <div
         v-for="plot in plots"

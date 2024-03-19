@@ -79,7 +79,7 @@ onUnmounted(() => {
 <template>
   <HeaderComponent />
   <main class="container margin-top-l padding-sm-x-m">
-    <Transition name="fade" mode="in-out">
+    <Transition name="fade">
       <span v-if="loading" class="position-fixed box-loader col-12" key="main-loader"></span>
     </Transition>
     
@@ -109,9 +109,11 @@ onUnmounted(() => {
         </div>
       </aside>
       <router-view v-slot="{ Component }">
+        <div class="col-auto" style="min-width: 50%;">
         <Transition name="fade" mode="out-in">
           <component :is="Component" :key="route.fullPath.toString()" />
         </Transition>
+      </div>
       </router-view>
       <aside v-if="pageBoxes?.right" class="col-3" key="right-modules">
         <div class="margin-left-l">

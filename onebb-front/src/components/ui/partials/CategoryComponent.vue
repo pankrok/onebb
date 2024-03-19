@@ -6,6 +6,7 @@ import useMoment from '@/hooks/useMoment'
 import parseUsername from '@/utils/parseUsername'
 import { $t } from '@/utils/i18n'
 import useTimelineStore from '@/stores/useTimelineStore'
+import { ref } from 'vue'
 
 defineProps<{
   category?: ICategory
@@ -14,6 +15,8 @@ defineProps<{
 }>()
 const { getBoardTimeline } = useTimelineStore()
 const { parse } = useMoment()
+const showCategory = ref(true)
+
 </script>
 <template>
   <panel-component :header="true" v-if="category">
@@ -41,14 +44,18 @@ const { parse } = useMoment()
           width="16"
           class="pointer fill-white"
           viewBox="0 0 512 512"
+          @click="showCategory = !showCategory"
+          :style="[showCategory ? 'transform: rotate(0deg)' : 'transform: rotate(-90deg)', 'transition: all .3s ease']"
         >
-          <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path
             d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
           />
         </svg>
       </div>
     </template>
+    
+    <TransitionGroup class="column position-relative" name="list" tag="div">
+      <template #default v-if="showCategory">
     <div
       v-for="board in category.boards"
       :key="board.id"
@@ -136,5 +143,7 @@ const { parse } = useMoment()
         </RouterLink>
       </div>
     </div>
+    </template>
+   </TransitionGroup>
   </panel-component>
 </template>
